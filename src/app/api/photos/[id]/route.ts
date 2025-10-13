@@ -4,11 +4,12 @@ import { deleteBlob } from '@/lib/blob';
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const photo = await prisma.photo.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!photo) {
@@ -22,7 +23,7 @@ export async function DELETE(
 
     // Delete from database
     await prisma.photo.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });

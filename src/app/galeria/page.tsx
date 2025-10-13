@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import NextImage from 'next/image';
 import { Camera, Upload, CheckCircle, Loader } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -205,9 +206,11 @@ export default function GaleriaPage() {
                 className="break-inside-avoid"
               >
                 <Card hover className="overflow-hidden">
-                  <img
+                  <NextImage
                     src={photo.url}
                     alt={photo.caption || 'Gallery photo'}
+                    width={600}
+                    height={400}
                     className="w-full h-auto"
                   />
                   {(photo.caption || photo.uploaderName) && (

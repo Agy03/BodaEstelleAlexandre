@@ -3,10 +3,11 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { reservedBy } = await req.json();
+    const { id } = await params;
 
     if (!reservedBy) {
       return NextResponse.json(
@@ -16,7 +17,7 @@ export async function POST(
     }
 
     const gift = await prisma.gift.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         reserved: true,
         reservedBy,

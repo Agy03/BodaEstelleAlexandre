@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import NextImage from 'next/image';
 import { Gift, ExternalLink, Check, Loader } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -123,9 +124,11 @@ export default function RegalosPage() {
                 <Card hover className="h-full flex flex-col">
                   {gift.image && (
                     <div className="w-full h-48 bg-gray-200 rounded-t-xl overflow-hidden">
-                      <img
+                      <NextImage
                         src={gift.image}
                         alt={gift.name}
+                        width={400}
+                        height={192}
                         className="w-full h-full object-cover"
                       />
                     </div>

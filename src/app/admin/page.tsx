@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import NextImage from 'next/image';
 import { Users, Camera, Music, CheckCircle, X } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -223,9 +224,11 @@ export default function AdminPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {photos.map((photo) => (
               <Card key={photo.id}>
-                <img
+                <NextImage
                   src={photo.url}
                   alt={photo.caption || ''}
+                  width={400}
+                  height={192}
                   className="w-full h-48 object-cover rounded-t-xl"
                 />
                 <CardContent className="pt-4">

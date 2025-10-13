@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import NextImage from 'next/image';
 import { MapPin, Hotel, Utensils, Landmark, PartyPopper } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 
@@ -157,9 +158,11 @@ export default function TurismoPage() {
                 <Card hover className="h-full">
                   {place.image && (
                     <div className="w-full h-48 bg-gray-200 rounded-t-xl overflow-hidden">
-                      <img
+                      <NextImage
                         src={place.image}
                         alt={place.name}
+                        width={400}
+                        height={192}
                         className="w-full h-full object-cover"
                       />
                     </div>
