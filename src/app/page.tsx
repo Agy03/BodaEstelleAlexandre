@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Heart, MapPin, Calendar, Users, Gift, Camera, Music, Info } from 'lucide-react';
+import { Heart, MapPin, Calendar, Users, Gift, Camera, Music, Info, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 
@@ -12,42 +12,42 @@ const features = [
     title: 'Confirma tu Asistencia',
     description: 'Háznoslo saber para poder preparar todo perfectamente',
     href: '/rsvp',
-    color: 'text-pink-500',
+    color: 'from-pink-500 to-rose-500',
   },
   {
     icon: MapPin,
     title: 'Turismo Cercano',
     description: 'Descubre lugares increíbles para visitar',
     href: '/turismo',
-    color: 'text-blue-500',
+    color: 'from-blue-500 to-cyan-500',
   },
   {
     icon: Gift,
     title: 'Lista de Regalos',
     description: 'Si deseas hacernos un regalo, aquí encontrarás ideas',
     href: '/regalos',
-    color: 'text-purple-500',
+    color: 'from-purple-500 to-pink-500',
   },
   {
     icon: Camera,
     title: 'Galería de Fotos',
     description: 'Comparte tus mejores momentos con nosotros',
     href: '/galeria',
-    color: 'text-green-500',
+    color: 'from-green-500 to-emerald-500',
   },
   {
     icon: Info,
     title: 'Información General',
     description: 'Todo lo que necesitas saber sobre el gran día',
     href: '/informacion',
-    color: 'text-orange-500',
+    color: 'from-orange-500 to-amber-500',
   },
   {
     icon: Music,
     title: 'Sugiere Música',
     description: 'Ayúdanos a crear la playlist perfecta',
     href: '/musica',
-    color: 'text-red-500',
+    color: 'from-red-500 to-pink-500',
   },
 ];
 
@@ -56,83 +56,192 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.15,
+      delayChildren: 0.3,
     },
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
     },
-  },
-};
+  };
+
+  const floatingAnimation = {
+    y: [0, -20, 0],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: "easeInOut" as const,
+    },
+  };
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-20 right-10 w-72 h-72 bg-gradient-to-br from-[var(--color-primary)]/20 to-[var(--color-secondary)]/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-tr from-[var(--color-secondary)]/20 to-[var(--color-accent)]/10 rounded-full blur-3xl" />
+      </div>
+
       {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/10 via-[var(--color-background)] to-[var(--color-secondary)]/10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="text-center px-4"
-        >
+      <section className="relative min-h-[90vh] flex items-center justify-center px-4 py-20">
+        <div className="max-w-5xl mx-auto text-center">
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Heart className="w-16 h-16 md:w-24 md:h-24 mx-auto mb-6 text-[var(--color-primary)] fill-current" />
+            {/* Decorative top element */}
+            <motion.div 
+              className="flex justify-center mb-8"
+              animate={floatingAnimation}
+            >
+              <div className="relative">
+                <Heart className="w-20 h-20 md:w-28 md:h-28 text-[var(--color-primary)] fill-current drop-shadow-lg" />
+                <Sparkles className="absolute -top-2 -right-2 w-8 h-8 text-[var(--color-secondary)] animate-pulse" />
+              </div>
+            </motion.div>
+            
+            <motion.h1 
+              className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-primary)] bg-clip-text text-transparent"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
+              Boda Estelle
+            </motion.h1>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              <p className="text-2xl md:text-3xl text-gray-700 mb-6 font-light">
+                Celebra con nosotros este día tan especial
+              </p>
+              
+              <div className="inline-block p-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] rounded-2xl mb-8">
+                <div className="bg-white px-8 py-4 rounded-xl">
+                  <div className="flex flex-col sm:flex-row gap-6 items-center text-gray-700">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 rounded-lg">
+                        <Calendar className="w-6 h-6 text-[var(--color-primary)]" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm text-gray-500 font-medium">Fecha</p>
+                        <p className="font-semibold">Por confirmar</p>
+                      </div>
+                    </div>
+                    <div className="hidden sm:block w-px h-10 bg-gray-200" />
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 rounded-lg">
+                        <MapPin className="w-6 h-6 text-[var(--color-primary)]" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm text-gray-500 font-medium">Lugar</p>
+                        <p className="font-semibold">Por confirmar</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
+              <Link href="/rsvp">
+                <Button 
+                  size="lg" 
+                  className="group relative overflow-hidden shadow-2xl hover:shadow-[var(--color-primary)]/50 transition-all duration-300 px-12 py-6 text-lg"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    Confirmar Asistencia
+                    <motion.span
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      →
+                    </motion.span>
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-primary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
-          
-          <h1 className="text-5xl md:text-7xl font-bold mb-4 text-[var(--color-primary)]">
-            Boda Estelle
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Celebra con nosotros este día tan especial
-          </p>
+        </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <div className="flex items-center gap-2 text-gray-700">
-              <Calendar className="w-5 h-5 text-[var(--color-primary)]" />
-              <span className="font-medium">Fecha por confirmar</span>
-            </div>
-            <div className="hidden sm:block text-gray-400">•</div>
-            <div className="flex items-center gap-2 text-gray-700">
-              <MapPin className="w-5 h-5 text-[var(--color-primary)]" />
-              <span className="font-medium">Lugar por confirmar</span>
-            </div>
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 border-2 border-[var(--color-primary)] rounded-full flex items-start justify-center p-2">
+            <motion.div
+              className="w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full"
+              animate={{ y: [0, 20, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
           </div>
-
-          <Link href="/rsvp">
-            <Button size="lg" className="shadow-lg hover:shadow-xl">
-              Confirmar Asistencia
-            </Button>
-          </Link>
         </motion.div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4">
+      <section className="py-32 px-4 relative overflow-hidden">
+        {/* Subtle background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 via-transparent to-gray-50/50 -z-10" />
+        
         <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="text-center mb-24"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
-              Todo lo que Necesitas
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-block mb-8"
+            >
+              <span className="text-sm font-medium tracking-widest text-[var(--color-primary)] uppercase">
+                Todo en un lugar
+              </span>
+            </motion.div>
+            
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-playfair text-[var(--color-text)]">
+              Descubre Todos los{' '}
+              <span className="relative inline-block">
+                <span className="relative z-10 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
+                  Detalles
+                </span>
+                <motion.div
+                  className="absolute -bottom-2 left-0 right-0 h-3 bg-gradient-to-r from-[var(--color-primary)]/20 to-[var(--color-secondary)]/20 -z-10"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                />
+              </span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Explora toda la información sobre nuestra boda y participa en cada momento especial
+            
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              Encuentra toda la información que necesitas para acompañarnos en este día tan especial
             </p>
           </motion.div>
 
@@ -143,14 +252,51 @@ export default function Home() {
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {features.map((feature) => (
-              <motion.div key={feature.href} variants={itemVariants}>
-                <Link href={feature.href}>
-                  <Card hover className="h-full cursor-pointer">
-                    <feature.icon className={`w-12 h-12 mb-4 ${feature.color}`} />
-                    <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                    <p className="text-gray-600">{feature.description}</p>
-                  </Card>
+            {features.map((feature, index) => (
+              <motion.div 
+                key={feature.href} 
+                variants={itemVariants}
+                custom={index}
+              >
+                <Link href={feature.href} className="block h-full group">
+                  <div className="h-full relative overflow-hidden rounded-2xl bg-white border border-gray-100 hover:border-[var(--color-primary)]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[var(--color-primary)]/10">
+                    {/* Gradient overlay on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/0 to-[var(--color-secondary)]/0 group-hover:from-[var(--color-primary)]/5 group-hover:to-[var(--color-secondary)]/5 transition-all duration-500" />
+                    
+                    {/* Top accent line */}
+                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
+                    
+                    <div className="relative p-8 lg:p-10">
+                      {/* Icon with minimal style */}
+                      <div className="mb-6 flex items-center justify-between">
+                        <div className="relative">
+                          <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-10 blur-xl group-hover:opacity-20 transition-opacity duration-500`} />
+                          <div className={`relative inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.color.replace('to-', 'to-white/20 ')}`}>
+                            <feature.icon className="w-7 h-7 text-white" />
+                          </div>
+                        </div>
+                        
+                        {/* Arrow indicator */}
+                        <motion.div
+                          className="text-[var(--color-primary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          animate={{ x: [0, 4, 0] }}
+                          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          </svg>
+                        </motion.div>
+                      </div>
+                      
+                      <h3 className="text-xl lg:text-2xl font-bold mb-3 text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors duration-300">
+                        {feature.title}
+                      </h3>
+                      
+                      <p className="text-gray-600 leading-relaxed text-sm lg:text-base">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
                 </Link>
               </motion.div>
             ))}
@@ -159,23 +305,52 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-24 px-4 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/10 via-[var(--color-secondary)]/5 to-transparent" />
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[var(--color-primary)]">
+            <motion.div
+              animate={floatingAnimation}
+              className="inline-block mb-6"
+            >
+              <div className="p-6 bg-white rounded-full shadow-2xl">
+                <Heart className="w-16 h-16 text-[var(--color-primary)] fill-current" />
+              </div>
+            </motion.div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[var(--color-primary)]">
               ¿Nos Acompañas?
             </h2>
-            <p className="text-lg text-gray-600 mb-8">
+            
+            <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto">
               Tu presencia es el mejor regalo que podríamos recibir. 
-              Por favor, confirma tu asistencia lo antes posible.
+              Por favor, confirma tu asistencia lo antes posible para que podamos 
+              organizar todo perfectamente.
             </p>
+            
             <Link href="/rsvp">
-              <Button size="lg" className="shadow-lg">
-                Confirmar Ahora
+              <Button 
+                size="lg" 
+                className="group relative overflow-hidden shadow-2xl hover:shadow-[var(--color-primary)]/50 transition-all duration-300 px-12 py-6 text-lg"
+              >
+                <span className="relative z-10 flex items-center gap-3">
+                  <Users className="w-6 h-6" />
+                  Confirmar Ahora
+                  <motion.span
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    →
+                  </motion.span>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-primary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Button>
             </Link>
           </motion.div>

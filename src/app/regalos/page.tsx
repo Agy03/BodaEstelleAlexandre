@@ -59,19 +59,36 @@ export default function RegalosPage() {
   };
 
   return (
-    <div className="min-h-screen py-20 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen py-20 px-4 relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-white to-orange-50 -z-10" />
+      <div className="absolute top-40 left-1/4 w-96 h-96 bg-gradient-to-br from-pink-300/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
+      <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-gradient-to-tl from-orange-300/20 to-transparent rounded-full blur-3xl -z-10" />
+      
+      <div className="max-w-7xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <Gift className="w-16 h-16 text-[var(--color-primary)] mx-auto mb-4" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
-            Lista de Regalos
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="relative inline-block mb-6"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-orange-500 rounded-full blur-2xl opacity-30 animate-pulse" />
+            <div className="relative bg-gradient-to-br from-pink-500 to-orange-500 p-5 rounded-full">
+              <Gift className="w-12 h-12 text-white" />
+            </div>
+          </motion.div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
+            <span className="bg-gradient-to-r from-pink-600 via-rose-600 to-orange-600 bg-clip-text text-transparent">
+              Lista de Regalos
+            </span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Si deseas hacernos un regalo, aquí encontrarás algunas ideas. 
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Si deseas hacernos un regalo, aquí encontrarás algunas ideas.<br />
             Tu presencia es el mejor regalo que podríamos recibir.
           </p>
         </motion.div>

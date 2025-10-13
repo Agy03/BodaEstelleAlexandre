@@ -6,18 +6,35 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 
 export default function InformacionPage() {
   return (
-    <div className="min-h-screen py-20 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen py-20 px-4 relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-rose-50 -z-10" />
+      <div className="absolute top-40 right-0 w-96 h-96 bg-gradient-to-bl from-amber-300/20 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute bottom-20 left-0 w-96 h-96 bg-gradient-to-tr from-rose-300/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
+      
+      <div className="max-w-7xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <Info className="w-16 h-16 text-[var(--color-primary)] mx-auto mb-4" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
-            Información General
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="relative inline-block mb-6"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-rose-500 rounded-full blur-2xl opacity-30 animate-pulse" />
+            <div className="relative bg-gradient-to-br from-amber-500 to-rose-500 p-5 rounded-full">
+              <Info className="w-12 h-12 text-white" />
+            </div>
+          </motion.div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
+            <span className="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 bg-clip-text text-transparent">
+              Información General
+            </span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Todo lo que necesitas saber sobre nuestro gran día
           </p>
         </motion.div>

@@ -81,18 +81,35 @@ export default function GaleriaPage() {
   };
 
   return (
-    <div className="min-h-screen py-20 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen py-20 px-4 relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-blue-50 -z-10" />
+      <div className="absolute top-20 right-1/3 w-96 h-96 bg-gradient-to-br from-purple-300/20 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute bottom-40 left-1/4 w-96 h-96 bg-gradient-to-tl from-blue-300/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
+      
+      <div className="max-w-7xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <Camera className="w-16 h-16 text-[var(--color-primary)] mx-auto mb-4" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
-            Galería de Fotos
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="relative inline-block mb-6"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full blur-2xl opacity-30 animate-pulse" />
+            <div className="relative bg-gradient-to-br from-purple-500 to-blue-500 p-5 rounded-full">
+              <Camera className="w-12 h-12 text-white" />
+            </div>
+          </motion.div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
+            <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+              Galería de Fotos
+            </span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Comparte tus mejores momentos con nosotros. Las fotos serán revisadas antes de publicarse.
           </p>
         </motion.div>
