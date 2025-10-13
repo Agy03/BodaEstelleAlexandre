@@ -7,10 +7,6 @@ export function ScrollVine() {
   const { scrollYProgress } = useScroll();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Smooth spring animation for the vine growth
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 50,
@@ -20,6 +16,43 @@ export function ScrollVine() {
 
   // Transform scroll progress to path length (0 to 1)
   const pathLength = useTransform(smoothProgress, [0, 1], [0, 1]);
+  const pathOpacity = useTransform(smoothProgress, [0, 0.1], [0, 1]);
+
+  // Pre-calcular todas las opacidades y escalas para las hojas
+  const leafData = [
+    { x: 35, y: 12, rotation: -30, scale: 0.8, delay: 0.1 },
+    { x: 45, y: 18, rotation: 45, scale: 0.9, delay: 0.15 },
+    { x: 32, y: 25, rotation: -45, scale: 0.85, delay: 0.2 },
+    { x: 43, y: 35, rotation: 30, scale: 0.95, delay: 0.25 },
+    { x: 30, y: 42, rotation: -35, scale: 0.9, delay: 0.3 },
+    { x: 40, y: 50, rotation: 20, scale: 1, delay: 0.35 },
+    { x: 33, y: 58, rotation: -40, scale: 0.85, delay: 0.4 },
+    { x: 45, y: 65, rotation: 35, scale: 0.9, delay: 0.45 },
+    { x: 35, y: 73, rotation: -25, scale: 0.95, delay: 0.5 },
+    { x: 42, y: 82, rotation: 40, scale: 0.9, delay: 0.55 },
+    { x: 36, y: 90, rotation: -30, scale: 0.85, delay: 0.6 },
+  ];
+
+  const flowerData = [
+    { x: 38, y: 28, delay: 0.25 },
+    { x: 36, y: 55, delay: 0.4 },
+    { x: 41, y: 78, delay: 0.55 },
+  ];
+
+  // Crear todos los transforms de una vez
+  const leafTransforms = leafData.map(leaf => ({
+    opacity: useTransform(smoothProgress, [leaf.delay, leaf.delay + 0.05], [0, 1]),
+    scale: useTransform(smoothProgress, [leaf.delay, leaf.delay + 0.1], [0, leaf.scale])
+  }));
+
+  const flowerTransforms = flowerData.map(flower => ({
+    opacity: useTransform(smoothProgress, [flower.delay, flower.delay + 0.05], [0, 1]),
+    scale: useTransform(smoothProgress, [flower.delay, flower.delay + 0.1], [0, 0.6])
+  }));
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) return null;
 
@@ -65,38 +98,18 @@ export function ScrollVine() {
           filter="url(#vineShadow)"
           style={{
             pathLength: pathLength,
-            opacity: useTransform(smoothProgress, [0, 0.1], [0, 1])
+            opacity: pathOpacity
           }}
           initial={{ pathLength: 0 }}
         />
 
         {/* Hojas a lo largo del tallo */}
-        {[
-          { x: 35, y: 12, rotation: -30, scale: 0.8, delay: 0.1 },
-          { x: 45, y: 18, rotation: 45, scale: 0.9, delay: 0.15 },
-          { x: 32, y: 25, rotation: -45, scale: 0.85, delay: 0.2 },
-          { x: 43, y: 35, rotation: 30, scale: 0.95, delay: 0.25 },
-          { x: 30, y: 42, rotation: -35, scale: 0.9, delay: 0.3 },
-          { x: 40, y: 50, rotation: 20, scale: 1, delay: 0.35 },
-          { x: 33, y: 58, rotation: -40, scale: 0.85, delay: 0.4 },
-          { x: 45, y: 65, rotation: 35, scale: 0.9, delay: 0.45 },
-          { x: 35, y: 73, rotation: -25, scale: 0.95, delay: 0.5 },
-          { x: 42, y: 82, rotation: 40, scale: 0.9, delay: 0.55 },
-          { x: 36, y: 90, rotation: -30, scale: 0.85, delay: 0.6 },
-        ].map((leaf, i) => (
+        {leafData.map((leaf, i) => (
           <motion.g
             key={i}
             style={{
-              opacity: useTransform(
-                smoothProgress,
-                [leaf.delay, leaf.delay + 0.05],
-                [0, 1]
-              ),
-              scale: useTransform(
-                smoothProgress,
-                [leaf.delay, leaf.delay + 0.1],
-                [0, leaf.scale]
-              )
+              opacity: leafTransforms[i].opacity,
+              scale: leafTransforms[i].scale
             }}
           >
             {/* Hoja con forma natural */}
@@ -139,24 +152,12 @@ export function ScrollVine() {
         ))}
 
         {/* Pequeñas flores ocasionales */}
-        {[
-          { x: 38, y: 28, delay: 0.25 },
-          { x: 36, y: 55, delay: 0.4 },
-          { x: 41, y: 78, delay: 0.55 },
-        ].map((flower, i) => (
+        {flowerData.map((flower, i) => (
           <motion.g
             key={`flower-${i}`}
             style={{
-              opacity: useTransform(
-                smoothProgress,
-                [flower.delay, flower.delay + 0.05],
-                [0, 1]
-              ),
-              scale: useTransform(
-                smoothProgress,
-                [flower.delay, flower.delay + 0.1],
-                [0, 0.6]
-              )
+              opacity: flowerTransforms[i].opacity,
+              scale: flowerTransforms[i].scale
             }}
           >
             {/* Pétalos pequeños */}

@@ -36,17 +36,31 @@ export default function TurismoPage() {
     if (selectedCategory === 'all') {
       setFilteredPlaces(places);
     } else {
-      setFilteredPlaces(places.filter((place) => place.type === selectedCategory));
+      // Asegurar que places es un array antes de filtrar
+      const filtered = Array.isArray(places) 
+        ? places.filter((place) => place.type === selectedCategory)
+        : [];
+      setFilteredPlaces(filtered);
     }
   }, [selectedCategory, places]);
 
   const fetchPlaces = async () => {
     try {
       const response = await fetch('/api/tourism');
+      if (!response.ok) {
+        throw new Error('Failed to fetch places');
+      }
       const data = await response.json();
-      setPlaces(data);
+      // Asegurar que data es un array
+      if (Array.isArray(data)) {
+        setPlaces(data);
+      } else {
+        console.warn('API did not return an array:', data);
+        setPlaces([]);
+      }
     } catch (error) {
       console.error('Error fetching places:', error);
+      setPlaces([]);
     } finally {
       setLoading(false);
     }
@@ -121,7 +135,7 @@ export default function TurismoPage() {
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-[var(--color-primary)] border-t-transparent"></div>
             <p className="mt-4 text-gray-600">Cargando lugares...</p>
           </div>
-        ) : filteredPlaces.length === 0 ? (
+        ) : !Array.isArray(filteredPlaces) || filteredPlaces.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-gray-600 text-lg">
               Próximamente agregaremos lugares recomendados para visitar
