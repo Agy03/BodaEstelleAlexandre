@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #A855F7;
-  --color-secondary: #C084FC;
-  --color-accent: #94A3B8;
-  --color-background: #FAF5FF;
-  --color-text: #1E293B;
+  /* Colores más románticos y suaves para boda */
+  --color-primary: #E8B4B8; /* Rosa empolvado */
+  --color-secondary: #C9A7C7; /* Lavanda suave */
+  --color-accent: #D4AF97; /* Dorado champagne */
+  --color-background: #FFF9F5; /* Blanco cálido */
+  --color-text: #4A4A4A; /* Gris carbón suave */
+  --color-gold: #D4AF97;
+  --color-rose: #E8B4B8;
 }
 
 @keyframes shimmer {
@@ -19,23 +22,80 @@
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-15px) rotate(3deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes flowerBlossom {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
   }
 }
 
 body {
-  background: linear-gradient(180deg, var(--color-background) 0%, #ffffff 50%, var(--color-background) 100%);
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(232, 180, 184, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(201, 167, 199, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, #FFF9F5 0%, #FFFFFF 50%, #FFF9F5 100%);
   color: var(--color-text);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), 'Georgia', serif;
   min-height: 100vh;
+  position: relative;
+}
+
+/* Patrón sutil de encaje en el fondo */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(232, 180, 184, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(201, 167, 199, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-playfair), serif;
-  letter-spacing: -0.02em;
+  font-family: var(--font-playfair), 'Georgia', serif;
+  letter-spacing: 0.02em;
+  font-weight: 400;
 }
 
 .text-balance {
@@ -43,11 +103,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .font-playfair {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-playfair), 'Georgia', serif;
 }
 
 .font-inter {
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-inter), 'Helvetica', sans-serif;
 }
 
 /* Smooth scrolling */
@@ -55,42 +115,104 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar con estilo boda */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-background);
+  background: linear-gradient(180deg, var(--color-background), #FFFFFF);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 5px;
+  background: linear-gradient(180deg, var(--color-rose), var(--color-secondary));
+  border-radius: 10px;
+  border: 2px solid var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-secondary);
+  background: linear-gradient(180deg, var(--color-primary), var(--color-accent));
 }
 
 /* Selection color */
 ::selection {
-  background-color: var(--color-primary);
+  background-color: var(--color-rose);
   color: white;
 }
 
-/* Glass morphism utility */
+/* Glass morphism con toque romántico */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 249, 245, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(232, 180, 184, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(232, 180, 184, 0.15);
 }
 
-/* Gradient text */
+/* Gradient text romántico */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(135deg, var(--color-rose), var(--color-secondary), var(--color-accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Ornamento decorativo */
+.ornament {
+  position: relative;
+}
+
+.ornament::before,
+.ornament::after {
+  content: '❋';
+  position: absolute;
+  color: var(--color-accent);
+  font-size: 1.5rem;
+  opacity: 0.3;
+}
+
+.ornament::before {
+  left: -2rem;
+}
+
+.ornament::after {
+  right: -2rem;
+}
+
+/* Línea decorativa */
+.divider-floral {
+  position: relative;
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.divider-floral::before,
+.divider-floral::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+}
+
+.divider-floral::before {
+  left: 0;
+}
+
+.divider-floral::after {
+  right: 0;
+}
+
+/* Animaciones */
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.animate-blossom {
+  animation: flowerBlossom 0.8s ease-out;
 }
 
