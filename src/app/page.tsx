@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Heart, MapPin, Calendar, Users, Gift, Camera, Music, Info, Flower2, Sparkles } from 'lucide-react';
+import { Heart, MapPin, Calendar, Users, Gift, Camera, Music, Info, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { ScrollVine } from '@/components/ui/ScrollVine';
 
 const features = [
   {
@@ -87,34 +88,20 @@ const floatingAnimation = {
 export default function Home() {
   return (
     <div className="min-h-screen overflow-hidden relative">
-      {/* Decorative floral elements */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        {/* Flores decorativas en las esquinas */}
-        <motion.div
-          className="absolute top-10 left-10 opacity-15"
-          animate={{ rotate: [0, 5, 0], scale: [1, 1.05, 1] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Flower2 className="w-32 h-32 text-[var(--color-rose)]" />
-        </motion.div>
-        <motion.div
-          className="absolute top-20 right-20 opacity-15"
-          animate={{ rotate: [0, -5, 0], scale: [1, 1.05, 1] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        >
-          <Flower2 className="w-40 h-40 text-[var(--color-secondary)]" />
-        </motion.div>
+      {/* Enredadera que crece con el scroll */}
+      <ScrollVine />
 
-        {/* Gradientes suaves */}
+      {/* Gradientes suaves de fondo */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-[var(--color-rose)]/10 to-[var(--color-secondary)]/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-tr from-[var(--color-secondary)]/10 to-[var(--color-accent)]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-tr from-[var(--color-secondary)]/10 to-[var(--color-accent)]/5 rounded-full blur-3xl" />
       </div>
 
       {/* Hero Section - Estilo invitación de boda */}
-      <section className="relative min-h-[90vh] flex items-center justify-center px-4 py-20">
-        {/* Marco decorativo */}
-        <div className="absolute inset-8 md:inset-16 border border-[var(--color-accent)]/20 rounded-3xl pointer-events-none" />
-        <div className="absolute inset-12 md:inset-20 border border-[var(--color-accent)]/10 rounded-3xl pointer-events-none" />
+      <section className="relative min-h-screen flex items-center justify-center px-4 py-20">
+        {/* Marco decorativo que cubre toda la sección */}
+        <div className="absolute inset-6 md:inset-12 border border-[var(--color-accent)]/20 rounded-3xl pointer-events-none" />
+        <div className="absolute inset-10 md:inset-16 border border-[var(--color-accent)]/10 rounded-3xl pointer-events-none" />
 
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <motion.div
@@ -204,68 +191,68 @@ export default function Home() {
                         <p className="text-sm text-gray-500 font-medium">Fecha</p>
                         <p className="font-semibold">Por confirmar</p>
                       </div>
-                  </div>
-                  <div className="hidden sm:block w-px h-10 bg-gray-200" />
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 rounded-lg">
-                      <MapPin className="w-6 h-6 text-[var(--color-primary)]" />
                     </div>
-                    <div className="text-left">
-                      <p className="text-sm text-gray-500 font-medium">Lugar</p>
-                      <p className="font-semibold">Por confirmar</p>
+                    <div className="hidden sm:block w-px h-10 bg-gray-200" />
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 rounded-lg">
+                        <MapPin className="w-6 h-6 text-[var(--color-primary)]" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm text-gray-500 font-medium">Lugar</p>
+                        <p className="font-semibold">Por confirmar</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-          >
-            <Link href="/rsvp">
-              <Button
-                size="lg"
-                className="group relative overflow-hidden shadow-2xl hover:shadow-[var(--color-primary)]/50 transition-all duration-300 px-12 py-6 text-lg"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  Confirmar Asistencia
-                  <motion.span
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    →
-                  </motion.span>
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-primary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </Button>
-            </Link>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
+              <Link href="/rsvp">
+                <Button
+                  size="lg"
+                  className="group relative overflow-hidden shadow-2xl hover:shadow-[var(--color-primary)]/50 transition-all duration-300 px-12 py-6 text-lg"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    Confirmar Asistencia
+                    <motion.span
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      →
+                    </motion.span>
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-primary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="w-6 h-10 border-2 border-[var(--color-primary)] rounded-full flex items-start justify-center p-2">
+            <motion.div
+              className="w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full"
+              animate={{ y: [0, 20, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </div>
         </motion.div>
-    </div>
-
-        {/* Scroll indicator */ }
-  <motion.div
-    className="absolute bottom-10 left-1/2 -translate-x-1/2"
-    animate={{ y: [0, 10, 0] }}
-    transition={{ duration: 2, repeat: Infinity }}
-  >
-    <div className="w-6 h-10 border-2 border-[var(--color-primary)] rounded-full flex items-start justify-center p-2">
-      <motion.div
-        className="w-1.5 h-1.5 bg-[var(--color-primary)] rounded-full"
-        animate={{ y: [0, 20, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      />
-    </div>
-  </motion.div>
       </section >
 
-    {/* Features Section */ }
-    < section className = "py-32 px-4 relative overflow-hidden" >
-      {/* Subtle background decoration */ }
-      < div className = "absolute inset-0 bg-gradient-to-b from-gray-50/50 via-transparent to-gray-50/50 -z-10" />
+      {/* Features Section */}
+      < section className="py-32 px-4 relative overflow-hidden" >
+        {/* Subtle background decoration */}
+        < div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 via-transparent to-gray-50/50 -z-10" />
 
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -381,10 +368,10 @@ export default function Home() {
         </div>
       </section >
 
-    {/* CTA Section */ }
-    < section className = "py-24 px-4 relative overflow-hidden" >
-      {/* Background decoration */ }
-      < div className = "absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/10 via-[var(--color-secondary)]/5 to-transparent" />
+      {/* CTA Section */}
+      < section className="py-24 px-4 relative overflow-hidden" >
+        {/* Background decoration */}
+        < div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/10 via-[var(--color-secondary)]/5 to-transparent" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div

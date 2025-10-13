@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
+import { Radio } from '@/components/ui/Radio';
 import { Button } from '@/components/ui/Button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { CheckCircle, Users } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { CheckCircle, Users, Mail, User, MessageSquare, Heart, Sparkles, Flower2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function RSVPPage() {
   const [formData, setFormData] = useState({
@@ -43,25 +46,57 @@ export default function RSVPPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen py-20 px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="min-h-screen py-20 px-4 flex items-center justify-center relative overflow-hidden">
+        {/* Decorative background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/10 via-[var(--color-background)] to-[var(--color-secondary)]/10" />
+        <div className="absolute top-10 left-10 opacity-10">
+          <Flower2 className="w-32 h-32 text-[var(--color-rose)]" />
+        </div>
+        <div className="absolute bottom-10 right-10 opacity-10">
+          <Flower2 className="w-32 h-32 text-[var(--color-secondary)]" />
+        </div>
+
+        <div className="max-w-2xl mx-auto relative z-10">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.6, type: "spring" }}
             className="text-center"
           >
-            <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
-            <h1 className="text-4xl font-bold mb-4 text-[var(--color-primary)]">
-              ¡Confirmación Recibida!
-            </h1>
-            <p className="text-lg text-gray-600 mb-8">
-              {formData.attending
-                ? '¡Nos alegra mucho que puedas acompañarnos! Te esperamos con mucha ilusión.'
-                : 'Lamentamos que no puedas asistir. ¡Esperamos celebrar contigo en otra ocasión!'}
-            </p>
-            <Button onClick={() => window.location.href = '/'}>
-              Volver al Inicio
-            </Button>
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="relative inline-block mb-8"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full blur-2xl opacity-30 animate-pulse" />
+              <div className="relative bg-gradient-to-br from-green-400 to-emerald-500 p-6 rounded-full">
+                <CheckCircle className="w-16 h-16 text-white" />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <h1 className="text-4xl md:text-5xl font-light font-playfair mb-6 bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
+                ¡Confirmación Recibida!
+              </h1>
+              <div className="flex justify-center items-center gap-3 mb-6">
+                <div className="h-px w-16 bg-gradient-to-r from-transparent via-[var(--color-rose)] to-transparent" />
+                <Heart className="w-5 h-5 text-[var(--color-rose)] fill-current" />
+                <div className="h-px w-16 bg-gradient-to-r from-transparent via-[var(--color-rose)] to-transparent" />
+              </div>
+              <p className="text-lg text-gray-600 mb-8 font-light leading-relaxed max-w-xl mx-auto">
+                {formData.attending
+                  ? '¡Nos alegra muchísimo que puedas acompañarnos en nuestro día especial! Te esperamos con mucha ilusión.'
+                  : 'Lamentamos que no puedas asistir. ¡Esperamos celebrar contigo en otra ocasión!'}
+              </p>
+              <Button onClick={() => window.location.href = '/'} size="lg">
+                Volver al Inicio
+              </Button>
+            </motion.div>
           </motion.div>
         </div>
       </div>
@@ -71,11 +106,19 @@ export default function RSVPPage() {
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
       {/* Decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/5 via-white to-[var(--color-secondary)]/5 -z-10" />
-      <div className="absolute top-20 left-0 w-96 h-96 bg-gradient-to-br from-[var(--color-primary)]/10 to-transparent rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-20 right-0 w-96 h-96 bg-gradient-to-tl from-[var(--color-secondary)]/10 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/5 via-[var(--color-background)] to-[var(--color-secondary)]/5" />
+      <div className="absolute top-20 left-0 w-96 h-96 bg-gradient-to-br from-[var(--color-rose)]/10 to-transparent rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-0 w-96 h-96 bg-gradient-to-tl from-[var(--color-secondary)]/10 to-transparent rounded-full blur-3xl" />
 
-      <div className="max-w-2xl mx-auto relative">
+      {/* Flores decorativas solo arriba */}
+      <div className="fixed top-10 left-10 opacity-10 pointer-events-none">
+        <Flower2 className="w-24 h-24 text-[var(--color-rose)]" />
+      </div>
+      <div className="fixed top-20 right-20 opacity-10 pointer-events-none">
+        <Flower2 className="w-28 h-28 text-[var(--color-secondary)]" />
+      </div>
+
+      <div className="max-w-2xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -87,107 +130,173 @@ export default function RSVPPage() {
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="relative inline-block mb-6"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-secondary)] rounded-full blur-2xl opacity-30 animate-pulse" />
-            <div className="relative bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-secondary)] p-5 rounded-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] rounded-full blur-2xl opacity-30 animate-pulse" />
+            <div className="relative bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] p-5 rounded-full shadow-xl">
               <Users className="w-12 h-12 text-white" />
             </div>
           </motion.div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
-            <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-accent)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-              Confirma tu Asistencia
-            </span>
-          </h1>
-          <p className="text-lg text-gray-600 leading-relaxed">
-            Por favor, háznoslo saber lo antes posible para poder organizar todo perfectamente
-          </p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <h1 className="text-4xl md:text-6xl font-light mb-4 font-playfair">
+              <span className="bg-gradient-to-r from-[var(--color-rose)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
+                Confirma tu Asistencia
+              </span>
+            </h1>
+
+            <div className="flex justify-center items-center gap-3 mb-6">
+              <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
+              <div className="h-px w-12 bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent" />
+              <Heart className="w-5 h-5 text-[var(--color-rose)] fill-current" />
+              <div className="h-px w-12 bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent" />
+              <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
+            </div>
+
+            <p className="text-lg text-gray-600 leading-relaxed font-light">
+              Por favor, háznoslo saber lo antes posible para poder organizar todo perfectamente
+            </p>
+          </motion.div>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.5 }}
         >
-          <Card>
-            <CardHeader>
-              <CardTitle>Formulario de Confirmación</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <Input
-                  label="Nombre completo *"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Juan Pérez"
-                />
+          <Card hover className="p-8 md:p-10">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Nombre */}
+              <Input
+                label="Nombre completo"
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Escribe tu nombre completo"
+                icon={<User className="w-5 h-5" />}
+              />
 
-                <Input
-                  label="Email *"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="juan@ejemplo.com"
-                />
+              {/* Email */}
+              <Input
+                label="Correo electrónico"
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="tu@email.com"
+                icon={<Mail className="w-5 h-5" />}
+              />
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    ¿Podrás asistir? *
-                  </label>
-                  <div className="flex gap-4">
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, attending: true })}
-                      className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all ${
-                        formData.attending
-                          ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
-                          : 'border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      ✓ Sí, asistiré
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, attending: false })}
-                      className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all ${
-                        !formData.attending
-                          ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-white'
-                          : 'border-gray-300 hover:border-gray-400'
-                      }`}
-                    >
-                      ✗ No podré asistir
-                    </button>
-                  </div>
+              {/* Asistencia */}
+              <div className="space-y-3">
+                <label className="block text-sm font-light tracking-wide text-gray-700">
+                  ¿Podrás asistir? <span className="text-[var(--color-rose)]">*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setFormData({ ...formData, attending: true })}
+                    className={cn(
+                      'relative py-4 px-6 rounded-xl border-2 transition-all duration-300 font-light',
+                      formData.attending
+                        ? 'border-[var(--color-rose)] bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] text-white shadow-lg shadow-[var(--color-rose)]/20'
+                        : 'border-[var(--color-accent)]/20 hover:border-[var(--color-rose)]/40 bg-white'
+                    )}
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <Heart className={cn("w-5 h-5", formData.attending && "fill-current")} />
+                      Sí, asistiré
+                    </span>
+                  </motion.button>
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setFormData({ ...formData, attending: false })}
+                    className={cn(
+                      'relative py-4 px-6 rounded-xl border-2 transition-all duration-300 font-light',
+                      !formData.attending
+                        ? 'border-gray-400 bg-gradient-to-br from-gray-400 to-gray-500 text-white shadow-lg shadow-gray-400/20'
+                        : 'border-[var(--color-accent)]/20 hover:border-gray-400/40 bg-white'
+                    )}
+                  >
+                    No podré asistir
+                  </motion.button>
                 </div>
+              </div>
 
-                {formData.attending && (
-                  <Input
+              {/* Número de acompañantes */}
+              {formData.attending && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Select
                     label="Número de acompañantes"
-                    type="number"
-                    min="0"
-                    max="10"
-                    value={formData.guests}
+                    value={formData.guests.toString()}
                     onChange={(e) =>
                       setFormData({ ...formData, guests: parseInt(e.target.value) || 0 })
                     }
-                    placeholder="0"
+                    icon={<Users className="w-5 h-5" />}
+                    options={[
+                      { value: '0', label: 'Solo yo' },
+                      { value: '1', label: '1 acompañante' },
+                      { value: '2', label: '2 acompañantes' },
+                      { value: '3', label: '3 acompañantes' },
+                      { value: '4', label: '4 acompañantes' },
+                      { value: '5', label: '5 acompañantes' },
+                    ]}
                   />
-                )}
+                </motion.div>
+              )}
 
-                <Textarea
-                  label="Comentarios o restricciones alimentarias"
-                  value={formData.comments}
-                  onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
-                  placeholder="Alergias, intolerancias, comentarios especiales..."
-                  rows={4}
-                />
+              {/* Comentarios */}
+              <Textarea
+                label="Comentarios o restricciones alimentarias"
+                value={formData.comments}
+                onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
+                placeholder="Alergias, intolerancias, comentarios especiales..."
+                rows={4}
+              />
 
-                <Button type="submit" className="w-full" size="lg" disabled={loading}>
-                  {loading ? 'Enviando...' : 'Confirmar Asistencia'}
+              {/* Botón de envío */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
+                <Button 
+                  type="submit" 
+                  className="w-full group relative overflow-hidden" 
+                  size="lg" 
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      >
+                        <Sparkles className="w-5 h-5" />
+                      </motion.div>
+                      Enviando...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      <Heart className="w-5 h-5 fill-current" />
+                      Confirmar Asistencia
+                    </span>
+                  )}
                 </Button>
-              </form>
-            </CardContent>
+              </motion.div>
+            </form>
           </Card>
         </motion.div>
       </div>
