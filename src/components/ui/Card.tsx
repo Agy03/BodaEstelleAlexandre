@@ -13,8 +13,8 @@ export function Card({ children, className, hover = false }: CardProps) {
   return (
     <div
       className={cn(
-        'bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100/50 p-6',
-        hover && 'transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:border-[var(--color-primary)]/20',
+        'bg-white/90 backdrop-blur-sm rounded-2xl shadow-md shadow-[var(--color-rose)]/5 border-2 border-[var(--color-accent)]/10 p-6',
+        hover && 'transition-all duration-500 hover:shadow-2xl hover:shadow-[var(--color-rose)]/10 hover:-translate-y-2 hover:border-[var(--color-rose)]/20',
         className
       )}
     >
@@ -29,7 +29,7 @@ export function CardHeader({ children, className }: { children: ReactNode; class
 
 export function CardTitle({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <h3 className={cn('text-2xl font-bold text-[var(--color-text)] tracking-tight', className)}>{children}</h3>
+    <h3 className={cn('text-2xl font-light text-[var(--color-rose)] tracking-wide', className)}>{children}</h3>
   );
 }
 

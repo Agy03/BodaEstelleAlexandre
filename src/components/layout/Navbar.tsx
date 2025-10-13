@@ -39,8 +39,8 @@ export function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-700',
         scrolled
-          ? 'bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-100/50'
-          : 'bg-gradient-to-b from-white/60 to-transparent backdrop-blur-sm'
+          ? 'bg-white/90 backdrop-blur-xl shadow-md shadow-[var(--color-rose)]/5 border-b border-[var(--color-rose)]/10'
+          : 'bg-white/70 backdrop-blur-md border-b border-[var(--color-accent)]/5'
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,18 +55,18 @@ export function Navbar() {
               transition={{ duration: 0.6, ease: "easeInOut" }}
               className="relative"
             >
-              <Heart className="w-7 h-7 fill-current text-[var(--color-primary)]" />
+              <Heart className="w-7 h-7 fill-current text-[var(--color-rose)]" />
               <motion.div 
-                className="absolute inset-0 bg-[var(--color-primary)] blur-xl opacity-20"
+                className="absolute inset-0 bg-[var(--color-rose)] blur-xl opacity-30"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               />
             </motion.div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold font-playfair bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
+              <span className="text-xl font-light font-playfair bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
                 Boda Estelle
               </span>
-              <span className="text-[10px] tracking-widest uppercase text-gray-400 -mt-1">2025</span>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--color-accent)] -mt-1">2025</span>
             </div>
           </Link>
 
@@ -84,26 +84,26 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "relative px-4 py-2 text-sm font-medium transition-all duration-300 group flex items-center gap-2",
+                      "relative px-4 py-2 text-sm font-light transition-all duration-300 group flex items-center gap-2",
                       isActive 
-                        ? "text-[var(--color-primary)]" 
-                        : "text-gray-600 hover:text-[var(--color-primary)]"
+                        ? "text-[var(--color-rose)]" 
+                        : "text-gray-600 hover:text-[var(--color-rose)]"
                     )}
                   >
                     <span className="relative z-10">{item.label}</span>
                     
-                    {/* Active indicator dot */}
+                    {/* Active indicator */}
                     {isActive && (
                       <motion.div
                         layoutId="activeNav"
-                        className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)]/5 to-[var(--color-secondary)]/5 rounded-full"
+                        className="absolute inset-0 bg-gradient-to-r from-[var(--color-rose)]/5 to-[var(--color-secondary)]/5 rounded-full"
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       />
                     )}
                     
                     {/* Bottom underline on hover */}
                     <motion.div
-                      className="absolute bottom-1 left-1/2 -translate-x-1/2 h-px bg-gradient-to-r from-transparent via-[var(--color-primary)] to-transparent"
+                      className="absolute bottom-1 left-1/2 -translate-x-1/2 h-px bg-gradient-to-r from-transparent via-[var(--color-rose)] to-transparent"
                       initial={{ width: 0, opacity: 0 }}
                       whileHover={{ width: "70%", opacity: 1 }}
                       transition={{ duration: 0.3 }}
@@ -119,7 +119,7 @@ export function Navbar() {
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.05 }}
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-3 rounded-full bg-white/50 backdrop-blur-sm border border-gray-200/50 hover:border-[var(--color-primary)]/30 hover:bg-[var(--color-primary)]/5 transition-all duration-300 text-[var(--color-primary)]"
+            className="md:hidden p-3 rounded-full bg-white/80 backdrop-blur-sm border border-[var(--color-rose)]/20 hover:border-[var(--color-rose)]/40 hover:bg-[var(--color-rose)]/5 transition-all duration-300 text-[var(--color-rose)]"
             aria-label="Toggle menu"
           >
             <AnimatePresence mode="wait">
@@ -157,7 +157,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100/50"
+            className="md:hidden bg-white/95 backdrop-blur-xl border-t border-[var(--color-rose)]/10"
           >
             <div className="px-6 py-8 space-y-1">
               {navItems.map((item, index) => {
@@ -173,23 +173,23 @@ export function Navbar() {
                       href={item.href}
                       onClick={() => setIsOpen(false)}
                       className={cn(
-                        "block px-6 py-4 text-base font-medium rounded-2xl transition-all duration-300 group relative",
+                        "block px-6 py-4 text-base font-light rounded-2xl transition-all duration-300 group relative",
                         isActive
-                          ? "bg-gradient-to-r from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 text-[var(--color-primary)]"
-                          : "text-gray-700 hover:bg-gray-50 hover:text-[var(--color-primary)]"
+                          ? "bg-gradient-to-r from-[var(--color-rose)]/10 to-[var(--color-secondary)]/10 text-[var(--color-rose)]"
+                          : "text-gray-700 hover:bg-[var(--color-rose)]/5 hover:text-[var(--color-rose)]"
                       )}
                     >
                       {isActive && (
                         <motion.div
                           layoutId="activeMobileNav"
-                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-secondary)] rounded-r-full"
+                          className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-[var(--color-rose)] to-[var(--color-secondary)] rounded-r-full"
                           transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         />
                       )}
                       <div className="flex items-center justify-between">
                         <span>{item.label}</span>
                         <motion.svg
-                          className="w-5 h-5 text-[var(--color-primary)] opacity-0 group-hover:opacity-100"
+                          className="w-5 h-5 text-[var(--color-rose)] opacity-0 group-hover:opacity-100"
                           initial={{ x: -10 }}
                           whileHover={{ x: 0 }}
                           fill="none"
