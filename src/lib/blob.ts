@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 // Note: removed import of getSignedUrl from '@aws-sdk/s3-request-presigner' to avoid missing module/type errors.
 // If you need signed URLs for private buckets, install '@aws-sdk/s3-request-presigner' and restore the import.
 
@@ -37,7 +37,7 @@ export async function deleteBlob(key: string): Promise<void> {
 
   await s3Client.send(command);
 }
-export async function getSignedBlobUrl(key: string, expiresIn: number = 3600): Promise<string> {
+export async function getSignedBlobUrl(key: string): Promise<string> {
   // Fallback: return a direct (unsigned) public URL so the code compiles without '@aws-sdk/s3-request-presigner'.
   // For private buckets and real signed URLs, install and import '@aws-sdk/s3-request-presigner' and re-enable signing.
   return `${process.env.BLOB_ENDPOINT || ''}/${BUCKET}/${key}`;

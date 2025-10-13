@@ -176,7 +176,7 @@ export default function Home() {
               className="max-w-2xl mx-auto mb-12"
             >
               <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed italic mb-12">
-                "Dos almas, un corazón, una vida juntos"
+                &ldquo;Dos almas, un corazón, una vida juntos&rdquo;
               </p>
 
               {/* Info cards */}

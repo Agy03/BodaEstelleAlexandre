@@ -5,10 +5,9 @@ import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
-import { Radio } from '@/components/ui/Radio';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { CheckCircle, Users, Mail, User, MessageSquare, Heart, Sparkles, Flower2 } from 'lucide-react';
+import { CheckCircle, Users, Mail, User, Heart, Sparkles, Flower2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function RSVPPage() {

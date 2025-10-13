@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Camera, Music, Gift, CheckCircle, X } from 'lucide-react';
+import { Users, Camera, Music, CheckCircle, X } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
@@ -101,7 +101,6 @@ export default function AdminPage() {
   };
 
   const attendingCount = rsvps.filter((r) => r.attending).length;
-  const notAttendingCount = rsvps.filter((r) => !r.attending).length;
   const totalGuests = rsvps.reduce((sum, r) => sum + (r.attending ? r.guests + 1 : 0), 0);
   const pendingPhotos = photos.filter((p) => !p.approved).length;
   const pendingSongs = songs.filter((s) => !s.approved).length;

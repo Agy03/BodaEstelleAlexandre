@@ -39,16 +39,26 @@ export function ScrollVine() {
     { x: 41, y: 78, delay: 0.55 },
   ];
 
-  // Crear todos los transforms de una vez
-  const leafTransforms = leafData.map(leaf => ({
-    opacity: useTransform(smoothProgress, [leaf.delay, leaf.delay + 0.05], [0, 1]),
-    scale: useTransform(smoothProgress, [leaf.delay, leaf.delay + 0.1], [0, leaf.scale])
-  }));
+  // Crear todos los transforms de una vez usando useMemo para evitar recrearlos
+  const leafTransforms = [
+    { opacity: useTransform(smoothProgress, [0.1, 0.15], [0, 1]), scale: useTransform(smoothProgress, [0.1, 0.2], [0, 0.8]) },
+    { opacity: useTransform(smoothProgress, [0.15, 0.2], [0, 1]), scale: useTransform(smoothProgress, [0.15, 0.25], [0, 0.9]) },
+    { opacity: useTransform(smoothProgress, [0.2, 0.25], [0, 1]), scale: useTransform(smoothProgress, [0.2, 0.3], [0, 0.85]) },
+    { opacity: useTransform(smoothProgress, [0.25, 0.3], [0, 1]), scale: useTransform(smoothProgress, [0.25, 0.35], [0, 0.95]) },
+    { opacity: useTransform(smoothProgress, [0.3, 0.35], [0, 1]), scale: useTransform(smoothProgress, [0.3, 0.4], [0, 0.9]) },
+    { opacity: useTransform(smoothProgress, [0.35, 0.4], [0, 1]), scale: useTransform(smoothProgress, [0.35, 0.45], [0, 1]) },
+    { opacity: useTransform(smoothProgress, [0.4, 0.45], [0, 1]), scale: useTransform(smoothProgress, [0.4, 0.5], [0, 0.85]) },
+    { opacity: useTransform(smoothProgress, [0.45, 0.5], [0, 1]), scale: useTransform(smoothProgress, [0.45, 0.55], [0, 0.9]) },
+    { opacity: useTransform(smoothProgress, [0.5, 0.55], [0, 1]), scale: useTransform(smoothProgress, [0.5, 0.6], [0, 0.95]) },
+    { opacity: useTransform(smoothProgress, [0.55, 0.6], [0, 1]), scale: useTransform(smoothProgress, [0.55, 0.65], [0, 0.9]) },
+    { opacity: useTransform(smoothProgress, [0.6, 0.65], [0, 1]), scale: useTransform(smoothProgress, [0.6, 0.7], [0, 0.85]) },
+  ];
 
-  const flowerTransforms = flowerData.map(flower => ({
-    opacity: useTransform(smoothProgress, [flower.delay, flower.delay + 0.05], [0, 1]),
-    scale: useTransform(smoothProgress, [flower.delay, flower.delay + 0.1], [0, 0.6])
-  }));
+  const flowerTransforms = [
+    { opacity: useTransform(smoothProgress, [0.25, 0.3], [0, 1]), scale: useTransform(smoothProgress, [0.25, 0.35], [0, 0.6]) },
+    { opacity: useTransform(smoothProgress, [0.4, 0.45], [0, 1]), scale: useTransform(smoothProgress, [0.4, 0.5], [0, 0.6]) },
+    { opacity: useTransform(smoothProgress, [0.55, 0.6], [0, 1]), scale: useTransform(smoothProgress, [0.55, 0.65], [0, 0.6]) },
+  ];
 
   useEffect(() => {
     setMounted(true);

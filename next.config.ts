@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Especificar el directorio raíz del proyecto para evitar advertencias
+  outputFileTracingRoot: path.join(__dirname),
+  
+  // Configuraciones adicionales
+  experimental: {
+    // Optimizaciones
+  },
 };
 
 export default nextConfig;
