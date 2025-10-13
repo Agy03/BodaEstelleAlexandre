@@ -1,103 +1,186 @@
-import Image from "next/image";
+'use client';
+
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Heart, MapPin, Calendar, Users, Gift, Camera, Music, Info } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+
+const features = [
+  {
+    icon: Users,
+    title: 'Confirma tu Asistencia',
+    description: 'Háznoslo saber para poder preparar todo perfectamente',
+    href: '/rsvp',
+    color: 'text-pink-500',
+  },
+  {
+    icon: MapPin,
+    title: 'Turismo Cercano',
+    description: 'Descubre lugares increíbles para visitar',
+    href: '/turismo',
+    color: 'text-blue-500',
+  },
+  {
+    icon: Gift,
+    title: 'Lista de Regalos',
+    description: 'Si deseas hacernos un regalo, aquí encontrarás ideas',
+    href: '/regalos',
+    color: 'text-purple-500',
+  },
+  {
+    icon: Camera,
+    title: 'Galería de Fotos',
+    description: 'Comparte tus mejores momentos con nosotros',
+    href: '/galeria',
+    color: 'text-green-500',
+  },
+  {
+    icon: Info,
+    title: 'Información General',
+    description: 'Todo lo que necesitas saber sobre el gran día',
+    href: '/informacion',
+    color: 'text-orange-500',
+  },
+  {
+    icon: Music,
+    title: 'Sugiere Música',
+    description: 'Ayúdanos a crear la playlist perfecta',
+    href: '/musica',
+    color: 'text-red-500',
+  },
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-[80vh] flex items-center justify-center bg-gradient-to-br from-[var(--color-primary)]/10 via-[var(--color-background)] to-[var(--color-secondary)]/10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="text-center px-4"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+          >
+            <Heart className="w-16 h-16 md:w-24 md:h-24 mx-auto mb-6 text-[var(--color-primary)] fill-current" />
+          </motion.div>
+          
+          <h1 className="text-5xl md:text-7xl font-bold mb-4 text-[var(--color-primary)]">
+            Boda Estelle
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Celebra con nosotros este día tan especial
+          </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <div className="flex items-center gap-2 text-gray-700">
+              <Calendar className="w-5 h-5 text-[var(--color-primary)]" />
+              <span className="font-medium">Fecha por confirmar</span>
+            </div>
+            <div className="hidden sm:block text-gray-400">•</div>
+            <div className="flex items-center gap-2 text-gray-700">
+              <MapPin className="w-5 h-5 text-[var(--color-primary)]" />
+              <span className="font-medium">Lugar por confirmar</span>
+            </div>
+          </div>
+
+          <Link href="/rsvp">
+            <Button size="lg" className="shadow-lg hover:shadow-xl">
+              Confirmar Asistencia
+            </Button>
+          </Link>
+        </motion.div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
+              Todo lo que Necesitas
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Explora toda la información sobre nuestra boda y participa en cada momento especial
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            Read our docs
-          </a>
+            {features.map((feature) => (
+              <motion.div key={feature.href} variants={itemVariants}>
+                <Link href={feature.href}>
+                  <Card hover className="h-full cursor-pointer">
+                    <feature.icon className={`w-12 h-12 mb-4 ${feature.color}`} />
+                    <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                    <p className="text-gray-600">{feature.description}</p>
+                  </Card>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 bg-gradient-to-r from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[var(--color-primary)]">
+              ¿Nos Acompañas?
+            </h2>
+            <p className="text-lg text-gray-600 mb-8">
+              Tu presencia es el mejor regalo que podríamos recibir. 
+              Por favor, confirma tu asistencia lo antes posible.
+            </p>
+            <Link href="/rsvp">
+              <Button size="lg" className="shadow-lg">
+                Confirmar Ahora
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
