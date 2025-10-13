@@ -1,18 +1,77 @@
 # 💍 Boda Estelle
 
-Aplicación web moderna, elegante y mobile-first para gestionar todos los aspectos de una boda.
+Aplicación web moderna y elegante para gestionar una boda.
 
-## ⚙️ Stack Tecnológico
+## Stack
 
-- **Next.js 15** (App Router, Server Actions, React 19)
-- **TypeScript**
-- **TailwindCSS** (diseño responsive y mobile-first)
-- **Prisma ORM** + **PostgreSQL**
-- **NextAuth.js v5** (autenticación con Google + Email)
-- **next-intl** (multilenguaje: francés, inglés, español)
-- **Framer Motion** (animaciones suaves)
-- **lucide-react** (iconos)
-- **AWS S3-compatible Blob Storage** (almacenamiento de fotos)
+- Next.js 15 + React 19 + TypeScript
+- TailwindCSS + Framer Motion
+- Prisma + PostgreSQL
+- S3-compatible Blob Storage
+
+## Inicio Rápido
+
+```bash
+# 1. Instalar dependencias
+npm install
+
+# 2. Configurar .env (copiar de .env.example)
+cp .env.example .env
+
+# 3. Configurar base de datos
+npx prisma generate
+npx prisma migrate dev --name init
+
+# 4. Iniciar
+npm run dev
+```
+
+## Variables de Entorno Mínimas
+
+```env
+DATABASE_URL="postgresql://..."
+NEXTAUTH_SECRET="genera-con: openssl rand -base64 32"
+NEXTAUTH_URL="http://localhost:3000"
+ADMIN_EMAILS="admin@example.com"
+```
+
+## Estructura
+
+```
+src/
+├── app/                 # Páginas (rsvp, turismo, regalos, galeria, etc)
+├── components/ui/       # Componentes reutilizables
+├── lib/                 # Utilidades (prisma, blob, theme)
+└── hooks/              # Custom hooks
+```
+
+## Características
+
+- ✅ RSVP / Confirmación de asistencia
+- ✅ Galería de fotos con aprobación
+- ✅ Lista de regalos con reservas
+- ✅ Turismo cercano
+- ✅ Sugerencias de música
+- ✅ Panel de administración
+- ✅ Tema dinámico (cambia según fecha)
+- ✅ 100% Mobile-first
+
+## Comandos Útiles
+
+```bash
+npm run dev              # Desarrollo
+npx prisma studio        # Ver base de datos
+npx prisma migrate dev   # Nueva migración
+npm run build            # Build producción
+```
+
+## Despliegue
+
+Configurar variables en Vercel y conectar el repo. Ver `SETUP.md` para más detalles.
+
+---
+
+Hecho con ❤️
 
 ## 🎨 Características
 
