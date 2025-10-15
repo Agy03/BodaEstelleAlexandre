@@ -6,6 +6,7 @@ export const authConfig: NextAuthConfig = {
   pages: {
     signIn: '/admin/login',
   },
+  secret: process.env.AUTH_SECRET,
   providers: [
     Credentials({
       credentials: {

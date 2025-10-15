@@ -416,97 +416,326 @@ export default function AdminPage() {
             </Card>
           )}
 
-        {activeTab === 'photos' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {photos.map((photo) => (
-              <Card key={photo.id}>
-                <NextImage
-                  src={photo.url}
-                  alt={photo.caption || ''}
-                  width={400}
-                  height={192}
-                  className="w-full h-48 object-cover rounded-t-xl"
-                />
-                <CardContent className="pt-4">
-                  {photo.caption && <p className="text-sm mb-2">{photo.caption}</p>}
-                  {photo.uploaderName && (
-                    <p className="text-xs text-gray-500 mb-3">Por: {photo.uploaderName}</p>
-                  )}
-                  <div className="flex gap-2">
-                    {!photo.approved && (
-                      <Button
-                        size="sm"
-                        onClick={() => approvePhoto(photo.id)}
-                        className="flex-1"
-                      >
-                        <CheckCircle className="w-4 h-4 mr-1" />
-                        Aprobar
-                      </Button>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => deletePhoto(photo.id)}
-                      className="flex-1"
-                    >
-                      <X className="w-4 h-4 mr-1" />
-                      Eliminar
-                    </Button>
-                  </div>
-                  {photo.approved && (
-                    <p className="text-xs text-green-600 mt-2 text-center">✓ Aprobada</p>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'songs' && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Sugerencias de Canciones</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {songs.map((song) => (
-                  <div
-                    key={song.id}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <h3 className="font-bold">{song.title}</h3>
-                      <p className="text-sm text-gray-600">{song.artist}</p>
-                      {song.suggestedBy && (
-                        <p className="text-xs text-gray-500 mt-1">
-                          Sugerida por: {song.suggestedBy}
-                        </p>
+          {activeTab === 'photos' && (
+            <div>
+              <div className="mb-4 flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Galería de Fotos</h2>
+                <span className="text-sm text-gray-600">
+                  {photos.filter(p => p.approved).length} aprobadas de {photos.length} total
+                </span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {photos.map((photo) => (
+                  <Card key={photo.id} className={photo.approved ? 'border-green-200' : 'border-orange-200'}>
+                    <NextImage
+                      src={photo.url}
+                      alt={photo.caption || ''}
+                      width={400}
+                      height={192}
+                      className="w-full h-48 object-cover rounded-t-xl"
+                    />
+                    <CardContent className="pt-4">
+                      {photo.caption && <p className="text-sm mb-2 font-medium">{photo.caption}</p>}
+                      {photo.uploaderName && (
+                        <p className="text-xs text-gray-500 mb-3">Subida por: {photo.uploaderName}</p>
                       )}
-                      {song.approved && (
-                        <p className="text-xs text-green-600 mt-1">✓ Aprobada</p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      {!song.approved && (
-                        <Button size="sm" onClick={() => approveSong(song.id)}>
-                          <CheckCircle className="w-4 h-4" />
+                      <div className="flex gap-2">
+                        {!photo.approved && (
+                          <Button
+                            size="sm"
+                            onClick={() => approvePhoto(photo.id)}
+                            className="flex-1 bg-green-500 hover:bg-green-600"
+                          >
+                            <CheckCircle className="w-4 h-4 mr-1" />
+                            Aprobar
+                          </Button>
+                        )}
+                        <Button
+                          size="sm"
+                          onClick={() => deletePhoto(photo.id)}
+                          className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          <Trash2 className="w-4 h-4 mr-1" />
+                          Eliminar
                         </Button>
+                      </div>
+                      {photo.approved && (
+                        <p className="text-xs text-green-600 mt-2 text-center font-medium">✓ Aprobada</p>
                       )}
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => deleteSong(song.id)}
-                      >
-                        <X className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        )}
+            </div>
+          )}
+
+          {activeTab === 'songs' && (
+            <div>
+              <div className="mb-4 flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Sugerencias Musicales</h2>
+                <span className="text-sm text-gray-600">
+                  {songs.filter(s => s.approved).length} aprobadas de {songs.length} total
+                </span>
+              </div>
+              <div className="space-y-3">
+                {songs.map((song) => (
+                  <Card
+                    key={song.id}
+                    className={`${song.approved ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200'}`}
+                  >
+                    <CardContent className="py-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-1">
+                            <Music className="w-5 h-5 text-pink-500" />
+                            <h3 className="font-bold text-lg">{song.title}</h3>
+                          </div>
+                          <p className="text-sm text-gray-600 ml-8">{song.artist}</p>
+                          {song.suggestedBy && (
+                            <p className="text-xs text-gray-500 ml-8 mt-1">
+                              Sugerida por: <span className="font-medium">{song.suggestedBy}</span>
+                            </p>
+                          )}
+                          {song.approved && (
+                            <span className="inline-block ml-8 mt-2 px-2 py-1 text-xs font-medium bg-green-200 text-green-700 rounded-full">
+                              ✓ Aprobada
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          {!song.approved && (
+                            <Button 
+                              size="sm" 
+                              onClick={() => approveSong(song.id)}
+                              className="bg-green-500 hover:bg-green-600"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            onClick={() => deleteSong(song.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'gifts' && (
+            <div>
+              <div className="mb-4 flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Lista de Regalos</h2>
+                <Button className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Añadir Regalo
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {gifts.map((gift) => (
+                  <Card key={gift.id} className="relative">
+                    {gift.priority && (
+                      <div className="absolute top-2 left-2 z-10 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                        ⭐ Prioritario
+                      </div>
+                    )}
+                    {gift.image && (
+                      <NextImage
+                        src={gift.image}
+                        alt={gift.name}
+                        width={400}
+                        height={192}
+                        className="w-full h-40 object-cover rounded-t-xl"
+                      />
+                    )}
+                    <CardContent className="pt-4">
+                      <h3 className="font-bold mb-2">{gift.name}</h3>
+                      {gift.description && (
+                        <p className="text-sm text-gray-600 mb-2">{gift.description}</p>
+                      )}
+                      {gift.price && (
+                        <p className="text-lg font-bold text-[var(--color-primary)] mb-2">
+                          {gift.price}€
+                        </p>
+                      )}
+                      <div className="flex items-center gap-2 mb-3">
+                        {gift.purchased ? (
+                          <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium">
+                            ✓ Comprado
+                          </span>
+                        ) : gift.reserved ? (
+                          <span className="px-2 py-1 bg-orange-200 text-orange-700 rounded text-xs font-medium">
+                            ⏳ Reservado
+                          </span>
+                        ) : (
+                          <span className="px-2 py-1 bg-green-200 text-green-700 rounded text-xs font-medium">
+                            ✓ Disponible
+                          </span>
+                        )}
+                        {gift.category && (
+                          <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
+                            {gift.category}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" className="flex-1">
+                          <Edit className="w-4 h-4 mr-1" />
+                          Editar
+                        </Button>
+                        <Button size="sm" className="bg-red-500 hover:bg-red-600 text-white">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'places' && (
+            <div>
+              <div className="mb-4 flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Lugares Turísticos</h2>
+                <Button className="bg-gradient-to-r from-teal-500 to-teal-600 text-white">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Añadir Lugar
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {places.map((place) => (
+                  <Card key={place.id} className="relative">
+                    {place.recommended && (
+                      <div className="absolute top-2 left-2 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                        ⭐ Recomendado
+                      </div>
+                    )}
+                    {place.image && (
+                      <NextImage
+                        src={place.image}
+                        alt={place.name}
+                        width={400}
+                        height={192}
+                        className="w-full h-40 object-cover rounded-t-xl"
+                      />
+                    )}
+                    <CardContent className="pt-4">
+                      <h3 className="font-bold mb-1">{place.name}</h3>
+                      {place.category && (
+                        <span className="inline-block px-2 py-1 bg-teal-100 text-teal-700 rounded text-xs mb-2">
+                          {place.category}
+                        </span>
+                      )}
+                      {place.description && (
+                        <p className="text-sm text-gray-600 mb-2">{place.description}</p>
+                      )}
+                      <div className="space-y-1 text-xs text-gray-500 mb-3">
+                        {place.distance && <p>📍 {place.distance}</p>}
+                        {place.rating && <p>⭐ {place.rating}/5</p>}
+                        {place.priceLevel && <p>💰 {place.priceLevel}</p>}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" className="flex-1">
+                          <Edit className="w-4 h-4 mr-1" />
+                          Editar
+                        </Button>
+                        <Button size="sm" className="bg-red-500 hover:bg-red-600 text-white">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+    </div>
+  );
+}
+
+// Helper Components
+function TabButton({ 
+  children, 
+  active, 
+  onClick, 
+  icon, 
+  badge, 
+  badgeColor = 'red' 
+}: { 
+  children: React.ReactNode; 
+  active: boolean; 
+  onClick: () => void; 
+  icon?: React.ReactNode;
+  badge?: number;
+  badgeColor?: 'red' | 'purple' | 'pink';
+}) {
+  const badgeColors = {
+    red: 'bg-red-500',
+    purple: 'bg-purple-500',
+    pink: 'bg-pink-500',
+  };
+
+  return (
+    <button
+      onClick={onClick}
+      className={`relative px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${
+        active
+          ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg scale-105'
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+      }`}
+    >
+      {icon}
+      {children}
+      {badge !== undefined && badge > 0 && (
+        <span className={`absolute -top-1 -right-1 ${badgeColors[badgeColor]} text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center`}>
+          {badge}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function StatRow({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+      <span className="text-gray-600">{label}</span>
+      <span className="font-bold text-lg">{value}</span>
+    </div>
+  );
+}
+
+function ActivityItem({ 
+  icon, 
+  text, 
+  action, 
+  info = false 
+}: { 
+  icon: React.ReactNode; 
+  text: string; 
+  action?: () => void;
+  info?: boolean;
+}) {
+  return (
+    <div 
+      onClick={action}
+      className={`flex items-center gap-3 p-3 rounded-lg ${
+        action ? 'bg-orange-50 hover:bg-orange-100 cursor-pointer' : 'bg-blue-50'
+      } transition-colors`}
+    >
+      {icon}
+      <span className="text-sm flex-1">{text}</span>
+      {action && !info && (
+        <span className="text-xs text-orange-600 font-medium">Ver →</span>
+      )}
     </div>
   );
 }
