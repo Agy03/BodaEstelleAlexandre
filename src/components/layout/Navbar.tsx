@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, Heart } from 'lucide-react';
+import { Menu, X, Heart, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -21,6 +22,8 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === 'admin';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,6 +115,36 @@ export function Navbar() {
                 </motion.div>
               );
             })}
+            
+            {/* Admin Link (solo visible cuando están autenticados) */}
+            {isAdmin && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+              >
+                <Link
+                  href="/admin"
+                  className={cn(
+                    "relative px-4 py-2 text-sm font-medium transition-all duration-300 group flex items-center gap-2 ml-2",
+                    pathname.startsWith('/admin')
+                      ? "text-white"
+                      : "text-gray-600 hover:text-white"
+                  )}
+                >
+                  <motion.div
+                    className={cn(
+                      "absolute inset-0 rounded-full transition-all duration-300",
+                      pathname.startsWith('/admin')
+                        ? "bg-gradient-to-r from-purple-500 to-purple-700 shadow-lg"
+                        : "bg-gradient-to-r from-purple-400 to-purple-600 opacity-0 group-hover:opacity-100"
+                    )}
+                  />
+                  <Shield className="w-4 h-4 relative z-10" />
+                  <span className="relative z-10">Admin</span>
+                </Link>
+              </motion.div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -203,6 +236,31 @@ export function Navbar() {
                   </motion.div>
                 );
               })}
+              
+              {/* Admin Link Mobile */}
+              {isAdmin && (
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navItems.length * 0.06, duration: 0.4 }}
+                >
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "block px-6 py-4 text-base font-medium rounded-2xl transition-all duration-300 group relative",
+                      pathname.startsWith('/admin')
+                        ? "bg-gradient-to-r from-purple-500 to-purple-700 text-white"
+                        : "bg-purple-50 text-purple-700 hover:bg-purple-100"
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-5 h-5" />
+                      <span>Administración</span>
+                    </div>
+                  </Link>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}

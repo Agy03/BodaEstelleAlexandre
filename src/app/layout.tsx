@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeSwitcherByDate } from "@/components/layout/ThemeSwitcherByDate";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -31,13 +32,15 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${playfair.variable} ${inter.variable}`}>
       <body className="font-inter antialiased bg-[var(--color-background)] text-[var(--color-text)]">
-        <ThemeSwitcherByDate>
-          <Navbar />
-          <main className="min-h-screen pt-16 md:pt-20">
-            {children}
-          </main>
-          <Footer />
-        </ThemeSwitcherByDate>
+        <AuthProvider>
+          <ThemeSwitcherByDate>
+            <Navbar />
+            <main className="min-h-screen pt-16 md:pt-20">
+              {children}
+            </main>
+            <Footer />
+          </ThemeSwitcherByDate>
+        </AuthProvider>
       </body>
     </html>
   );
