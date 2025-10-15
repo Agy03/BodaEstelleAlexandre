@@ -8,9 +8,9 @@ export default function InformacionPage() {
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
       {/* Decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-rose-50 -z-10" />
-      <div className="absolute top-40 right-0 w-96 h-96 bg-gradient-to-bl from-amber-300/20 to-transparent rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-20 left-0 w-96 h-96 bg-gradient-to-tr from-rose-300/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#FFF9F5] via-white to-[#F8EDE3] -z-10" />
+      <div className="absolute top-40 right-0 w-96 h-96 bg-gradient-to-bl from-[var(--color-accent)]/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
+      <div className="absolute bottom-20 left-0 w-96 h-96 bg-gradient-to-tr from-[var(--color-primary)]/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
       
       <div className="max-w-7xl mx-auto relative">
         <motion.div
@@ -24,13 +24,13 @@ export default function InformacionPage() {
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="relative inline-block mb-6"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-rose-500 rounded-full blur-2xl opacity-30 animate-pulse" />
-            <div className="relative bg-gradient-to-br from-amber-500 to-rose-500 p-5 rounded-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-primary)] rounded-full blur-2xl opacity-30 animate-pulse" />
+            <div className="relative bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-primary)] p-5 rounded-full">
               <Info className="w-12 h-12 text-white" />
             </div>
           </motion.div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
-            <span className="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
               Información General
             </span>
           </h1>

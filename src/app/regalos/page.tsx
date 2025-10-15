@@ -1,11 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import NextImage from 'next/image';
-import { Gift, ExternalLink, Check, Loader } from 'lucide-react';
+import { Gift, ExternalLink, Check, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+
+const categories = [
+  { id: 'all', label: 'Todos', icon: Sparkles, color: 'from-[var(--color-primary)] to-[var(--color-secondary)]' },
+  { id: 'home', label: 'Hogar', icon: Gift, color: 'from-[var(--color-secondary)] to-[var(--color-accent)]' },
+  { id: 'experience', label: 'Experiencias', icon: Users, color: 'from-[var(--color-primary)] to-[var(--color-accent)]' },
+  { id: 'other', label: 'Otros', icon: Tag, color: 'from-[var(--color-accent)] to-[var(--color-primary)]' },
+];
 
 type GiftItem = {
   id: string;
@@ -16,15 +23,83 @@ type GiftItem = {
   link?: string;
   reserved: boolean;
   purchased: boolean;
+  category?: string;
+  priority?: boolean;
+  reservedBy?: string;
 };
 
 export default function RegalosPage() {
   const [gifts, setGifts] = useState<GiftItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [showReserveModal, setShowReserveModal] = useState(false);
+  const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
+
+  // Load favorites from localStorage
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('giftFavorites');
+    if (savedFavorites) {
+      setFavorites(new Set(JSON.parse(savedFavorites)));
+    }
+  }, []);
+
+  // Save favorites to localStorage
+  useEffect(() => {
+    localStorage.setItem('giftFavorites', JSON.stringify(Array.from(favorites)));
+  }, [favorites]);
 
   useEffect(() => {
     fetchGifts();
   }, []);
+
+  // Filter gifts
+  const displayedGifts = useMemo(() => {
+    let filtered = gifts;
+
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter((gift) => gift.category === selectedCategory);
+    }
+
+    // Filter by search
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((gift) =>
+        gift.name.toLowerCase().includes(query) ||
+        (gift.description?.toLowerCase().includes(query))
+      );
+    }
+
+    return filtered;
+  }, [gifts, selectedCategory, searchQuery]);
+
+  // Priority/Featured gifts
+  const priorityGifts = useMemo(() => {
+    return gifts.filter((gift) => gift.priority && !gift.purchased && !gift.reserved).slice(0, 3);
+  }, [gifts]);
+
+  // Statistics
+  const stats = useMemo(() => {
+    const total = gifts.length;
+    const reserved = gifts.filter(g => g.reserved).length;
+    const purchased = gifts.filter(g => g.purchased).length;
+    const available = total - reserved - purchased;
+    return { total, reserved, purchased, available };
+  }, [gifts]);
+
+  const toggleFavorite = (giftId: string) => {
+    setFavorites((prev) => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(giftId)) {
+        newFavorites.delete(giftId);
+      } else {
+        newFavorites.add(giftId);
+      }
+      return newFavorites;
+    });
+  };
 
   const fetchGifts = async () => {
     try {
@@ -38,20 +113,30 @@ export default function RegalosPage() {
     }
   };
 
-  const handleReserve = async (giftId: string) => {
+  const handleReserve = async (gift: GiftItem) => {
+    setSelectedGift(gift);
+    setShowReserveModal(true);
+  };
+
+  const confirmReserve = async () => {
+    if (!selectedGift) return;
+    
     const name = prompt('Por favor, introduce tu nombre para reservar este regalo:');
     if (!name) return;
 
     try {
-      const response = await fetch(`/api/gifts/${giftId}/reserve`, {
+      const response = await fetch(`/api/gifts/${selectedGift.id}/reserve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reservedBy: name }),
       });
 
       if (response.ok) {
-        fetchGifts(); // Refresh list
-        alert('¡Regalo reservado! Gracias por tu generosidad.');
+        fetchGifts();
+        setShowReserveModal(false);
+        setSelectedGift(null);
+        // Show success animation
+        alert('¡Regalo reservado! Gracias por tu generosidad. 💝');
       }
     } catch (error) {
       console.error('Error reserving gift:', error);
@@ -62,131 +147,499 @@ export default function RegalosPage() {
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
       {/* Decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-white to-orange-50 -z-10" />
-      <div className="absolute top-40 left-1/4 w-96 h-96 bg-gradient-to-br from-pink-300/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
-      <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-gradient-to-tl from-orange-300/20 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#FFF9F5] via-white to-[#F8EDE3] -z-10" />
+      
+      {/* Animated floating elements */}
+      <motion.div 
+        className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-[var(--color-primary)]/20 to-transparent rounded-full blur-3xl -z-10"
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div 
+        className="absolute bottom-40 right-10 w-80 h-80 bg-gradient-to-tr from-[var(--color-accent)]/20 to-transparent rounded-full blur-3xl -z-10"
+        animate={{ 
+          scale: [1.2, 1, 1.2],
+          opacity: [0.5, 0.3, 0.5],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div 
+        className="absolute top-1/2 left-1/2 w-96 h-96 bg-gradient-to-br from-[var(--color-secondary)]/10 to-transparent rounded-full blur-3xl -z-10"
+        animate={{ 
+          x: [-50, 50, -50],
+          y: [-30, 30, -30],
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+      />
       
       <div className="max-w-7xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
           <motion.div
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="relative inline-block mb-6"
+            transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
+            className="relative inline-block mb-8"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-orange-500 rounded-full blur-2xl opacity-30 animate-pulse" />
-            <div className="relative bg-gradient-to-br from-pink-500 to-orange-500 p-5 rounded-full">
-              <Gift className="w-12 h-12 text-white" />
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] rounded-full blur-2xl opacity-40"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.6, 0.4] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            />
+            <div className="relative bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] p-6 rounded-full shadow-2xl">
+              <Gift className="w-14 h-14 text-white" />
             </div>
           </motion.div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
-            <span className="bg-gradient-to-r from-pink-600 via-rose-600 to-orange-600 bg-clip-text text-transparent">
+          
+          <motion.h1 
+            className="text-5xl md:text-7xl font-bold mb-6 font-playfair"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
               Lista de Regalos
             </span>
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          </motion.h1>
+          
+          <motion.p 
+            className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
             Si deseas hacernos un regalo, aquí encontrarás algunas ideas.<br />
-            Tu presencia es el mejor regalo que podríamos recibir.
-          </p>
+            <span className="text-[var(--color-primary)] font-medium">Tu presencia es el mejor regalo que podríamos recibir.</span>
+          </motion.p>
         </motion.div>
 
-        {loading ? (
-          <div className="text-center py-20">
-            <Loader className="w-12 h-12 mx-auto animate-spin text-[var(--color-primary)]" />
-            <p className="mt-4 text-gray-600">Cargando lista de regalos...</p>
-          </div>
-        ) : gifts.length === 0 ? (
-          <div className="text-center py-20">
-            <Card className="max-w-2xl mx-auto">
-              <CardContent className="pt-6">
-                <p className="text-gray-600 text-lg mb-4">
-                  Próximamente publicaremos nuestra lista de regalos.
-                </p>
-                <p className="text-gray-500">
-                  Mientras tanto, tu compañía es el mejor regalo que podríamos recibir.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {gifts.map((gift, index) => (
-              <motion.div
-                key={gift.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+        {/* Statistics */}
+        {!loading && gifts.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12"
+          >
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
+              <div className="text-3xl font-bold text-[var(--color-primary)] mb-1">{stats.total}</div>
+              <div className="text-sm text-gray-600">Total regalos</div>
+            </div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
+              <div className="text-3xl font-bold text-green-600 mb-1">{stats.available}</div>
+              <div className="text-sm text-gray-600">Disponibles</div>
+            </div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
+              <div className="text-3xl font-bold text-orange-600 mb-1">{stats.reserved}</div>
+              <div className="text-sm text-gray-600">Reservados</div>
+            </div>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
+              <div className="text-3xl font-bold text-gray-600 mb-1">{stats.purchased}</div>
+              <div className="text-sm text-gray-600">Comprados</div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Search Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="max-w-2xl mx-auto mb-12"
+        >
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Buscar regalo por nombre o descripción..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/90 backdrop-blur-sm border-2 border-gray-100 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10 transition-all outline-none text-gray-700 placeholder:text-gray-400 shadow-lg"
+            />
+            {searchQuery && (
+              <motion.button
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                onClick={() => setSearchQuery('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                <Card hover className="h-full flex flex-col">
-                  {gift.image && (
-                    <div className="w-full h-48 bg-gray-200 rounded-t-xl overflow-hidden">
-                      <NextImage
-                        src={gift.image}
-                        alt={gift.name}
-                        width={400}
-                        height={192}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  <CardContent className="pt-4 flex-1 flex flex-col">
-                    <h3 className="text-xl font-bold mb-2 text-[var(--color-text)]">
-                      {gift.name}
-                    </h3>
-                    
-                    {gift.description && (
-                      <p className="text-gray-600 mb-4 flex-1">{gift.description}</p>
-                    )}
-                    
-                    {gift.price && (
-                      <p className="text-lg font-bold text-[var(--color-primary)] mb-4">
-                        {gift.price.toFixed(2)} €
-                      </p>
-                    )}
-
-                    <div className="space-y-2">
-                      {gift.purchased ? (
-                        <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-2 rounded-lg">
-                          <Check className="w-5 h-5" />
-                          <span className="font-medium">Ya comprado</span>
-                        </div>
-                      ) : gift.reserved ? (
-                        <div className="flex items-center gap-2 text-orange-600 bg-orange-50 px-4 py-2 rounded-lg">
-                          <Check className="w-5 h-5" />
-                          <span className="font-medium">Reservado</span>
-                        </div>
-                      ) : (
-                        <Button
-                          onClick={() => handleReserve(gift.id)}
-                          className="w-full"
-                        >
-                          Reservar Regalo
-                        </Button>
-                      )}
-
-                      {gift.link && !gift.purchased && (
-                        <a
-                          href={gift.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2 w-full px-4 py-2 border-2 border-[var(--color-primary)] text-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary)] hover:text-white transition-colors"
-                        >
-                          Ver en tienda
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                ✕
+              </motion.button>
+            )}
           </div>
+        </motion.div>
+
+        {/* Category Filters */}
+        <motion.div 
+          className="flex flex-wrap justify-center gap-3 mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          {categories.map((category, index) => {
+            const Icon = category.icon;
+            const isSelected = selectedCategory === category.id;
+            
+            return (
+              <motion.button
+                key={category.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7 + index * 0.05 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`relative px-8 py-4 rounded-2xl transition-all font-semibold text-base overflow-hidden group ${
+                  isSelected
+                    ? 'text-white shadow-xl'
+                    : 'text-gray-700 bg-white/90 backdrop-blur-sm hover:bg-white shadow-lg hover:shadow-xl border border-gray-100'
+                }`}
+              >
+                {isSelected && (
+                  <motion.div
+                    layoutId="activeGiftCategory"
+                    className={`absolute inset-0 bg-gradient-to-r ${category.color}`}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                
+                {!isSelected && (
+                  <div className={`absolute inset-0 bg-gradient-to-r ${category.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
+                )}
+                
+                <span className="relative z-10 flex items-center gap-3">
+                  <Icon className="w-5 h-5" />
+                  {category.label}
+                </span>
+              </motion.button>
+            );
+          })}
+        </motion.div>
+
+        {/* Priority Gifts Section */}
+        {!searchQuery && priorityGifts.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="mb-16"
+          >
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3 font-playfair">
+                💝 Más deseados
+              </h2>
+              <p className="text-gray-600">Regalos que nos harían especialmente felices</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {priorityGifts.map((gift, index) => {
+                const isFavorite = favorites.has(gift.id);
+                
+                return (
+                  <motion.div
+                    key={gift.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.9 + index * 0.1 }}
+                  >
+                    <GiftCard 
+                      gift={gift} 
+                      isFavorite={isFavorite}
+                      onToggleFavorite={toggleFavorite}
+                      onReserve={handleReserve}
+                      isPriority
+                    />
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-16" />
+          </motion.div>
+        )}
+
+        {/* Results counter */}
+        {!loading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center mb-8"
+          >
+            <p className="text-gray-600">
+              Mostrando <span className="font-semibold text-[var(--color-primary)]">{displayedGifts.length}</span> {displayedGifts.length === 1 ? 'regalo' : 'regalos'}
+              {searchQuery && <span className="ml-1">para &ldquo;{searchQuery}&rdquo;</span>}
+            </p>
+          </motion.div>
+        )}
+
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader className="w-12 h-12 text-[var(--color-primary)] animate-spin mb-4" />
+            <p className="text-gray-600">Cargando regalos...</p>
+          </div>
+        ) : displayedGifts.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-20"
+          >
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 max-w-md mx-auto shadow-xl border border-gray-100">
+              <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-gray-700 mb-2">
+                {searchQuery ? 'No se encontraron regalos' : 'No hay regalos disponibles'}
+              </h3>
+              <p className="text-gray-600 mb-6">
+                {searchQuery 
+                  ? 'Intenta con otros términos de búsqueda'
+                  : 'Pronto añadiremos más regalos'
+                }
+              </p>
+              {searchQuery && (
+                <Button
+                  onClick={() => setSearchQuery('')}
+                  className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white"
+                >
+                  Limpiar búsqueda
+                </Button>
+              )}
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            layout
+          >
+            <AnimatePresence mode="popLayout">
+              {displayedGifts.map((gift, index) => {
+                const isFavorite = favorites.has(gift.id);
+                
+                return (
+                  <motion.div
+                    key={gift.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <GiftCard 
+                      gift={gift} 
+                      isFavorite={isFavorite}
+                      onToggleFavorite={toggleFavorite}
+                      onReserve={handleReserve}
+                    />
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
         )}
       </div>
+
+      {/* Reserve Modal */}
+      <AnimatePresence>
+        {showReserveModal && selectedGift && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowReserveModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
+            >
+              <div className="text-center mb-6">
+                <div className="bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Gift className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Reservar regalo</h3>
+                <p className="text-gray-600">{selectedGift.name}</p>
+              </div>
+              
+              <div className="space-y-4">
+                <Button
+                  onClick={confirmReserve}
+                  className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white text-lg py-4"
+                >
+                  Confirmar reserva
+                </Button>
+                <Button
+                  onClick={() => setShowReserveModal(false)}
+                  className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 py-4"
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+// Gift Card Component
+function GiftCard({ 
+  gift, 
+  isFavorite, 
+  onToggleFavorite, 
+  onReserve,
+  isPriority = false 
+}: { 
+  gift: GiftItem; 
+  isFavorite: boolean;
+  onToggleFavorite: (id: string) => void;
+  onReserve: (gift: GiftItem) => void;
+  isPriority?: boolean;
+}) {
+  const isAvailable = !gift.reserved && !gift.purchased;
+
+  return (
+    <Card className={`group relative overflow-hidden transition-all duration-300 hover:shadow-2xl ${
+      isPriority ? 'border-4 border-[var(--color-accent)]' : 'border border-gray-100'
+    }`}>
+      {/* Priority Badge */}
+      {isPriority && (
+        <div className="absolute top-4 left-4 z-20 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+          <Sparkles className="w-4 h-4" />
+          Más deseado
+        </div>
+      )}
+
+      {/* Favorite Button */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => onToggleFavorite(gift.id)}
+        className={`absolute top-4 right-4 z-20 w-12 h-12 rounded-full backdrop-blur-sm shadow-lg transition-all flex items-center justify-center ${
+          isFavorite 
+            ? 'bg-red-500 text-white' 
+            : 'bg-white/90 text-gray-400 hover:text-red-500'
+        }`}
+      >
+        <Heart className={`w-6 h-6 ${isFavorite ? 'fill-current' : ''}`} />
+      </motion.button>
+
+      <CardContent className="p-0">
+        {/* Image */}
+        <div className={`relative overflow-hidden ${isPriority ? 'h-64' : 'h-52'} bg-gradient-to-br from-gray-100 to-gray-50`}>
+          {gift.image ? (
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.4 }}
+              className="w-full h-full"
+            >
+              <NextImage
+                src={gift.image}
+                alt={gift.name}
+                fill
+                className="object-cover"
+              />
+            </motion.div>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Gift className="w-16 h-16 text-gray-300" />
+            </div>
+          )}
+
+          {/* Status overlay */}
+          {!isAvailable && (
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <div className={`px-6 py-3 rounded-full font-bold text-white shadow-lg ${
+                gift.purchased 
+                  ? 'bg-gradient-to-r from-gray-500 to-gray-700' 
+                  : 'bg-gradient-to-r from-orange-500 to-orange-700'
+              }`}>
+                {gift.purchased ? '✓ Comprado' : '⏳ Reservado'}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors">
+            {gift.name}
+          </h3>
+          
+          {gift.description && (
+            <p className="text-gray-600 mb-4 line-clamp-3 text-sm leading-relaxed">
+              {gift.description}
+            </p>
+          )}
+
+          {/* Price and Category */}
+          <div className="flex items-center justify-between mb-4">
+            {gift.price && (
+              <div className="text-2xl font-bold text-[var(--color-primary)]">
+                {gift.price}€
+              </div>
+            )}
+            {gift.category && (
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${
+                gift.category === 'home' ? 'from-[var(--color-secondary)] to-[var(--color-accent)]' :
+                gift.category === 'experience' ? 'from-[var(--color-primary)] to-[var(--color-accent)]' :
+                'from-[var(--color-accent)] to-[var(--color-primary)]'
+              } text-white`}>
+                {gift.category === 'home' ? 'Hogar' : gift.category === 'experience' ? 'Experiencia' : 'Otro'}
+              </span>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3">
+            {isAvailable ? (
+              <>
+                <Button
+                  onClick={() => onReserve(gift)}
+                  className="flex-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white hover:shadow-xl transition-all"
+                >
+                  <Gift className="w-4 h-4 mr-2" />
+                  Reservar
+                </Button>
+                {gift.link && (
+                  <Button
+                    onClick={() => window.open(gift.link, '_blank')}
+                    className="bg-white border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-all"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </Button>
+                )}
+              </>
+            ) : (
+              gift.link && (
+                <Button
+                  onClick={() => window.open(gift.link, '_blank')}
+                  className="flex-1 bg-gray-100 text-gray-700 hover:bg-gray-200"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Ver en tienda
+                </Button>
+              )
+            )}
+          </div>
+
+          {/* Reserved by */}
+          {gift.reserved && gift.reservedBy && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <p className="text-xs text-gray-500 text-center">
+                Reservado por <span className="font-semibold text-gray-700">{gift.reservedBy}</span>
+              </p>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

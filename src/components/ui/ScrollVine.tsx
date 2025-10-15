@@ -19,24 +19,24 @@ export function ScrollVine() {
   const pathOpacity = useTransform(smoothProgress, [0, 0.1], [0, 1]);
 
   // Pre-calcular todas las opacidades y escalas para las hojas
+  // Hojas posicionadas directamente sobre el tallo principal
   const leafData = [
-    { x: 35, y: 12, rotation: -30, scale: 0.8, delay: 0.1 },
-    { x: 45, y: 18, rotation: 45, scale: 0.9, delay: 0.15 },
-    { x: 32, y: 25, rotation: -45, scale: 0.85, delay: 0.2 },
-    { x: 43, y: 35, rotation: 30, scale: 0.95, delay: 0.25 },
-    { x: 30, y: 42, rotation: -35, scale: 0.9, delay: 0.3 },
-    { x: 40, y: 50, rotation: 20, scale: 1, delay: 0.35 },
-    { x: 33, y: 58, rotation: -40, scale: 0.85, delay: 0.4 },
-    { x: 45, y: 65, rotation: 35, scale: 0.9, delay: 0.45 },
-    { x: 35, y: 73, rotation: -25, scale: 0.95, delay: 0.5 },
-    { x: 42, y: 82, rotation: 40, scale: 0.9, delay: 0.55 },
-    { x: 36, y: 90, rotation: -30, scale: 0.85, delay: 0.6 },
+    { x: 30, y: 15, rotation: -45, scale: 0.8, delay: 0.1 },
+    { x: 40, y: 22, rotation: 20, scale: 0.9, delay: 0.15 },
+    { x: 35, y: 30, rotation: -30, scale: 0.85, delay: 0.2 },
+    { x: 32, y: 40, rotation: -50, scale: 0.95, delay: 0.25 },
+    { x: 38, y: 48, rotation: 15, scale: 0.9, delay: 0.3 },
+    { x: 35, y: 60, rotation: -20, scale: 1, delay: 0.35 },
+    { x: 30, y: 68, rotation: -55, scale: 0.85, delay: 0.4 },
+    { x: 37, y: 75, rotation: 25, scale: 0.9, delay: 0.45 },
+    { x: 40, y: 83, rotation: 10, scale: 0.95, delay: 0.5 },
+    { x: 38, y: 90, rotation: -15, scale: 0.9, delay: 0.55 },
   ];
 
   const flowerData = [
-    { x: 38, y: 28, delay: 0.25 },
-    { x: 36, y: 55, delay: 0.4 },
-    { x: 41, y: 78, delay: 0.55 },
+    { x: 39, y: 28, rotation: 0, delay: 0.25 },
+    { x: 36, y: 55, rotation: -10, delay: 0.4 },
+    { x: 39, y: 78, rotation: 5, delay: 0.55 },
   ];
 
   // Crear todos los transforms de una vez usando useMemo para evitar recrearlos
@@ -51,7 +51,6 @@ export function ScrollVine() {
     { opacity: useTransform(smoothProgress, [0.45, 0.5], [0, 1]), scale: useTransform(smoothProgress, [0.45, 0.55], [0, 0.9]) },
     { opacity: useTransform(smoothProgress, [0.5, 0.55], [0, 1]), scale: useTransform(smoothProgress, [0.5, 0.6], [0, 0.95]) },
     { opacity: useTransform(smoothProgress, [0.55, 0.6], [0, 1]), scale: useTransform(smoothProgress, [0.55, 0.65], [0, 0.9]) },
-    { opacity: useTransform(smoothProgress, [0.6, 0.65], [0, 1]), scale: useTransform(smoothProgress, [0.6, 0.7], [0, 0.85]) },
   ];
 
   const flowerTransforms = [
@@ -78,23 +77,16 @@ export function ScrollVine() {
         <defs>
           {/* Gradiente verde natural para la enredadera */}
           <linearGradient id="vineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#86A789" stopOpacity="0.9" />
-            <stop offset="50%" stopColor="#739072" stopOpacity="0.95" />
+            <stop offset="0%" stopColor="#86A789" stopOpacity="0.95" />
+            <stop offset="50%" stopColor="#739072" stopOpacity="0.98" />
             <stop offset="100%" stopColor="#4F6F52" stopOpacity="1" />
           </linearGradient>
 
-          {/* Filtro de sombra suave */}
-          <filter id="vineShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-            <feOffset dx="1" dy="2" result="offsetblur" />
-            <feComponentTransfer>
-              <feFuncA type="linear" slope="0.3" />
-            </feComponentTransfer>
-            <feMerge>
-              <feMergeNode />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
+          {/* Gradiente para las hojas */}
+          <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#A8D5BA" />
+            <stop offset="100%" stopColor="#739072" />
+          </linearGradient>
         </defs>
 
         {/* Tallo principal - curva sinuosa */}
@@ -105,7 +97,6 @@ export function ScrollVine() {
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          filter="url(#vineShadow)"
           style={{
             pathLength: pathLength,
             opacity: pathOpacity
@@ -113,22 +104,23 @@ export function ScrollVine() {
           initial={{ pathLength: 0 }}
         />
 
-        {/* Hojas a lo largo del tallo */}
+        {/* Hojas a lo largo del tallo - brotan directamente del tallo */}
         {leafData.map((leaf, i) => (
           <motion.g
             key={i}
             style={{
               opacity: leafTransforms[i].opacity,
-              scale: leafTransforms[i].scale
+              scale: leafTransforms[i].scale,
+              transformOrigin: `${leaf.x}px ${leaf.y}px`
             }}
           >
             {/* Hoja con forma natural */}
             <motion.path
-              d={`M ${leaf.x} ${leaf.y} Q ${leaf.x - 3} ${leaf.y - 5}, ${leaf.x - 5} ${leaf.y - 3} Q ${leaf.x - 4} ${leaf.y + 2}, ${leaf.x} ${leaf.y} Q ${leaf.x + 4} ${leaf.y + 2}, ${leaf.x + 5} ${leaf.y - 3} Q ${leaf.x + 3} ${leaf.y - 5}, ${leaf.x} ${leaf.y}`}
-              fill="#86A789"
-              stroke="#739072"
+              d={`M ${leaf.x} ${leaf.y} Q ${leaf.x - 4} ${leaf.y - 6}, ${leaf.x - 6} ${leaf.y - 4} Q ${leaf.x - 5} ${leaf.y + 1}, ${leaf.x} ${leaf.y} Q ${leaf.x + 5} ${leaf.y + 1}, ${leaf.x + 6} ${leaf.y - 4} Q ${leaf.x + 4} ${leaf.y - 6}, ${leaf.x} ${leaf.y}`}
+              fill="url(#leafGradient)"
+              stroke="#5A7C5A"
               strokeWidth="0.5"
-              filter="url(#vineShadow)"
+              opacity="0.95"
               style={{
                 transformOrigin: `${leaf.x}px ${leaf.y}px`,
                 rotate: leaf.rotation
@@ -151,7 +143,7 @@ export function ScrollVine() {
               x2={leaf.x}
               y2={leaf.y - 5}
               stroke="#4F6F52"
-              strokeWidth="0.3"
+              strokeWidth="0.4"
               opacity="0.6"
               style={{
                 transformOrigin: `${leaf.x}px ${leaf.y}px`,
@@ -161,26 +153,32 @@ export function ScrollVine() {
           </motion.g>
         ))}
 
-        {/* Pequeñas flores ocasionales */}
+        {/* Pequeñas flores ocasionales - crecen del tallo */}
         {flowerData.map((flower, i) => (
           <motion.g
             key={`flower-${i}`}
             style={{
               opacity: flowerTransforms[i].opacity,
-              scale: flowerTransforms[i].scale
+              scale: flowerTransforms[i].scale,
+              transformOrigin: `${flower.x}px ${flower.y}px`
             }}
           >
             {/* Pétalos pequeños */}
             {[0, 72, 144, 216, 288].map((angle) => (
-              <motion.circle
+              <motion.ellipse
                 key={angle}
-                cx={flower.x + Math.cos((angle * Math.PI) / 180) * 2}
-                cy={flower.y + Math.sin((angle * Math.PI) / 180) * 2}
-                r="1.2"
+                cx={flower.x + Math.cos((angle * Math.PI) / 180) * 2.2}
+                cy={flower.y + Math.sin((angle * Math.PI) / 180) * 2.2}
+                rx="1.3"
+                ry="1.8"
                 fill="#E8B4B8"
-                opacity="0.9"
+                opacity="0.95"
+                style={{
+                  transformOrigin: `${flower.x}px ${flower.y}px`,
+                  rotate: angle + flower.rotation
+                }}
                 animate={{
-                  scale: [1, 1.1, 1],
+                  scale: [1, 1.08, 1],
                 }}
                 transition={{
                   duration: 2,
@@ -191,7 +189,7 @@ export function ScrollVine() {
               />
             ))}
             {/* Centro de la flor */}
-            <circle cx={flower.x} cy={flower.y} r="0.8" fill="#D4AF97" />
+            <circle cx={flower.x} cy={flower.y} r="1" fill="#D4AF97" opacity="0.95" />
           </motion.g>
         ))}
       </svg>

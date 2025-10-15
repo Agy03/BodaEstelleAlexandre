@@ -71,9 +71,9 @@ export default function MusicaPage() {
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
       {/* Decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-cyan-50 -z-10" />
-      <div className="absolute top-20 left-1/3 w-96 h-96 bg-gradient-to-br from-emerald-300/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
-      <div className="absolute bottom-20 right-1/3 w-96 h-96 bg-gradient-to-tl from-cyan-300/20 to-transparent rounded-full blur-3xl -z-10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#FFF9F5] via-white to-[#F8EDE3] -z-10" />
+      <div className="absolute top-20 left-1/3 w-96 h-96 bg-gradient-to-br from-[var(--color-secondary)]/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
+      <div className="absolute bottom-20 right-1/3 w-96 h-96 bg-gradient-to-tl from-[var(--color-primary)]/20 to-transparent rounded-full blur-3xl -z-10 animate-float" />
       
       <div className="max-w-7xl mx-auto relative">
         <motion.div
@@ -87,13 +87,13 @@ export default function MusicaPage() {
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="relative inline-block mb-6"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full blur-2xl opacity-30 animate-pulse" />
-            <div className="relative bg-gradient-to-br from-emerald-500 to-cyan-500 p-5 rounded-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-secondary)] to-[var(--color-accent)] rounded-full blur-2xl opacity-30 animate-pulse" />
+            <div className="relative bg-gradient-to-br from-[var(--color-secondary)] to-[var(--color-accent)] p-5 rounded-full">
               <Music className="w-12 h-12 text-white" />
             </div>
           </motion.div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
-            <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
               Sugiere Música
             </span>
           </h1>
