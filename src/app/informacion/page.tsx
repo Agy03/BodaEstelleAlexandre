@@ -348,25 +348,25 @@ export default function InformacionPage() {
                     </p>
                     <div className="grid grid-cols-3 gap-3">
                       <motion.div 
-                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
                         className="group relative"
                       >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-red-600 to-red-700 shadow-lg cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="aspect-square rounded-xl bg-gradient-to-br from-rose-300/80 to-rose-400/80 shadow-md cursor-pointer" />
+                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                       </motion.div>
                       <motion.div 
-                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
                         className="group relative"
                       >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="aspect-square rounded-xl bg-gradient-to-br from-orange-300/80 to-orange-400/80 shadow-md cursor-pointer" />
+                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                       </motion.div>
                       <motion.div 
-                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
                         className="group relative"
                       >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="aspect-square rounded-xl bg-gradient-to-br from-sky-300/80 to-blue-400/80 shadow-md cursor-pointer" />
+                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                       </motion.div>
                     </div>
                   </div>
@@ -379,25 +379,25 @@ export default function InformacionPage() {
                     </p>
                     <div className="grid grid-cols-3 gap-3">
                       <motion.div 
-                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
                         className="group relative"
                       >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-300/80 to-purple-400/80 shadow-md cursor-pointer" />
+                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                       </motion.div>
                       <motion.div 
-                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
                         className="group relative"
                       >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-400 to-purple-500 shadow-lg cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-200/90 to-purple-300/90 shadow-md cursor-pointer" />
+                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                       </motion.div>
                       <motion.div 
-                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileHover={{ scale: 1.05, y: -2 }}
                         className="group relative"
                       >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-slate-400 to-slate-500 shadow-lg cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="aspect-square rounded-xl bg-gradient-to-br from-slate-300/80 to-slate-400/80 shadow-md cursor-pointer" />
+                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                       </motion.div>
                     </div>
                   </div>
