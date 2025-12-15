@@ -2,17 +2,11 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
 import { Gift, ExternalLink, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-
-const categories = [
-  { id: 'all', label: 'Todos', icon: Sparkles, color: 'from-[var(--color-primary)] to-[var(--color-secondary)]' },
-  { id: 'home', label: 'Hogar', icon: Gift, color: 'from-[var(--color-secondary)] to-[var(--color-accent)]' },
-  { id: 'experience', label: 'Experiencias', icon: Users, color: 'from-[var(--color-primary)] to-[var(--color-accent)]' },
-  { id: 'other', label: 'Otros', icon: Tag, color: 'from-[var(--color-accent)] to-[var(--color-primary)]' },
-];
 
 type GiftItem = {
   id: string;
@@ -29,6 +23,16 @@ type GiftItem = {
 };
 
 export default function RegalosPage() {
+  const t = useTranslations('gifts');
+  const tCommon = useTranslations('common');
+  
+  const categories = [
+    { id: 'all', label: t('categories.all'), icon: Sparkles, color: 'from-[var(--color-primary)] to-[var(--color-secondary)]' },
+    { id: 'home', label: t('categories.home'), icon: Gift, color: 'from-[var(--color-secondary)] to-[var(--color-accent)]' },
+    { id: 'experience', label: t('categories.experience'), icon: Users, color: 'from-[var(--color-primary)] to-[var(--color-accent)]' },
+    { id: 'other', label: t('categories.other'), icon: Tag, color: 'from-[var(--color-accent)] to-[var(--color-primary)]' },
+  ];
+  
   const [gifts, setGifts] = useState<GiftItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -204,7 +208,7 @@ export default function RegalosPage() {
             transition={{ delay: 0.3 }}
           >
             <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
-              Lista de Regalos
+              {t('title')}
             </span>
           </motion.h1>
           
@@ -214,8 +218,7 @@ export default function RegalosPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            Si deseas hacernos un regalo, aquí encontrarás algunas ideas.<br />
-            <span className="text-[var(--color-primary)] font-medium">Tu presencia es el mejor regalo que podríamos recibir.</span>
+            {t('subtitle')}
           </motion.p>
         </motion.div>
 
@@ -229,19 +232,19 @@ export default function RegalosPage() {
           >
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
               <div className="text-3xl font-bold text-[var(--color-primary)] mb-1">{stats.total}</div>
-              <div className="text-sm text-gray-600">Total regalos</div>
+              <div className="text-sm text-gray-600">{t('title')}</div>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
               <div className="text-3xl font-bold text-green-600 mb-1">{stats.available}</div>
-              <div className="text-sm text-gray-600">Disponibles</div>
+              <div className="text-sm text-gray-600">{t('stats.available')}</div>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
               <div className="text-3xl font-bold text-orange-600 mb-1">{stats.reserved}</div>
-              <div className="text-sm text-gray-600">Reservados</div>
+              <div className="text-sm text-gray-600">{t('stats.reserved')}</div>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
               <div className="text-3xl font-bold text-gray-600 mb-1">{stats.purchased}</div>
-              <div className="text-sm text-gray-600">Comprados</div>
+              <div className="text-sm text-gray-600">{t('stats.purchased')}</div>
             </div>
           </motion.div>
         )}
@@ -381,7 +384,7 @@ export default function RegalosPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader className="w-12 h-12 text-[var(--color-primary)] animate-spin mb-4" />
-            <p className="text-gray-600">Cargando regalos...</p>
+            <p className="text-gray-600">{tCommon('loading')}</p>
           </div>
         ) : displayedGifts.length === 0 ? (
           <motion.div

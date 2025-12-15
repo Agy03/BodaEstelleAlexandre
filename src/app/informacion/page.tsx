@@ -1,10 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { Info, Calendar, MapPin, Cloud, Shirt, Car, Clock, Palette } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 
 export default function InformacionPage() {
+  const t = useTranslations('info');
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
       {/* Decorative background */}
@@ -31,11 +33,11 @@ export default function InformacionPage() {
           </motion.div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
             <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
-              Información General
+              {t('title')}
             </span>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Todo lo que necesitas saber sobre nuestro gran día
+            {t('subtitle')}
           </p>
         </motion.div>
 
@@ -50,24 +52,24 @@ export default function InformacionPage() {
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <Calendar className="w-8 h-8 text-[var(--color-primary)]" />
-                  <CardTitle>Fecha y Hora</CardTitle>
+                  <CardTitle>{t('dateTime.title')}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div>
                     <p className="font-bold text-[var(--color-primary)] text-lg">
-                      Fecha por confirmar
+                      {t('dateTime.dateLabel')}
                     </p>
-                    <p className="text-gray-600">Año 2025</p>
+                    <p className="text-gray-600">{t('dateTime.year')}</p>
                   </div>
                   <div className="border-t pt-3">
                     <Clock className="w-5 h-5 text-[var(--color-accent)] inline mr-2" />
-                    <span className="font-medium">Horario:</span>
+                    <span className="font-medium">{t('dateTime.schedule')}</span>
                     <ul className="mt-2 ml-7 space-y-1 text-gray-600">
-                      <li>• Ceremonia: Por confirmar</li>
-                      <li>• Cóctel: Después de la ceremonia</li>
-                      <li>• Cena y fiesta: Por confirmar</li>
+                      <li>• {t('dateTime.ceremony')}</li>
+                      <li>• {t('dateTime.cocktail')}</li>
+                      <li>• {t('dateTime.dinnerParty')}</li>
                     </ul>
                   </div>
                 </div>
@@ -85,20 +87,20 @@ export default function InformacionPage() {
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <MapPin className="w-8 h-8 text-[var(--color-primary)]" />
-                  <CardTitle>Ubicación</CardTitle>
+                  <CardTitle>{t('location.title')}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div>
-                    <p className="font-bold text-lg">Lugar por confirmar</p>
-                    <p className="text-gray-600">Ciudad, País</p>
+                    <p className="font-bold text-lg">{t('location.place')}</p>
+                    <p className="text-gray-600">{t('location.city')}</p>
                   </div>
                   <div className="border-t pt-3">
                     <Car className="w-5 h-5 text-[var(--color-accent)] inline mr-2" />
-                    <span className="font-medium">Cómo llegar:</span>
+                    <span className="font-medium">{t('location.howToGet')}</span>
                     <p className="mt-2 text-gray-600">
-                      Información de transporte y aparcamiento disponible próximamente.
+                      {t('location.transportInfo')}
                     </p>
                   </div>
                 </div>
@@ -116,20 +118,20 @@ export default function InformacionPage() {
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <Shirt className="w-8 h-8 text-[var(--color-primary)]" />
-                  <CardTitle>Código de Vestimenta</CardTitle>
+                  <CardTitle>{t('dressCode.title')}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <p className="text-gray-600">
-                    <strong>Etiqueta:</strong> Formal / Elegante
+                    <strong>{t('dressCode.etiquette')}</strong>
                   </p>
                   <div className="border-t pt-3">
-                    <p className="font-medium mb-2">Recomendaciones:</p>
+                    <p className="font-medium mb-2">{t('dressCode.recommendations')}</p>
                     <ul className="space-y-1 text-gray-600">
-                      <li>• Traje o vestido largo para la ceremonia</li>
-                      <li>• Calzado cómodo para la fiesta</li>
-                      <li>• Ten en cuenta el clima de la temporada</li>
+                      <li>• {t('dressCode.suit')}</li>
+                      <li>• {t('dressCode.shoes')}</li>
+                      <li>• {t('dressCode.weather')}</li>
                     </ul>
                   </div>
                 </div>
@@ -147,16 +149,16 @@ export default function InformacionPage() {
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <Palette className="w-8 h-8 text-[var(--color-primary)]" />
-                  <CardTitle>Paleta de Colores</CardTitle>
+                  <CardTitle>{t('colorPalette.title')}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-4">
-                  Si deseas coordinar tu atuendo con la decoración de la boda:
+                  {t('colorPalette.description')}
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <p className="font-medium mb-2">Enero - Marzo:</p>
+                    <p className="font-medium mb-2">{t('colorPalette.winter')}</p>
                     <div className="flex gap-2">
                       <div className="w-16 h-16 rounded-lg bg-red-600" title="Rojo" />
                       <div className="w-16 h-16 rounded-lg bg-orange-500" title="Naranja" />
@@ -164,7 +166,7 @@ export default function InformacionPage() {
                     </div>
                   </div>
                   <div>
-                    <p className="font-medium mb-2">Abril en adelante:</p>
+                    <p className="font-medium mb-2">{t('colorPalette.spring')}</p>
                     <div className="flex gap-2">
                       <div className="w-16 h-16 rounded-lg bg-purple-500" title="Lila" />
                       <div className="w-16 h-16 rounded-lg bg-purple-400" title="Lila claro" />
@@ -187,17 +189,15 @@ export default function InformacionPage() {
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <Cloud className="w-8 h-8 text-[var(--color-primary)]" />
-                  <CardTitle>Clima Esperado</CardTitle>
+                  <CardTitle>{t('weather.title')}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600">
-                  El clima en la fecha del evento suele ser [descripción del clima]. 
-                  Te recomendamos traer [ropa ligera/abrigo/etc.] y estar preparado para 
-                  [sol/lluvia/etc.].
+                  {t('weather.description')}
                 </p>
                 <p className="text-gray-500 mt-3 text-sm">
-                  Actualizaremos esta información más cerca de la fecha del evento.
+                  {t('weather.update')}
                 </p>
               </CardContent>
             </Card>

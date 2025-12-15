@@ -5,6 +5,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeSwitcherByDate } from "@/components/layout/ThemeSwitcherByDate";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -24,23 +26,27 @@ export const metadata: Metadata = {
   keywords: ["boda", "wedding", "Estelle", "celebración", "RSVP"],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const messages = await getMessages();
+  
   return (
     <html lang="es" className={`${playfair.variable} ${inter.variable}`}>
       <body className="font-inter antialiased bg-[var(--color-background)] text-[var(--color-text)]">
-        <AuthProvider>
-          <ThemeSwitcherByDate>
-            <Navbar />
-            <main className="min-h-screen pt-16 md:pt-20">
-              {children}
-            </main>
-            <Footer />
-          </ThemeSwitcherByDate>
-        </AuthProvider>
+        <NextIntlClientProvider messages={messages}>
+          <AuthProvider>
+            <ThemeSwitcherByDate>
+              <Navbar />
+              <main className="min-h-screen pt-16 md:pt-20">
+                {children}
+              </main>
+              <Footer />
+            </ThemeSwitcherByDate>
+          </AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,0 +1,243 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "info": "Informations",
+    "rsvp": "Confirmer",
+    "gifts": "Cadeaux",
+    "gallery": "Galerie",
+    "music": "Musique",
+    "tourism": "Tourisme"
+  },
+  "home": {
+    "title": "Estelle & Alexandre",
+    "subtitle": "Nous nous marions !",
+    "date": "21 Juin 2025",
+    "location": "Paris, France",
+    "countdown": {
+      "days": "Jours",
+      "hours": "Heures",
+      "minutes": "Minutes",
+      "seconds": "Secondes"
+    },
+    "features": {
+      "rsvp": {
+        "title": "Confirmez votre Présence",
+        "description": "Faites-nous savoir pour que nous puissions tout préparer parfaitement"
+      },
+      "tourism": {
+        "title": "Tourisme à Proximité",
+        "description": "Découvrez des lieux incroyables à visiter"
+      },
+      "gifts": {
+        "title": "Liste de Mariage",
+        "description": "Si vous souhaitez nous offrir un cadeau, vous trouverez des idées ici"
+      },
+      "gallery": {
+        "title": "Galerie Photos",
+        "description": "Partagez vos meilleurs moments avec nous"
+      },
+      "info": {
+        "title": "Informations Générales",
+        "description": "Tout ce que vous devez savoir sur le grand jour"
+      },
+      "music": {
+        "title": "Suggérez de la Musique",
+        "description": "Aidez-nous à créer la playlist parfaite"
+      }
+    }
+  },
+  "info": {
+    "title": "Informations Générales",
+    "subtitle": "Tout ce que vous devez savoir sur notre grand jour",
+    "dateTime": {
+      "title": "Date & Heure",
+      "dateLabel": "Date à confirmer",
+      "year": "Année 2025",
+      "schedule": "Horaires:",
+      "ceremony": "Cérémonie: À confirmer",
+      "cocktail": "Cocktail: Après la cérémonie",
+      "dinnerParty": "Dîner et fête: À confirmer"
+    },
+    "location": {
+      "title": "Lieu",
+      "place": "Lieu à confirmer",
+      "city": "Ville, Pays",
+      "howToGet": "Comment s'y rendre:",
+      "transportInfo": "Informations sur le transport et le stationnement disponibles prochainement."
+    },
+    "dressCode": {
+      "title": "Code Vestimentaire",
+      "etiquette": "Tenue: Formelle / Élégante",
+      "recommendations": "Recommandations:",
+      "suit": "Costume ou robe longue pour la cérémonie",
+      "shoes": "Chaussures confortables pour la fête",
+      "weather": "Tenez compte de la météo saisonnière"
+    },
+    "colorPalette": {
+      "title": "Palette de Couleurs",
+      "description": "Si vous souhaitez coordonner votre tenue avec la décoration du mariage:",
+      "winter": "Janvier - Mars:",
+      "spring": "Avril et après:"
+    },
+    "weather": {
+      "title": "Météo Prévue",
+      "description": "La météo à la date de l'événement est généralement [description météo]. Nous vous recommandons d'apporter [vêtements légers/manteau/etc.] et d'être préparé pour [soleil/pluie/etc.].",
+      "update": "Nous mettrons à jour ces informations plus près de la date de l'événement."
+    },
+    "ceremony": {
+      "title": "Cérémonie",
+      "date": "21 Juin 2025",
+      "time": "16h00",
+      "location": "Église de la Madeleine",
+      "address": "Place de la Madeleine, 75008 Paris"
+    },
+    "reception": {
+      "title": "Réception",
+      "time": "19h00",
+      "location": "Château de Versailles",
+      "address": "Place d'Armes, 78000 Versailles"
+    }
+  },
+  "rsvp": {
+    "title": "Confirmer votre Présence",
+    "subtitle": "Merci de confirmer avant le 1er Mai",
+    "form": {
+      "name": "Nom complet",
+      "email": "Adresse e-mail",
+      "attending": "Serez-vous présent(e) ?",
+      "yes": "Oui, je serai présent(e)",
+      "no": "Non, je ne pourrai pas venir",
+      "guests": "Nombre d'accompagnants",
+      "guestsOptions": {
+        "0": "Moi seul(e)",
+        "1": "1 accompagnant",
+        "2": "2 accompagnants",
+        "3": "3 accompagnants",
+        "4": "4 accompagnants",
+        "5": "5 accompagnants"
+      },
+      "comments": "Commentaires ou restrictions alimentaires",
+      "submit": "Confirmer ma Présence",
+      "submitting": "Envoi en cours..."
+    },
+    "success": "Confirmation Reçue!",
+    "successMessageAttending": "Nous sommes ravis que vous puissiez nous accompagner pour notre jour spécial! Nous avons hâte de vous voir.",
+    "successMessageNotAttending": "Nous regrettons que vous ne puissiez pas assister. Nous espérons célébrer avec vous une autre fois!",
+    "backToHome": "Retour à l'accueil",
+    "error": "Erreur lors de l'envoi. Veuillez réessayer."
+  },
+  "gifts": {
+    "title": "Liste de Mariage",
+    "subtitle": "Votre présence est notre plus beau cadeau",
+    "reserved": "Réservé",
+    "reserve": "Réserver",
+    "reserveBy": "Réservé par",
+    "link": "Voir en boutique",
+    "filter": "Filtrer par catégorie",
+    "all": "Tous",
+    "categories": {
+      "all": "Tous",
+      "home": "Maison",
+      "experience": "Expériences",
+      "other": "Autres"
+    },
+    "stats": {
+      "available": "Disponibles",
+      "reserved": "Réservés",
+      "purchased": "Achetés"
+    },
+    "confirmReserve": "Veuillez entrer votre nom pour réserver ce cadeau:",
+    "successReserve": "Cadeau réservé! Merci pour votre générosité. 💝",
+    "errorReserve": "Erreur lors de la réservation. Veuillez réessayer."
+  },
+  "gallery": {
+    "title": "Galerie Photos",
+    "subtitle": "Partagez vos photos avec nous",
+    "upload": "Télécharger une photo",
+    "uploading": "Téléchargement...",
+    "caption": "Description (optionnel)",
+    "yourName": "Votre nom (optionnel)",
+    "pending": "Photo téléchargée! Elle sera visible après approbation.",
+    "selectPhoto": "Sélectionnez une photo"
+  },
+  "music": {
+    "title": "Suggestions Musicales",
+    "subtitle": "Quelle chanson ne peut pas manquer ?",
+    "form": {
+      "song": "Titre de la chanson",
+      "artist": "Artiste",
+      "yourName": "Votre nom (optionnel)",
+      "submit": "Envoyer la suggestion",
+      "submitting": "Envoi en cours..."
+    },
+    "pending": "En attente d'approbation",
+    "success": "Merci pour votre suggestion !",
+    "error": "Erreur lors de l'envoi. Réessayez."
+  },
+  "tourism": {
+    "title": "Guide Touristique",
+    "subtitle": "Découvrez Paris",
+    "filter": "Filtrer par catégorie",
+    "all": "Tous",
+    "hotels": "Hôtels",
+    "restaurants": "Restaurants",
+    "culture": "Culture",
+    "leisure": "Loisirs",
+    "recommended": "Recommandé",
+    "distance": "Distance",
+    "rating": "Note",
+    "viewMap": "Voir sur la carte",
+    "categories": {
+      "all": "Tous",
+      "hotel": "Hôtels",
+      "restaurant": "Restaurants",
+      "culture": "Culture",
+      "leisure": "Loisirs"
+    },
+    "noPlaces": "Aucun lieu disponible dans cette catégorie."
+  },
+  "admin": {
+    "title": "Panneau d'Administration",
+    "login": {
+      "title": "Se Connecter",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "error": "Nom d'utilisateur ou mot de passe incorrect"
+    },
+    "logout": "Se déconnecter",
+    "tabs": {
+      "overview": "Aperçu",
+      "rsvps": "Confirmations",
+      "photos": "Photos",
+      "songs": "Chansons",
+      "gifts": "Cadeaux",
+      "places": "Lieux"
+    },
+    "stats": {
+      "totalRsvps": "Confirmations",
+      "attending": "Présents",
+      "notAttending": "Absents",
+      "pendingPhotos": "Photos en attente",
+      "pendingSongs": "Chansons en attente"
+    },
+    "actions": {
+      "approve": "Approuver",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "add": "Ajouter",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "search": "Rechercher"
+  }
+}

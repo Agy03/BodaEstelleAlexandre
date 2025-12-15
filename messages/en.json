@@ -1,0 +1,243 @@
+{
+  "nav": {
+    "home": "Home",
+    "info": "Information",
+    "rsvp": "RSVP",
+    "gifts": "Gifts",
+    "gallery": "Gallery",
+    "music": "Music",
+    "tourism": "Tourism"
+  },
+  "home": {
+    "title": "Estelle & Alexandre",
+    "subtitle": "We're getting married!",
+    "date": "June 21, 2025",
+    "location": "Paris, France",
+    "countdown": {
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds"
+    },
+    "features": {
+      "rsvp": {
+        "title": "RSVP",
+        "description": "Let us know so we can prepare everything perfectly"
+      },
+      "tourism": {
+        "title": "Nearby Tourism",
+        "description": "Discover amazing places to visit"
+      },
+      "gifts": {
+        "title": "Gift Registry",
+        "description": "If you wish to give us a gift, you'll find ideas here"
+      },
+      "gallery": {
+        "title": "Photo Gallery",
+        "description": "Share your best moments with us"
+      },
+      "info": {
+        "title": "General Information",
+        "description": "Everything you need to know about the big day"
+      },
+      "music": {
+        "title": "Suggest Music",
+        "description": "Help us create the perfect playlist"
+      }
+    }
+  },
+  "info": {
+    "title": "General Information",
+    "subtitle": "Everything you need to know about our big day",
+    "dateTime": {
+      "title": "Date & Time",
+      "dateLabel": "Date to be confirmed",
+      "year": "Year 2025",
+      "schedule": "Schedule:",
+      "ceremony": "Ceremony: To be confirmed",
+      "cocktail": "Cocktail: After the ceremony",
+      "dinnerParty": "Dinner and party: To be confirmed"
+    },
+    "location": {
+      "title": "Location",
+      "place": "Venue to be confirmed",
+      "city": "City, Country",
+      "howToGet": "How to get there:",
+      "transportInfo": "Transportation and parking information available soon."
+    },
+    "dressCode": {
+      "title": "Dress Code",
+      "etiquette": "Dress code: Formal / Elegant",
+      "recommendations": "Recommendations:",
+      "suit": "Suit or long dress for the ceremony",
+      "shoes": "Comfortable shoes for the party",
+      "weather": "Keep the seasonal weather in mind"
+    },
+    "colorPalette": {
+      "title": "Color Palette",
+      "description": "If you wish to coordinate your outfit with the wedding decoration:",
+      "winter": "January - March:",
+      "spring": "April onwards:"
+    },
+    "weather": {
+      "title": "Expected Weather",
+      "description": "The weather on the event date is usually [weather description]. We recommend bringing [light clothing/coat/etc.] and being prepared for [sun/rain/etc.].",
+      "update": "We will update this information closer to the event date."
+    },
+    "ceremony": {
+      "title": "Ceremony",
+      "date": "June 21, 2025",
+      "time": "4:00 PM",
+      "location": "La Madeleine Church",
+      "address": "Place de la Madeleine, 75008 Paris"
+    },
+    "reception": {
+      "title": "Reception",
+      "time": "7:00 PM",
+      "location": "Château de Versailles",
+      "address": "Place d'Armes, 78000 Versailles"
+    }
+  },
+  "rsvp": {
+    "title": "RSVP",
+    "subtitle": "Please confirm your attendance before May 1st",
+    "form": {
+      "name": "Full name",
+      "email": "Email address",
+      "attending": "Will you attend?",
+      "yes": "Yes, I will attend",
+      "no": "No, I cannot attend",
+      "guests": "Number of guests",
+      "guestsOptions": {
+        "0": "Just me",
+        "1": "1 guest",
+        "2": "2 guests",
+        "3": "3 guests",
+        "4": "4 guests",
+        "5": "5 guests"
+      },
+      "comments": "Comments or dietary restrictions",
+      "submit": "Confirm Attendance",
+      "submitting": "Sending..."
+    },
+    "success": "Confirmation Received!",
+    "successMessageAttending": "We're so happy you can join us on our special day! We can't wait to see you.",
+    "successMessageNotAttending": "We're sorry you can't attend. We hope to celebrate with you another time!",
+    "backToHome": "Back to Home",
+    "error": "Error sending. Please try again."
+  },
+  "gifts": {
+    "title": "Gift Registry",
+    "subtitle": "Your presence is our greatest gift",
+    "reserved": "Reserved",
+    "reserve": "Reserve",
+    "reserveBy": "Reserved by",
+    "link": "View in store",
+    "filter": "Filter by category",
+    "all": "All",
+    "categories": {
+      "all": "All",
+      "home": "Home",
+      "experience": "Experiences",
+      "other": "Other"
+    },
+    "stats": {
+      "available": "Available",
+      "reserved": "Reserved",
+      "purchased": "Purchased"
+    },
+    "confirmReserve": "Please enter your name to reserve this gift:",
+    "successReserve": "Gift reserved! Thank you for your generosity. 💝",
+    "errorReserve": "Error reserving gift. Please try again."
+  },
+  "gallery": {
+    "title": "Photo Gallery",
+    "subtitle": "Share your photos with us",
+    "upload": "Upload photo",
+    "uploading": "Uploading...",
+    "caption": "Caption (optional)",
+    "yourName": "Your name (optional)",
+    "pending": "Photo uploaded! It will be visible after approval.",
+    "selectPhoto": "Select a photo"
+  },
+  "music": {
+    "title": "Music Suggestions",
+    "subtitle": "What song can't be missed?",
+    "form": {
+      "song": "Song name",
+      "artist": "Artist",
+      "yourName": "Your name (optional)",
+      "submit": "Send suggestion",
+      "submitting": "Sending..."
+    },
+    "pending": "Pending approval",
+    "success": "Thank you for your suggestion!",
+    "error": "Error sending. Try again."
+  },
+  "tourism": {
+    "title": "Tourist Guide",
+    "subtitle": "Discover Paris",
+    "filter": "Filter by category",
+    "all": "All",
+    "hotels": "Hotels",
+    "restaurants": "Restaurants",
+    "culture": "Culture",
+    "leisure": "Leisure",
+    "recommended": "Recommended",
+    "distance": "Distance",
+    "rating": "Rating",
+    "viewMap": "View on map",
+    "categories": {
+      "all": "All",
+      "hotel": "Hotels",
+      "restaurant": "Restaurants",
+      "culture": "Culture",
+      "leisure": "Leisure"
+    },
+    "noPlaces": "No places available in this category."
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "login": {
+      "title": "Sign In",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Sign In",
+      "error": "Invalid username or password"
+    },
+    "logout": "Sign out",
+    "tabs": {
+      "overview": "Overview",
+      "rsvps": "RSVPs",
+      "photos": "Photos",
+      "songs": "Songs",
+      "gifts": "Gifts",
+      "places": "Places"
+    },
+    "stats": {
+      "totalRsvps": "Confirmations",
+      "attending": "Attending",
+      "notAttending": "Not attending",
+      "pendingPhotos": "Pending photos",
+      "pendingSongs": "Pending songs"
+    },
+    "actions": {
+      "approve": "Approve",
+      "delete": "Delete",
+      "edit": "Edit",
+      "add": "Add",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search"
+  }
+}

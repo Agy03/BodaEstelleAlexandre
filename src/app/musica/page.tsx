@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { Music, Plus, CheckCircle, Loader } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -17,6 +18,7 @@ type Song = {
 };
 
 export default function MusicaPage() {
+  const t = useTranslations('music');
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -94,11 +96,11 @@ export default function MusicaPage() {
           </motion.div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
             <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
-              Sugiere Música
+              {t('title')}
             </span>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Ayúdanos a crear la playlist perfecta para nuestra celebración
+            {t('subtitle')}
           </p>
         </motion.div>
 
@@ -112,47 +114,47 @@ export default function MusicaPage() {
             <Card>
               <CardContent className="pt-6">
                 <h2 className="text-2xl font-bold mb-4 text-[var(--color-text)]">
-                  Añade una Canción
+                  {t('form.submit')}
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <Input
-                    label="Título de la canción *"
+                    label={t('form.song')}
                     type="text"
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="Despacito"
+                    placeholder=""
                   />
 
                   <Input
-                    label="Artista *"
+                    label={t('form.artist')}
                     type="text"
                     required
                     value={formData.artist}
                     onChange={(e) => setFormData({ ...formData, artist: e.target.value })}
-                    placeholder="Luis Fonsi"
+                    placeholder=""
                   />
 
                   <Input
-                    label="Tu nombre (opcional)"
+                    label={t('form.yourName')}
                     type="text"
                     value={formData.suggestedBy}
                     onChange={(e) =>
                       setFormData({ ...formData, suggestedBy: e.target.value })
                     }
-                    placeholder="Juan Pérez"
+                    placeholder=""
                   />
 
                   <Button type="submit" className="w-full" disabled={submitting}>
                     {submitting ? (
                       <>
                         <Loader className="w-5 h-5 mr-2 animate-spin" />
-                        Enviando...
+                        {t('form.submitting')}
                       </>
                     ) : (
                       <>
                         <Plus className="w-5 h-5 mr-2" />
-                        Sugerir Canción
+                        {t('form.submit')}
                       </>
                     )}
                   </Button>
@@ -160,7 +162,7 @@ export default function MusicaPage() {
                   {success && (
                     <div className="flex items-center gap-2 text-green-600 justify-center">
                       <CheckCircle className="w-5 h-5" />
-                      <span>¡Sugerencia enviada! Será revisada pronto.</span>
+                      <span>{t('success')}</span>
                     </div>
                   )}
                 </form>
@@ -186,7 +188,7 @@ export default function MusicaPage() {
                   </div>
                 ) : songs.length === 0 ? (
                   <p className="text-gray-600 text-center py-12">
-                    Aún no hay canciones confirmadas. ¡Sé el primero en sugerir!
+                    {t('pending')}
                   </p>
                 ) : (
                   <div className="space-y-3 max-h-[600px] overflow-y-auto">

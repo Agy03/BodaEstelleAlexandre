@@ -8,7 +8,7 @@ const BUCKET = 'photos'; // Nombre del bucket en Supabase Storage
 export async function uploadBlob(file: File, key: string): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from(BUCKET)
     .upload(key, buffer, {
       contentType: file.type,

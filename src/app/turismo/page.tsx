@@ -2,17 +2,10 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
 import { MapPin, Hotel, Utensils, Landmark, PartyPopper, ExternalLink, Sparkles, Heart, Search, Navigation, Star, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
-
-const categories = [
-  { id: 'all', label: 'Todos', icon: Sparkles, color: 'from-[var(--color-primary)] to-[var(--color-secondary)]' },
-  { id: 'hotel', label: 'Hoteles', icon: Hotel, color: 'from-[var(--color-secondary)] to-[var(--color-accent)]' },
-  { id: 'restaurant', label: 'Restaurantes', icon: Utensils, color: 'from-[var(--color-primary)] to-[var(--color-accent)]' },
-  { id: 'culture', label: 'Cultura', icon: Landmark, color: 'from-[var(--color-accent)] to-[var(--color-primary)]' },
-  { id: 'leisure', label: 'Ocio', icon: PartyPopper, color: 'from-[var(--color-secondary)] to-[var(--color-primary)]' },
-];
 
 type Place = {
   id: string;
@@ -30,6 +23,16 @@ type Place = {
 };
 
 export default function TurismoPage() {
+  const t = useTranslations('tourism');
+  
+  const categories = [
+    { id: 'all', label: t('categories.all'), icon: Sparkles, color: 'from-[var(--color-primary)] to-[var(--color-secondary)]' },
+    { id: 'hotel', label: t('categories.hotel'), icon: Hotel, color: 'from-[var(--color-secondary)] to-[var(--color-accent)]' },
+    { id: 'restaurant', label: t('categories.restaurant'), icon: Utensils, color: 'from-[var(--color-primary)] to-[var(--color-accent)]' },
+    { id: 'culture', label: t('categories.culture'), icon: Landmark, color: 'from-[var(--color-accent)] to-[var(--color-primary)]' },
+    { id: 'leisure', label: t('categories.leisure'), icon: PartyPopper, color: 'from-[var(--color-secondary)] to-[var(--color-primary)]' },
+  ];
+  
   const [places, setPlaces] = useState<Place[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
@@ -174,7 +177,7 @@ export default function TurismoPage() {
             transition={{ delay: 0.3 }}
           >
             <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
-              Descubre la Ciudad
+              {t('title')}
             </span>
           </motion.h1>
           
@@ -184,8 +187,7 @@ export default function TurismoPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            Lugares especiales que te recomendamos visitar durante tu estancia.<br />
-            <span className="text-[var(--color-primary)] font-medium">Haz de tu visita una experiencia inolvidable.</span>
+            {t('subtitle')}
           </motion.p>
         </motion.div>
 

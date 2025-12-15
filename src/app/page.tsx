@@ -3,50 +3,51 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, MapPin, Calendar, Users, Gift, Camera, Music, Info, Sparkles } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ScrollVine } from '@/components/ui/ScrollVine';
 
-const features = [
+const getFeatures = (t: (key: string) => string) => [
   {
     icon: Users,
-    title: 'Confirma tu Asistencia',
-    description: 'Háznoslo saber para poder preparar todo perfectamente',
+    title: t('home.features.rsvp.title'),
+    description: t('home.features.rsvp.description'),
     href: '/rsvp',
     color: 'from-rose-300 to-pink-300',
   },
   {
     icon: MapPin,
-    title: 'Turismo Cercano',
-    description: 'Descubre lugares increíbles para visitar',
+    title: t('home.features.tourism.title'),
+    description: t('home.features.tourism.description'),
     href: '/turismo',
     color: 'from-purple-300 to-lavender-300',
   },
   {
     icon: Gift,
-    title: 'Lista de Regalos',
-    description: 'Si deseas hacernos un regalo, aquí encontrarás ideas',
+    title: t('home.features.gifts.title'),
+    description: t('home.features.gifts.description'),
     href: '/regalos',
     color: 'from-amber-300 to-yellow-200',
   },
   {
     icon: Camera,
-    title: 'Galería de Fotos',
-    description: 'Comparte tus mejores momentos con nosotros',
+    title: t('home.features.gallery.title'),
+    description: t('home.features.gallery.description'),
     href: '/galeria',
     color: 'from-pink-300 to-rose-200',
   },
   {
     icon: Info,
-    title: 'Información General',
-    description: 'Todo lo que necesitas saber sobre el gran día',
+    title: t('home.features.info.title'),
+    description: t('home.features.info.description'),
     href: '/informacion',
     color: 'from-blue-200 to-cyan-200',
   },
   {
     icon: Music,
-    title: 'Sugiere Música',
-    description: 'Ayúdanos a crear la playlist perfecta',
+    title: t('home.features.music.title'),
+    description: t('home.features.music.description'),
     href: '/musica',
     color: 'from-purple-200 to-pink-200',
   },
@@ -86,6 +87,9 @@ const floatingAnimation = {
 };
 
 export default function Home() {
+  const t = useTranslations();
+  const features = getFeatures(t);
+  
   return (
     <div className="min-h-screen overflow-hidden relative">
       {/* Enredadera que crece con el scroll */}

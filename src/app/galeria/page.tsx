@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
 import { Camera, Upload, CheckCircle, Loader } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -18,6 +19,8 @@ type Photo = {
 };
 
 export default function GaleriaPage() {
+  const t = useTranslations('gallery');
+  const tCommon = useTranslations('common');
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -107,11 +110,11 @@ export default function GaleriaPage() {
           </motion.div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 font-playfair">
             <span className="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
-              Galería de Fotos
+              {t('title')}
             </span>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Comparte tus mejores momentos con nosotros. Las fotos serán revisadas antes de publicarse.
+            {t('subtitle')}
           </p>
         </motion.div>
 
@@ -128,7 +131,7 @@ export default function GaleriaPage() {
                 {/* File Upload con preview */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Selecciona una foto *
+                    {t('upload')} *
                   </label>
                   
                   {/* Custom file input */}
@@ -157,7 +160,7 @@ export default function GaleriaPage() {
                             {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                           </p>
                           <p className="text-xs text-[var(--color-rose)] mt-2">
-                            Click para cambiar la imagen
+                            Click para cambiar
                           </p>
                         </div>
                       ) : (
@@ -166,7 +169,7 @@ export default function GaleriaPage() {
                             <Camera className="w-8 h-8 text-[var(--color-rose)]" />
                           </div>
                           <p className="mb-2 text-sm font-medium text-gray-700">
-                            <span className="text-[var(--color-rose)]">Click para seleccionar</span> o arrastra una imagen
+                            <span className="text-[var(--color-rose)]">Click</span> o arrastra una imagen
                           </p>
                           <p className="text-xs text-gray-500">
                             PNG, JPG, WEBP hasta 10MB
@@ -178,19 +181,19 @@ export default function GaleriaPage() {
                 </div>
 
                 <Input
-                  label="Tu nombre (opcional)"
+                  label={t('yourName')}
                   type="text"
                   value={uploaderName}
                   onChange={(e) => setUploaderName(e.target.value)}
-                  placeholder="Juan Pérez"
+                  placeholder=""
                 />
 
                 <Input
-                  label="Descripción (opcional)"
+                  label={t('caption')}
                   type="text"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Un momento especial..."
+                  placeholder=""
                 />
 
                 <Button
@@ -201,12 +204,12 @@ export default function GaleriaPage() {
                   {uploading ? (
                     <>
                       <Loader className="w-5 h-5 mr-2 animate-spin" />
-                      Subiendo...
+                      {t('uploading')}
                     </>
                   ) : (
                     <>
                       <Upload className="w-5 h-5 mr-2" />
-                      {selectedFile ? 'Subir Foto' : 'Selecciona una foto primero'}
+                      {t('upload')}
                     </>
                   )}
                 </Button>
@@ -218,7 +221,7 @@ export default function GaleriaPage() {
                     className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 justify-center"
                   >
                     <CheckCircle className="w-5 h-5" />
-                    <span className="font-medium">¡Foto subida! Estará visible después de ser aprobada.</span>
+                    <span className="font-medium">{t('pending')}</span>
                   </motion.div>
                 )}
               </form>
@@ -230,12 +233,12 @@ export default function GaleriaPage() {
         {loading ? (
           <div className="text-center py-20">
             <Loader className="w-12 h-12 mx-auto animate-spin text-[var(--color-primary)]" />
-            <p className="mt-4 text-gray-600">Cargando fotos...</p>
+            <p className="mt-4 text-gray-600">{tCommon('loading')}</p>
           </div>
         ) : photos.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-gray-600 text-lg">
-              Aún no hay fotos en la galería. ¡Sé el primero en compartir!
+              {t('subtitle')}
             </p>
           </div>
         ) : (

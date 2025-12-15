@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
@@ -11,6 +12,7 @@ import { CheckCircle, Users, Mail, User, Heart, Sparkles, Flower2 } from 'lucide
 import { cn } from '@/lib/utils';
 
 export default function RSVPPage() {
+  const t = useTranslations('rsvp');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -80,7 +82,7 @@ export default function RSVPPage() {
               transition={{ delay: 0.4 }}
             >
               <h1 className="text-4xl md:text-5xl font-light font-playfair mb-6 bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-                ¡Confirmación Recibida!
+                {t('success')}
               </h1>
               <div className="flex justify-center items-center gap-3 mb-6">
                 <div className="h-px w-16 bg-gradient-to-r from-transparent via-[var(--color-rose)] to-transparent" />
@@ -89,11 +91,11 @@ export default function RSVPPage() {
               </div>
               <p className="text-lg text-gray-600 mb-8 font-light leading-relaxed max-w-xl mx-auto">
                 {formData.attending
-                  ? '¡Nos alegra muchísimo que puedas acompañarnos en nuestro día especial! Te esperamos con mucha ilusión.'
-                  : 'Lamentamos que no puedas asistir. ¡Esperamos celebrar contigo en otra ocasión!'}
+                  ? t('successMessageAttending')
+                  : t('successMessageNotAttending')}
               </p>
               <Button onClick={() => window.location.href = '/'} size="lg">
-                Volver al Inicio
+                {t('backToHome')}
               </Button>
             </motion.div>
           </motion.div>
@@ -142,7 +144,7 @@ export default function RSVPPage() {
           >
             <h1 className="text-4xl md:text-6xl font-light mb-4 font-playfair">
               <span className="bg-gradient-to-r from-[var(--color-rose)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
-                Confirma tu Asistencia
+                {t('title')}
               </span>
             </h1>
 
@@ -155,7 +157,7 @@ export default function RSVPPage() {
             </div>
 
             <p className="text-lg text-gray-600 leading-relaxed font-light">
-              Por favor, háznoslo saber lo antes posible para poder organizar todo perfectamente
+              {t('subtitle')}
             </p>
           </motion.div>
         </motion.div>
@@ -169,30 +171,30 @@ export default function RSVPPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Nombre */}
               <Input
-                label="Nombre completo"
+                label={t('form.name')}
                 type="text"
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Escribe tu nombre completo"
+                placeholder={t('form.name')}
                 icon={<User className="w-5 h-5" />}
               />
 
               {/* Email */}
               <Input
-                label="Correo electrónico"
+                label={t('form.email')}
                 type="email"
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="tu@email.com"
+                placeholder={t('form.email')}
                 icon={<Mail className="w-5 h-5" />}
               />
 
               {/* Asistencia */}
               <div className="space-y-3">
                 <label className="block text-sm font-light tracking-wide text-gray-700">
-                  ¿Podrás asistir? <span className="text-[var(--color-rose)]">*</span>
+                  {t('form.attending')} <span className="text-[var(--color-rose)]">*</span>
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   <motion.button
@@ -209,7 +211,7 @@ export default function RSVPPage() {
                   >
                     <span className="flex items-center justify-center gap-2">
                       <Heart className={cn("w-5 h-5", formData.attending && "fill-current")} />
-                      Sí, asistiré
+                      {t('form.yes')}
                     </span>
                   </motion.button>
                   <motion.button
@@ -224,7 +226,7 @@ export default function RSVPPage() {
                         : 'border-[var(--color-accent)]/20 hover:border-gray-400/40 bg-white'
                     )}
                   >
-                    No podré asistir
+                    {t('form.no')}
                   </motion.button>
                 </div>
               </div>
@@ -238,19 +240,19 @@ export default function RSVPPage() {
                   transition={{ duration: 0.3 }}
                 >
                   <Select
-                    label="Número de acompañantes"
+                    label={t('form.guests')}
                     value={formData.guests.toString()}
                     onChange={(e) =>
                       setFormData({ ...formData, guests: parseInt(e.target.value) || 0 })
                     }
                     icon={<Users className="w-5 h-5" />}
                     options={[
-                      { value: '0', label: 'Solo yo' },
-                      { value: '1', label: '1 acompañante' },
-                      { value: '2', label: '2 acompañantes' },
-                      { value: '3', label: '3 acompañantes' },
-                      { value: '4', label: '4 acompañantes' },
-                      { value: '5', label: '5 acompañantes' },
+                      { value: '0', label: t('form.guestsOptions.0') },
+                      { value: '1', label: t('form.guestsOptions.1') },
+                      { value: '2', label: t('form.guestsOptions.2') },
+                      { value: '3', label: t('form.guestsOptions.3') },
+                      { value: '4', label: t('form.guestsOptions.4') },
+                      { value: '5', label: t('form.guestsOptions.5') },
                     ]}
                   />
                 </motion.div>
@@ -258,10 +260,10 @@ export default function RSVPPage() {
 
               {/* Comentarios */}
               <Textarea
-                label="Comentarios o restricciones alimentarias"
+                label={t('form.comments')}
                 value={formData.comments}
                 onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
-                placeholder="Alergias, intolerancias, comentarios especiales..."
+                placeholder={t('form.comments')}
                 rows={4}
               />
 
@@ -285,12 +287,12 @@ export default function RSVPPage() {
                       >
                         <Sparkles className="w-5 h-5" />
                       </motion.div>
-                      Enviando...
+                      {t('form.submitting')}
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
                       <Heart className="w-5 h-5 fill-current" />
-                      Confirmar Asistencia
+                      {t('form.submit')}
                     </span>
                   )}
                 </Button>

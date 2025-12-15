@@ -6,16 +6,18 @@ import { Menu, X, Heart, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
-const navItems = [
-  { href: '/', label: 'Inicio' },
-  { href: '/rsvp', label: 'Confirmar' },
-  { href: '/turismo', label: 'Turismo' },
-  { href: '/regalos', label: 'Regalos' },
-  { href: '/galeria', label: 'Galería' },
-  { href: '/informacion', label: 'Info' },
-  { href: '/musica', label: 'Música' },
+const getNavItems = (t: (key: string) => string) => [
+  { href: '/', label: t('nav.home') },
+  { href: '/rsvp', label: t('nav.rsvp') },
+  { href: '/turismo', label: t('nav.tourism') },
+  { href: '/regalos', label: t('nav.gifts') },
+  { href: '/galeria', label: t('nav.gallery') },
+  { href: '/informacion', label: t('nav.info') },
+  { href: '/musica', label: t('nav.music') },
 ];
 
 export function Navbar() {
@@ -23,7 +25,9 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const { data: session } = useSession();
+  const t = useTranslations();
   const isAdmin = session?.user?.role === 'admin';
+  const navItems = getNavItems(t);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,8 +78,9 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item, index) => {
+          <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              {navItems.map((item, index) => {
               const isActive = pathname === item.href;
               return (
                 <motion.div
@@ -114,8 +119,10 @@ export function Navbar() {
                   </Link>
                 </motion.div>
               );
-            })}
+            })}            </div>
             
+            {/* Language Switcher */}
+            <LanguageSwitcher />            
             {/* Admin Link (solo visible cuando están autenticados) */}
             {isAdmin && (
               <motion.div
@@ -141,7 +148,7 @@ export function Navbar() {
                     )}
                   />
                   <Shield className="w-4 h-4 relative z-10" />
-                  <span className="relative z-10">Admin</span>
+                  <span className="relative z-10">{t('admin.title')}</span>
                 </Link>
               </motion.div>
             )}
@@ -193,6 +200,16 @@ export function Navbar() {
             className="md:hidden bg-white/95 backdrop-blur-xl border-t border-[var(--color-rose)]/10"
           >
             <div className="px-6 py-8 space-y-1">
+              {/* Language Switcher - Mobile */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4 }}
+                className="mb-4 flex justify-center"
+              >
+                <LanguageSwitcher />
+              </motion.div>
+              
               {navItems.map((item, index) => {
                 const isActive = pathname === item.href;
                 return (
@@ -256,7 +273,7 @@ export function Navbar() {
                   >
                     <div className="flex items-center gap-2">
                       <Shield className="w-5 h-5" />
-                      <span>Administración</span>
+                      <span>{t('admin.title')}</span>
                     </div>
                   </Link>
                 </motion.div>
