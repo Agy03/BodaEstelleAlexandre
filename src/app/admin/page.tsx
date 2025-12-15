@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
@@ -81,6 +82,7 @@ type TourismPlace = {
 };
 
 export default function AdminPage() {
+  const t = useTranslations('admin');
   const { data: session, status } = useSession();
   const router = useRouter();
   const [rsvps, setRsvps] = useState<RSVP[]>([]);
@@ -287,7 +289,7 @@ export default function AdminPage() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
                 <h1 className="text-4xl md:text-6xl font-light mb-3 bg-gradient-to-r from-[#E8B4B8] via-[#C9A7C7] to-[#D4AF97] bg-clip-text text-transparent font-playfair">
-                  Panel de Administración
+                  {t('title')}
                 </h1>
                 <p className="text-xl text-gray-600 flex items-center gap-2 font-light">
                   <span>Bienvenid@s,</span>

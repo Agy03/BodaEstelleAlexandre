@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 
 export default function AdminLoginPage() {
+  const t = useTranslations('admin.login');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -29,13 +31,13 @@ export default function AdminLoginPage() {
       });
 
       if (result?.error) {
-        setError('Usuario o contraseña incorrectos');
+        setError(t('error'));
       } else {
         router.push('/admin');
         router.refresh();
       }
     } catch {
-      setError('Error al iniciar sesión');
+      setError(t('error'));
     } finally {
       setLoading(false);
     }
@@ -86,7 +88,7 @@ export default function AdminLoginPage() {
               </motion.div>
               
               <h1 className="text-3xl font-bold text-gray-800 mb-2 font-playfair">
-                Panel de Administración
+                {t('title')}
               </h1>
               <p className="text-gray-600 flex items-center justify-center gap-2">
                 <Heart className="w-4 h-4 text-[var(--color-primary)]" />
@@ -98,7 +100,7 @@ export default function AdminLoginPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-                  Usuario
+                  {t('username')}
                 </label>
                 <Input
                   id="username"
@@ -114,7 +116,7 @@ export default function AdminLoginPage() {
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  Contraseña
+                  {t('password')}
                 </label>
                 <Input
                   id="password"
@@ -146,10 +148,10 @@ export default function AdminLoginPage() {
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
                     <Loader className="w-5 h-5 animate-spin" />
-                    Iniciando sesión...
+                    {t('submit')}...
                   </span>
                 ) : (
-                  'Iniciar sesión'
+                  t('submit')
                 )}
               </Button>
             </form>
