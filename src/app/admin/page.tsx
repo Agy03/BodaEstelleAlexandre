@@ -51,6 +51,22 @@ type Song = {
   suggestedBy?: string;
   approved: boolean;
   createdAt: string;
+  spotifyId?: string;
+  album?: string;
+  albumArt?: string;
+  previewUrl?: string;
+  spotifyUrl?: string;
+};
+
+type SpotifyTrack = {
+  id: string;
+  name: string;
+  artist: string;
+  album: string;
+  image: string;
+  previewUrl?: string;
+  spotifyUrl: string;
+  duration: number;
 };
 
 type Gift = {
@@ -99,6 +115,15 @@ export default function AdminPage() {
   const [editingPlace, setEditingPlace] = useState<TourismPlace | undefined>(undefined);
   const [editingGift, setEditingGift] = useState<Gift | undefined>(undefined);
 
+  // Spotify search states
+  const [spotifySearchQuery, setSpotifySearchQuery] = useState('');
+  const [spotifyResults, setSpotifyResults] = useState<SpotifyTrack[]>([]);
+  const [spotifyLoading, setSpotifyLoading] = useState(false);
+  const [selectedSpotifyTrack, setSelectedSpotifyTrack] = useState<SpotifyTrack | null>(null);
+  const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/admin/login');
@@ -106,6 +131,41 @@ export default function AdminPage() {
       fetchData();
     }
   }, [status, router]);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.src = '';
+      }
+    };
+  }, [audioElement]);
+
+  // Spotify search with debounce
+  useEffect(() => {
+    if (!spotifySearchQuery.trim()) {
+      setSpotifyResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setSpotifyLoading(true);
+      try {
+        const response = await fetch(`/api/spotify/search?q=${encodeURIComponent(spotifySearchQuery)}`);
+        if (response.ok) {
+          const data = await response.json();
+          setSpotifyResults(data.tracks || []);
+        }
+      } catch (error) {
+        console.error('Error searching Spotify:', error);
+      } finally {
+        setSpotifyLoading(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [spotifySearchQuery]);
 
   const handleLogout = async () => {
     await signOut({ redirect: true, callbackUrl: '/' });
@@ -161,6 +221,58 @@ export default function AdminPage() {
     } catch (error) {
       console.error('Error approving song:', error);
     }
+  };
+
+  const addSpotifySong = async () => {
+    if (!selectedSpotifyTrack) return;
+
+    try {
+      const response = await fetch('/api/songs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: selectedSpotifyTrack.name,
+          artist: selectedSpotifyTrack.artist,
+          spotifyId: selectedSpotifyTrack.id,
+          album: selectedSpotifyTrack.album,
+          albumArt: selectedSpotifyTrack.image,
+          previewUrl: selectedSpotifyTrack.previewUrl,
+          spotifyUrl: selectedSpotifyTrack.spotifyUrl,
+          suggestedBy: 'Admin',
+          approved: true,
+        }),
+      });
+
+      if (response.ok) {
+        setSelectedSpotifyTrack(null);
+        setSpotifySearchQuery('');
+        setSpotifyResults([]);
+        fetchData();
+      }
+    } catch (error) {
+      console.error('Error adding song from Spotify:', error);
+    }
+  };
+
+  const playPreview = (previewUrl: string) => {
+    if (audioElement) {
+      audioElement.pause();
+    }
+
+    if (currentAudioUrl === previewUrl && isPlaying) {
+      audioElement?.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    const audio = new Audio(previewUrl);
+    audio.volume = 0.5;
+    audio.play();
+    audio.onended = () => setIsPlaying(false);
+    
+    setAudioElement(audio);
+    setCurrentAudioUrl(previewUrl);
+    setIsPlaying(true);
   };
 
   const deleteSong = async (songId: string) => {
@@ -716,12 +828,128 @@ export default function AdminPage() {
 
           {activeTab === 'songs' && (
             <div>
-              <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Sugerencias Musicales</h2>
-                <span className="text-sm text-gray-600">
-                  {songs.filter(s => s.approved).length} aprobadas de {songs.length} total
-                </span>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold mb-4">Sugerencias Musicales</h2>
+                
+                {/* Spotify Search Section */}
+                <Card className="mb-6 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Music className="w-6 h-6 text-green-600" />
+                      <h3 className="text-lg font-bold text-green-900">Añadir desde Spotify</h3>
+                    </div>
+                    
+                    <div className="relative mb-4">
+                      <input
+                        type="text"
+                        value={spotifySearchQuery}
+                        onChange={(e) => setSpotifySearchQuery(e.target.value)}
+                        placeholder="Buscar canción en Spotify..."
+                        className="w-full px-4 py-3 rounded-xl border-2 border-green-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                      />
+                      {spotifyLoading && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <Loader className="w-5 h-5 animate-spin text-green-600" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Spotify Results */}
+                    {spotifyResults.length > 0 && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="space-y-2 max-h-96 overflow-y-auto"
+                      >
+                        {spotifyResults.map((track) => (
+                          <motion.div
+                            key={track.id}
+                            whileHover={{ scale: 1.01 }}
+                            onClick={() => setSelectedSpotifyTrack(track)}
+                            className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                              selectedSpotifyTrack?.id === track.id
+                                ? 'border-green-500 bg-green-100 shadow-lg'
+                                : 'border-gray-200 bg-white hover:border-green-300 hover:shadow-md'
+                            }`}
+                          >
+                            <div className="flex items-center gap-4">
+                              <NextImage
+                                src={track.image}
+                                alt={track.name}
+                                width={64}
+                                height={64}
+                                className="rounded-lg shadow-md"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-bold text-gray-900 truncate">{track.name}</h4>
+                                <p className="text-sm text-gray-600 truncate">{track.artist}</p>
+                                <p className="text-xs text-gray-500 truncate">{track.album}</p>
+                              </div>
+                              {track.previewUrl && (
+                                <Button
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    playPreview(track.previewUrl!);
+                                  }}
+                                  className={`${
+                                    currentAudioUrl === track.previewUrl && isPlaying
+                                      ? 'bg-red-500 hover:bg-red-600'
+                                      : 'bg-green-500 hover:bg-green-600'
+                                  } text-white`}
+                                >
+                                  {currentAudioUrl === track.previewUrl && isPlaying ? '⏸ Pausar' : '▶ Preview'}
+                                </Button>
+                              )}
+                            </div>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    )}
+
+                    {/* Selected Track & Add Button */}
+                    {selectedSpotifyTrack && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-4 p-4 bg-green-100 rounded-xl border-2 border-green-500"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <NextImage
+                              src={selectedSpotifyTrack.image}
+                              alt={selectedSpotifyTrack.name}
+                              width={48}
+                              height={48}
+                              className="rounded-lg shadow-md"
+                            />
+                            <div>
+                              <p className="font-bold text-green-900">{selectedSpotifyTrack.name}</p>
+                              <p className="text-sm text-green-700">{selectedSpotifyTrack.artist}</p>
+                            </div>
+                          </div>
+                          <Button
+                            onClick={addSpotifySong}
+                            className="bg-green-600 hover:bg-green-700 text-white"
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Añadir Canción
+                          </Button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Stats */}
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-sm text-gray-600">
+                    {songs.filter(s => s.approved).length} aprobadas de {songs.length} total
+                  </span>
+                </div>
               </div>
+
+              {/* Songs List */}
               <div className="space-y-3">
                 {songs.map((song) => (
                   <Card
@@ -729,40 +957,81 @@ export default function AdminPage() {
                     className={`${song.approved ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200'}`}
                   >
                     <CardContent className="py-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
+                      <div className="flex items-start gap-4">
+                        {/* Album Art */}
+                        {song.albumArt && (
+                          <NextImage
+                            src={song.albumArt}
+                            alt={song.title}
+                            width={80}
+                            height={80}
+                            className="rounded-lg shadow-md flex-shrink-0"
+                          />
+                        )}
+                        
+                        {/* Song Info */}
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-1">
-                            <Music className="w-5 h-5 text-pink-500" />
-                            <h3 className="font-bold text-lg">{song.title}</h3>
+                            {!song.albumArt && <Music className="w-5 h-5 text-pink-500 flex-shrink-0" />}
+                            <h3 className="font-bold text-lg truncate">{song.title}</h3>
                           </div>
-                          <p className="text-sm text-gray-600 ml-8">{song.artist}</p>
+                          <p className="text-sm text-gray-600 truncate">{song.artist}</p>
+                          {song.album && (
+                            <p className="text-xs text-gray-500 truncate mt-1">{song.album}</p>
+                          )}
                           {song.suggestedBy && (
-                            <p className="text-xs text-gray-500 ml-8 mt-1">
+                            <p className="text-xs text-gray-500 mt-1">
                               Sugerida por: <span className="font-medium">{song.suggestedBy}</span>
                             </p>
                           )}
                           {song.approved && (
-                            <span className="inline-block ml-8 mt-2 px-2 py-1 text-xs font-medium bg-green-200 text-green-700 rounded-full">
+                            <span className="inline-block mt-2 px-2 py-1 text-xs font-medium bg-green-200 text-green-700 rounded-full">
                               ✓ Aprobada
                             </span>
                           )}
                         </div>
-                        <div className="flex gap-2">
+
+                        {/* Actions */}
+                        <div className="flex flex-col gap-2 flex-shrink-0">
+                          {song.previewUrl && (
+                            <Button
+                              size="sm"
+                              onClick={() => playPreview(song.previewUrl!)}
+                              className={`${
+                                currentAudioUrl === song.previewUrl && isPlaying
+                                  ? 'bg-red-500 hover:bg-red-600'
+                                  : 'bg-purple-500 hover:bg-purple-600'
+                              } text-white min-w-[100px]`}
+                            >
+                              {currentAudioUrl === song.previewUrl && isPlaying ? '⏸ Pausar' : '▶ Preview'}
+                            </Button>
+                          )}
+                          {song.spotifyUrl && (
+                            <Button
+                              size="sm"
+                              onClick={() => window.open(song.spotifyUrl, '_blank')}
+                              className="bg-green-600 hover:bg-green-700 text-white min-w-[100px]"
+                            >
+                              🎵 Spotify
+                            </Button>
+                          )}
                           {!song.approved && (
                             <Button 
                               size="sm" 
                               onClick={() => approveSong(song.id)}
-                              className="bg-green-500 hover:bg-green-600"
+                              className="bg-green-500 hover:bg-green-600 min-w-[100px]"
                             >
-                              <CheckCircle className="w-4 h-4" />
+                              <CheckCircle className="w-4 h-4 mr-1" />
+                              Aprobar
                             </Button>
                           )}
                           <Button
                             size="sm"
                             onClick={() => deleteSong(song.id)}
-                            className="bg-red-500 hover:bg-red-600 text-white"
+                            className="bg-red-500 hover:bg-red-600 text-white min-w-[100px]"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-4 h-4 mr-1" />
+                            Eliminar
                           </Button>
                         </div>
                       </div>

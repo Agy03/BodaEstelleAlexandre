@@ -142,6 +142,10 @@ model Song {
   user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   suggestedBy String?
   spotifyId   String?
+  album       String?
+  albumArt    String?
+  previewUrl  String?
+  spotifyUrl  String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
