@@ -268,7 +268,17 @@ export default function AdminPage() {
     const audio = new Audio(previewUrl);
     audio.volume = 0.5;
     audio.play();
-    audio.onended = () => setIsPlaying(false);
+    
+    // Limitar preview a 10 segundos
+    const timeout = setTimeout(() => {
+      audio.pause();
+      setIsPlaying(false);
+    }, 10000);
+    
+    audio.onended = () => {
+      clearTimeout(timeout);
+      setIsPlaying(false);
+    };
     
     setAudioElement(audio);
     setCurrentAudioUrl(previewUrl);
@@ -949,95 +959,203 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Songs List */}
-              <div className="space-y-3">
-                {songs.map((song) => (
-                  <Card
-                    key={song.id}
-                    className={`${song.approved ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200'}`}
-                  >
-                    <CardContent className="py-4">
-                      <div className="flex items-start gap-4">
-                        {/* Album Art */}
-                        {song.albumArt && (
-                          <NextImage
-                            src={song.albumArt}
-                            alt={song.title}
-                            width={80}
-                            height={80}
-                            className="rounded-lg shadow-md flex-shrink-0"
-                          />
-                        )}
-                        
-                        {/* Song Info */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 mb-1">
-                            {!song.albumArt && <Music className="w-5 h-5 text-pink-500 flex-shrink-0" />}
-                            <h3 className="font-bold text-lg truncate">{song.title}</h3>
+              {/* Songs Playlist */}
+              <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 rounded-2xl p-6 shadow-xl border border-purple-200">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                      <Music className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">Playlist de la Boda</h3>
+                      <p className="text-sm text-gray-600">{songs.length} canciones • {songs.filter(s => s.approved).length} aprobadas</p>
+                    </div>
+                  </div>
+                  {songs.some(s => !s.approved) && (
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          songs.filter(s => !s.approved).forEach(song => approveSong(song.id));
+                        }}
+                        className="bg-green-500 hover:bg-green-600 text-white"
+                      >
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        Aprobar Todas
+                      </Button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Playlist Header */}
+                <div className="grid grid-cols-[auto_1fr_auto_80px] gap-4 px-4 py-2 border-b border-purple-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  <div className="w-12">#</div>
+                  <div>Canción</div>
+                  <div className="text-center">Estado</div>
+                  <div className="text-center">Acciones</div>
+                </div>
+
+                {/* Songs */}
+                <div className="mt-2">
+                  {songs.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500">
+                      <Music className="w-16 h-16 mx-auto mb-4 opacity-30" />
+                      <p className="text-lg">No hay canciones sugeridas aún</p>
+                      <p className="text-sm mt-2">Usa el buscador de Spotify arriba para añadir canciones</p>
+                    </div>
+                  ) : (
+                    songs.map((song, index) => (
+                      <motion.div
+                        key={song.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className={`grid grid-cols-[auto_1fr_auto_80px] gap-4 items-center px-4 py-3 rounded-xl hover:bg-white/80 transition-all group ${
+                          !song.approved ? 'bg-orange-100/50' : ''
+                        }`}
+                      >
+                        {/* Number & Play Button */}
+                        <div className="w-12 flex items-center justify-center">
+                          {song.previewUrl ? (
+                            <button
+                              onClick={() => playPreview(song.previewUrl!)}
+                              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                                currentAudioUrl === song.previewUrl && isPlaying
+                                  ? 'bg-green-500 text-white shadow-lg scale-110'
+                                  : 'bg-white text-gray-700 group-hover:bg-purple-500 group-hover:text-white shadow-md hover:scale-110'
+                              }`}
+                            >
+                              {currentAudioUrl === song.previewUrl && isPlaying ? (
+                                <span className="text-xl">⏸</span>
+                              ) : (
+                                <span className="text-xl">▶</span>
+                              )}
+                            </button>
+                          ) : (
+                            <span className="text-gray-400 font-semibold">{index + 1}</span>
+                          )}
+                        </div>
+
+                        {/* Song Info with Album Art */}
+                        <div className="flex items-center gap-4 min-w-0">
+                          {song.albumArt ? (
+                            <NextImage
+                              src={song.albumArt}
+                              alt={song.title}
+                              width={56}
+                              height={56}
+                              className="rounded-lg shadow-md flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                              <Music className="w-6 h-6 text-white" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-bold text-gray-900 truncate">{song.title}</h4>
+                              {song.spotifyUrl && (
+                                <button
+                                  onClick={() => window.open(song.spotifyUrl, '_blank')}
+                                  className="text-green-600 hover:text-green-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  title="Abrir en Spotify"
+                                >
+                                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+                            <p className="text-sm text-gray-600 truncate">{song.artist}</p>
+                            {song.album && (
+                              <p className="text-xs text-gray-500 truncate">{song.album}</p>
+                            )}
+                            {song.suggestedBy && (
+                              <p className="text-xs text-purple-600 mt-1">
+                                Sugerida por <span className="font-medium">{song.suggestedBy}</span>
+                              </p>
+                            )}
                           </div>
-                          <p className="text-sm text-gray-600 truncate">{song.artist}</p>
-                          {song.album && (
-                            <p className="text-xs text-gray-500 truncate mt-1">{song.album}</p>
-                          )}
-                          {song.suggestedBy && (
-                            <p className="text-xs text-gray-500 mt-1">
-                              Sugerida por: <span className="font-medium">{song.suggestedBy}</span>
-                            </p>
-                          )}
-                          {song.approved && (
-                            <span className="inline-block mt-2 px-2 py-1 text-xs font-medium bg-green-200 text-green-700 rounded-full">
-                              ✓ Aprobada
+                        </div>
+
+                        {/* Status Badge */}
+                        <div className="flex justify-center">
+                          {song.approved ? (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                              <CheckCircle className="w-3 h-3" />
+                              Aprobada
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium animate-pulse">
+                              <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                              Pendiente
                             </span>
                           )}
                         </div>
 
-                        {/* Actions */}
-                        <div className="flex flex-col gap-2 flex-shrink-0">
-                          {song.previewUrl && (
-                            <Button
-                              size="sm"
-                              onClick={() => playPreview(song.previewUrl!)}
-                              className={`${
-                                currentAudioUrl === song.previewUrl && isPlaying
-                                  ? 'bg-red-500 hover:bg-red-600'
-                                  : 'bg-purple-500 hover:bg-purple-600'
-                              } text-white min-w-[100px]`}
+                        {/* Action Buttons */}
+                        <div className="flex gap-1 justify-end">
+                          {!song.approved ? (
+                            <>
+                              <button
+                                onClick={() => approveSong(song.id)}
+                                className="w-8 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white flex items-center justify-center transition-all hover:scale-110 shadow-md"
+                                title="Aprobar"
+                              >
+                                <CheckCircle className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => deleteSong(song.id)}
+                                className="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all hover:scale-110 shadow-md"
+                                title="Rechazar"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              onClick={() => deleteSong(song.id)}
+                              className="w-8 h-8 rounded-lg bg-gray-400 hover:bg-red-500 text-white flex items-center justify-center transition-all hover:scale-110 shadow-md opacity-0 group-hover:opacity-100"
+                              title="Eliminar"
                             >
-                              {currentAudioUrl === song.previewUrl && isPlaying ? '⏸ Pausar' : '▶ Preview'}
-                            </Button>
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           )}
-                          {song.spotifyUrl && (
-                            <Button
-                              size="sm"
-                              onClick={() => window.open(song.spotifyUrl, '_blank')}
-                              className="bg-green-600 hover:bg-green-700 text-white min-w-[100px]"
-                            >
-                              🎵 Spotify
-                            </Button>
-                          )}
-                          {!song.approved && (
-                            <Button 
-                              size="sm" 
-                              onClick={() => approveSong(song.id)}
-                              className="bg-green-500 hover:bg-green-600 min-w-[100px]"
-                            >
-                              <CheckCircle className="w-4 h-4 mr-1" />
-                              Aprobar
-                            </Button>
-                          )}
-                          <Button
-                            size="sm"
-                            onClick={() => deleteSong(song.id)}
-                            className="bg-red-500 hover:bg-red-600 text-white min-w-[100px]"
-                          >
-                            <Trash2 className="w-4 h-4 mr-1" />
-                            Eliminar
-                          </Button>
+                        </div>
+                      </motion.div>
+                    ))
+                  )}
+                </div>
+
+                {/* Preview Info */}
+                {isPlaying && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-6 p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl shadow-lg"
+                  >
+                    <div className="flex items-center justify-between text-white">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                          <Music className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-sm">Reproduciendo preview (10 segundos)</p>
+                          <p className="text-xs text-white/80">Escuchando desde nuestra API</p>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      <button
+                        onClick={() => {
+                          audioElement?.pause();
+                          setIsPlaying(false);
+                        }}
+                        className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+                      >
+                        ⏸ Detener
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
               </div>
             </div>
           )}
