@@ -1,52 +1,74 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
-// Note: removed import of getSignedUrl from '@aws-sdk/s3-request-presigner' to avoid missing module/type errors.
-// If you need signed URLs for private buckets, install '@aws-sdk/s3-request-presigner' and restore the import.
+import { supabase } from './supabase';
 
-const s3Client = new S3Client({
-  region: process.env.BLOB_REGION || 'us-east-1',
-  endpoint: process.env.BLOB_ENDPOINT,
-  credentials: {
-    accessKeyId: process.env.BLOB_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.BLOB_SECRET_ACCESS_KEY || '',
-  },
-});
+const BUCKET = 'photos'; // Nombre del bucket en Supabase Storage
 
-const BUCKET = process.env.BLOB_BUCKET || 'boda-estelle-photos';
-
+/**
+ * Upload a file to Supabase Storage
+ */
 export async function uploadBlob(file: File, key: string): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   
-  const command = new PutObjectCommand({
-    Bucket: BUCKET,
-    Key: key,
-    Body: buffer,
-    ContentType: file.type,
-  });
+  const { data, error } = await supabase.storage
+    .from(BUCKET)
+    .upload(key, buffer, {
+      contentType: file.type,
+      upsert: false,
+    });
 
-  await s3Client.send(command);
-  
-  // Return public URL or generate signed URL
-  return `${process.env.BLOB_ENDPOINT}/${BUCKET}/${key}`;
+  if (error) {
+    console.error('Error uploading to Supabase Storage:', error);
+    throw new Error(`Failed to upload file: ${error.message}`);
+  }
+
+  // Get the public URL
+  const { data: { publicUrl } } = supabase.storage
+    .from(BUCKET)
+    .getPublicUrl(key);
+
+  return publicUrl;
 }
 
+/**
+ * Delete a file from Supabase Storage
+ */
 export async function deleteBlob(key: string): Promise<void> {
-  const command = new DeleteObjectCommand({
-    Bucket: BUCKET,
-    Key: key,
-  });
+  const { error } = await supabase.storage
+    .from(BUCKET)
+    .remove([key]);
 
-  await s3Client.send(command);
-}
-export async function getSignedBlobUrl(key: string): Promise<string> {
-  // Fallback: return a direct (unsigned) public URL so the code compiles without '@aws-sdk/s3-request-presigner'.
-  // For private buckets and real signed URLs, install and import '@aws-sdk/s3-request-presigner' and re-enable signing.
-  return `${process.env.BLOB_ENDPOINT || ''}/${BUCKET}/${key}`;
+  if (error) {
+    console.error('Error deleting from Supabase Storage:', error);
+    throw new Error(`Failed to delete file: ${error.message}`);
+  }
 }
 
+/**
+ * Get a signed URL for temporary access (optional, for private buckets)
+ */
+export async function getSignedBlobUrl(key: string, expiresIn: number = 3600): Promise<string> {
+  const { data, error } = await supabase.storage
+    .from(BUCKET)
+    .createSignedUrl(key, expiresIn);
 
+  if (error || !data) {
+    console.error('Error creating signed URL:', error);
+    // Fallback to public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from(BUCKET)
+      .getPublicUrl(key);
+    return publicUrl;
+  }
+
+  return data.signedUrl;
+}
+
+/**
+ * Generate a unique key for blob storage
+ */
 export function generateBlobKey(filename: string): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 15);
   const extension = filename.split('.').pop();
   return `photos/${timestamp}-${random}.${extension}`;
 }
+
