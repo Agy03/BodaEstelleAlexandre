@@ -7,11 +7,11 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   error?: string;
   icon?: React.ReactNode;
-  options: { value: string; label: string }[];
+  options?: { value: string; label: string }[];
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, label, error, icon, options, ...props }, ref) => {
+  ({ className, label, error, icon, options, children, ...props }, ref) => {
     return (
       <div className="space-y-2">
         {label && (
@@ -42,11 +42,11 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             ref={ref}
             {...props}
           >
-            {options.map((option) => (
+            {options ? options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
-            ))}
+            )) : children}
           </select>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

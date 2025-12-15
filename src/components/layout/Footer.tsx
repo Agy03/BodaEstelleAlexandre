@@ -13,15 +13,7 @@ const quickLinks = [
 
 export function Footer() {
   return (
-    <footer className="relative mt-40 overflow-hidden">
-      {/* Elegant wave separator */}
-      <div className="absolute top-0 left-0 right-0 -translate-y-full">
-        <svg className="w-full h-24 text-[var(--color-rose)]" viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path d="M0,0 C300,80 600,80 900,40 L1200,80 L1200,120 L0,120 Z" fill="currentColor" opacity="0.05" />
-          <path d="M0,20 C300,100 600,100 900,60 L1200,100 L1200,120 L0,120 Z" fill="currentColor" opacity="0.1" />
-        </svg>
-      </div>
-      
+    <footer className="relative mt-20 overflow-hidden">
       {/* Gradient background */}
       <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-background)]/50 via-white to-[var(--color-background)]/50" />
       
@@ -55,10 +47,10 @@ export function Footer() {
                   />
                 </motion.div>
                 <h3 className="text-2xl font-light font-playfair bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-                  Boda Estelle
+                  Estelle & Alexandre
                 </h3>
               </div>
-              <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--color-accent)]">2025</span>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--color-accent)]">2026</span>
             </Link>
             <p className="text-gray-600 leading-relaxed text-sm">
               Gracias por compartir este día especial con nosotros. Vuestra presencia es el mejor regalo.
@@ -152,7 +144,7 @@ export function Footer() {
         >
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-gray-500">
             <p className="flex items-center gap-1.5">
-              <span>© {new Date().getFullYear()} Boda Estelle</span>
+              <span>© {new Date().getFullYear()} Estelle & Alexandre</span>
             </p>
             <span className="hidden sm:inline text-gray-300">•</span>
             <p className="flex items-center gap-1.5">

@@ -124,18 +124,57 @@ export default function GaleriaPage() {
         >
           <Card>
             <CardContent className="pt-6">
-              <form onSubmit={handleUpload} className="space-y-4">
+              <form onSubmit={handleUpload} className="space-y-6">
+                {/* File Upload con preview */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
                     Selecciona una foto *
                   </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="w-full"
-                    required
-                  />
+                  
+                  {/* Custom file input */}
+                  <div className="relative">
+                    <input
+                      id="file-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="sr-only"
+                      required
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className="flex flex-col items-center justify-center w-full h-48 px-4 transition-all duration-300 bg-white border-2 border-[var(--color-rose)]/30 border-dashed rounded-2xl cursor-pointer hover:bg-[var(--color-rose)]/5 hover:border-[var(--color-rose)]/60 group"
+                    >
+                      {selectedFile ? (
+                        <div className="flex flex-col items-center">
+                          <div className="mb-3 p-3 bg-green-100 rounded-full">
+                            <CheckCircle className="w-8 h-8 text-green-600" />
+                          </div>
+                          <p className="text-sm font-medium text-gray-700 mb-1">
+                            {selectedFile.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                          <p className="text-xs text-[var(--color-rose)] mt-2">
+                            Click para cambiar la imagen
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <div className="mb-3 p-3 bg-[var(--color-rose)]/10 rounded-full group-hover:scale-110 transition-transform">
+                            <Camera className="w-8 h-8 text-[var(--color-rose)]" />
+                          </div>
+                          <p className="mb-2 text-sm font-medium text-gray-700">
+                            <span className="text-[var(--color-rose)]">Click para seleccionar</span> o arrastra una imagen
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            PNG, JPG, WEBP hasta 10MB
+                          </p>
+                        </div>
+                      )}
+                    </label>
+                  </div>
                 </div>
 
                 <Input
@@ -156,7 +195,7 @@ export default function GaleriaPage() {
 
                 <Button
                   type="submit"
-                  className="w-full"
+                  className="w-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] hover:shadow-2xl hover:shadow-[var(--color-rose)]/30 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={uploading || !selectedFile}
                 >
                   {uploading ? (
@@ -167,23 +206,27 @@ export default function GaleriaPage() {
                   ) : (
                     <>
                       <Upload className="w-5 h-5 mr-2" />
-                      Subir Foto
+                      {selectedFile ? 'Subir Foto' : 'Selecciona una foto primero'}
                     </>
                   )}
                 </Button>
 
                 {uploadSuccess && (
-                  <div className="flex items-center gap-2 text-green-600 justify-center">
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 justify-center"
+                  >
                     <CheckCircle className="w-5 h-5" />
-                    <span>¡Foto subida! Estará visible después de ser aprobada.</span>
-                  </div>
+                    <span className="font-medium">¡Foto subida! Estará visible después de ser aprobada.</span>
+                  </motion.div>
                 )}
               </form>
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* Photos Gallery */}
+        {/* Photos Gallery - Masonry Layout Asimétrico */}
         {loading ? (
           <div className="text-center py-20">
             <Loader className="w-12 h-12 mx-auto animate-spin text-[var(--color-primary)]" />
@@ -196,36 +239,63 @@ export default function GaleriaPage() {
             </p>
           </div>
         ) : (
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
-            {photos.map((photo, index) => (
-              <motion.div
-                key={photo.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.05 }}
-                className="break-inside-avoid"
-              >
-                <Card hover className="overflow-hidden">
-                  <NextImage
-                    src={photo.url}
-                    alt={photo.caption || 'Gallery photo'}
-                    width={600}
-                    height={400}
-                    className="w-full h-auto"
-                  />
-                  {(photo.caption || photo.uploaderName) && (
-                    <CardContent className="pt-3">
-                      {photo.caption && (
-                        <p className="text-gray-700 mb-1">{photo.caption}</p>
-                      )}
-                      {photo.uploaderName && (
-                        <p className="text-sm text-gray-500">— {photo.uploaderName}</p>
-                      )}
-                    </CardContent>
-                  )}
-                </Card>
-              </motion.div>
-            ))}
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
+            {photos.map((photo, index) => {
+              // Crear alturas variables aleatorias para efecto asimétrico
+              const randomHeight = [
+                'h-48', 'h-56', 'h-64', 'h-72', 'h-80', 'h-96',
+                'aspect-square', 'aspect-[4/3]', 'aspect-[3/4]', 'aspect-video'
+              ];
+              const heightClass = randomHeight[index % randomHeight.length];
+              
+              return (
+                <motion.div
+                  key={photo.id}
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ 
+                    delay: index * 0.08,
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 100
+                  }}
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  className="break-inside-avoid mb-4 group"
+                >
+                  <Card hover className="overflow-hidden relative">
+                    {/* Imagen con overlay gradiente al hover */}
+                    <div className="relative overflow-hidden">
+                      <NextImage
+                        src={photo.url}
+                        alt={photo.caption || 'Gallery photo'}
+                        width={600}
+                        height={400}
+                        className={`w-full ${heightClass} object-cover transition-transform duration-500 group-hover:scale-110`}
+                      />
+                      
+                      {/* Overlay romántico al hover */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {(photo.caption || photo.uploaderName) && (
+                          <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                            {photo.caption && (
+                              <p className="text-sm font-medium mb-1">{photo.caption}</p>
+                            )}
+                            {photo.uploaderName && (
+                              <p className="text-xs opacity-90">— {photo.uploaderName}</p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Efecto de brillo romántico */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[var(--color-rose)]/10 via-transparent to-[var(--color-secondary)]/10" />
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         )}
       </div>

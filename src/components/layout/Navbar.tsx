@@ -67,9 +67,9 @@ export function Navbar() {
             </motion.div>
             <div className="flex flex-col">
               <span className="text-xl font-light font-playfair bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-                Boda Estelle
+                Estelle & Alexandre
               </span>
-              <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--color-accent)] -mt-1">2025</span>
+              <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--color-accent)] -mt-1">2026</span>
             </div>
           </Link>
 

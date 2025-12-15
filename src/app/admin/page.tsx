@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { PlaceModal } from '@/components/admin/PlaceModal';
+import { GiftModal } from '@/components/admin/GiftModal';
 
 type RSVP = {
   id: string;
@@ -89,6 +91,12 @@ export default function AdminPage() {
   const [places, setPlaces] = useState<TourismPlace[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'rsvps' | 'photos' | 'songs' | 'gifts' | 'places'>('overview');
   const [loading, setLoading] = useState(true);
+  
+  // Modal states
+  const [isPlaceModalOpen, setIsPlaceModalOpen] = useState(false);
+  const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
+  const [editingPlace, setEditingPlace] = useState<TourismPlace | undefined>(undefined);
+  const [editingGift, setEditingGift] = useState<Gift | undefined>(undefined);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -165,6 +173,88 @@ export default function AdminPage() {
     }
   };
 
+  // Gift functions
+  const handleSaveGift = async (giftData: any) => {
+    try {
+      if (editingGift) {
+        // Update existing gift
+        await fetch(`/api/gifts/${editingGift.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(giftData),
+        });
+      } else {
+        // Create new gift
+        await fetch('/api/gifts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(giftData),
+        });
+      }
+      fetchData();
+      setEditingGift(undefined);
+    } catch (error) {
+      console.error('Error saving gift:', error);
+    }
+  };
+
+  const handleEditGift = (gift: Gift) => {
+    setEditingGift(gift);
+    setIsGiftModalOpen(true);
+  };
+
+  const handleDeleteGift = async (giftId: string) => {
+    if (!confirm('¿Estás seguro de que quieres eliminar este regalo?')) return;
+    
+    try {
+      await fetch(`/api/gifts/${giftId}`, { method: 'DELETE' });
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting gift:', error);
+    }
+  };
+
+  // Place functions
+  const handleSavePlace = async (placeData: any) => {
+    try {
+      if (editingPlace) {
+        // Update existing place
+        await fetch(`/api/tourism/${editingPlace.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(placeData),
+        });
+      } else {
+        // Create new place
+        await fetch('/api/tourism', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(placeData),
+        });
+      }
+      fetchData();
+      setEditingPlace(undefined);
+    } catch (error) {
+      console.error('Error saving place:', error);
+    }
+  };
+
+  const handleEditPlace = (place: TourismPlace) => {
+    setEditingPlace(place);
+    setIsPlaceModalOpen(true);
+  };
+
+  const handleDeletePlace = async (placeId: string) => {
+    if (!confirm('¿Estás seguro de que quieres eliminar este lugar?')) return;
+    
+    try {
+      await fetch(`/api/tourism/${placeId}`, { method: 'DELETE' });
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting place:', error);
+    }
+  };
+
   const attendingCount = rsvps.filter((r) => r.attending).length;
   const totalGuests = rsvps.reduce((sum, r) => sum + (r.attending ? r.guests + 1 : 0), 0);
   const pendingPhotos = photos.filter((p) => !p.approved).length;
@@ -181,186 +271,320 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen py-20 px-4 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen py-20 px-4 bg-gradient-to-br from-[#FFF9F5] via-[#FCF5F1] to-[#F9F2EE] relative">
+      {/* Patrón sutil de encaje de fondo */}
+      <div className="fixed inset-0 pointer-events-none opacity-30">
+        <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-[#E8B4B8]/20 to-[#C9A7C7]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-tr from-[#C9A7C7]/10 to-[#D4AF97]/5 rounded-full blur-3xl" />
+      </div>
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Header con degradado y sombra elegante */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-12 flex items-center justify-between"
+          className="mb-12 relative z-10"
         >
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent font-playfair">
-              Panel de Administración
-            </h1>
-            <p className="text-lg text-gray-600">Bienvenid@s, {session?.user?.name || 'Novios'} 💝</p>
+          <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-[#E8B4B8]/30">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div>
+                <h1 className="text-4xl md:text-6xl font-light mb-3 bg-gradient-to-r from-[#E8B4B8] via-[#C9A7C7] to-[#D4AF97] bg-clip-text text-transparent font-playfair">
+                  Panel de Administración
+                </h1>
+                <p className="text-xl text-gray-600 flex items-center gap-2 font-light">
+                  <span>Bienvenid@s,</span>
+                  <span className="font-semibold bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] bg-clip-text text-transparent">
+                    {session?.user?.name || 'Novios'}
+                  </span>
+                  <span className="text-2xl">💝</span>
+                </p>
+              </div>
+              <Button
+                onClick={handleLogout}
+                className="bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] text-white hover:shadow-2xl hover:shadow-[#E8B4B8]/50 hover:scale-105 transition-all px-8 py-4 text-lg"
+              >
+                <LogOut className="w-5 h-5 mr-2" />
+                Cerrar sesión
+              </Button>
+            </div>
           </div>
-          <Button
-            onClick={handleLogout}
-            className="bg-gradient-to-r from-red-500 to-red-600 text-white hover:shadow-lg"
-          >
-            <LogOut className="w-4 h-4 mr-2" />
-            Cerrar sesión
-          </Button>
         </motion.div>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
-            <CardContent className="pt-6">
-              <Users className="w-8 h-8 text-green-600 mb-2" />
-              <p className="text-3xl font-bold text-green-700">{attendingCount}</p>
-              <p className="text-sm text-green-600 font-medium">Confirmados</p>
-            </CardContent>
-          </Card>
+        {/* Stats Overview con estética romántica */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
+          >
+            <Card className="bg-gradient-to-br from-[#E8B4B8] to-[#d69da3] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
+              <CardContent className="pt-8 pb-6 relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <Users className="w-12 h-12 text-white/90" />
+                  <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                    <span className="text-xs font-bold text-white">RSVPs</span>
+                  </div>
+                </div>
+                <p className="text-5xl font-black text-white mb-2">{attendingCount}</p>
+                <p className="text-white/90 font-semibold text-lg">Confirmados</p>
+                <p className="text-white/70 text-sm mt-1">de {rsvps.length} respuestas</p>
+              </CardContent>
+            </Card>
+          </motion.div>
           
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-            <CardContent className="pt-6">
-              <Users className="w-8 h-8 text-blue-600 mb-2" />
-              <p className="text-3xl font-bold text-blue-700">{totalGuests}</p>
-              <p className="text-sm text-blue-600 font-medium">Total Invitados</p>
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card className="bg-gradient-to-br from-[#C9A7C7] to-[#b08db5] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
+              <CardContent className="pt-8 pb-6 relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <Users className="w-12 h-12 text-white/90" />
+                  <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                    <span className="text-xs font-bold text-white">Total</span>
+                  </div>
+                </div>
+                <p className="text-5xl font-black text-white mb-2">{totalGuests}</p>
+                <p className="text-white/90 font-semibold text-lg">Invitados</p>
+                <p className="text-white/70 text-sm mt-1">incluyendo acompañantes</p>
+              </CardContent>
+            </Card>
+          </motion.div>
           
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
-            <CardContent className="pt-6">
-              <Camera className="w-8 h-8 text-purple-600 mb-2" />
-              <p className="text-3xl font-bold text-purple-700">{pendingPhotos}</p>
-              <p className="text-sm text-purple-600 font-medium">Fotos Pendientes</p>
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Card className="bg-gradient-to-br from-[#D4AF97] to-[#c29d84] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
+              <CardContent className="pt-8 pb-6 relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <Camera className="w-12 h-12 text-white/90" />
+                  {pendingPhotos > 0 && (
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full animate-pulse">
+                      <span className="text-xs font-bold">{pendingPhotos}</span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-5xl font-black text-white mb-2">{photos.length}</p>
+                <p className="text-white/90 font-semibold text-lg">Fotos</p>
+                <p className="text-white/70 text-sm mt-1">
+                  {pendingPhotos > 0 ? `${pendingPhotos} por aprobar` : 'Todas aprobadas ✓'}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
           
-          <Card className="bg-gradient-to-br from-pink-50 to-pink-100 border-pink-200">
-            <CardContent className="pt-6">
-              <Music className="w-8 h-8 text-pink-600 mb-2" />
-              <p className="text-3xl font-bold text-pink-700">{pendingSongs}</p>
-              <p className="text-sm text-pink-600 font-medium">Canciones Pendientes</p>
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <Card className="bg-gradient-to-br from-[#f0c4c8] to-[#E8B4B8] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
+              <CardContent className="pt-8 pb-6 relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <Music className="w-12 h-12 text-white/90" />
+                  {pendingSongs > 0 && (
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full animate-pulse">
+                      <span className="text-xs font-bold">{pendingSongs}</span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-5xl font-black text-white mb-2">{songs.length}</p>
+                <p className="text-white/90 font-semibold text-lg">Canciones</p>
+                <p className="text-white/70 text-sm mt-1">
+                  {pendingSongs > 0 ? `${pendingSongs} por aprobar` : 'Todas aprobadas ✓'}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
           
-          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
-            <CardContent className="pt-6">
-              <Gift className="w-8 h-8 text-orange-600 mb-2" />
-              <p className="text-3xl font-bold text-orange-700">{availableGifts}</p>
-              <p className="text-sm text-orange-600 font-medium">Regalos Disponibles</p>
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Card className="bg-gradient-to-br from-[#d9c7d7] to-[#C9A7C7] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
+              <CardContent className="pt-8 pb-6 relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <Gift className="w-12 h-12 text-white/90" />
+                  <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                    <span className="text-xs font-bold text-white">{availableGifts}</span>
+                  </div>
+                </div>
+                <p className="text-5xl font-black text-white mb-2">{gifts.length}</p>
+                <p className="text-white/90 font-semibold text-lg">Regalos</p>
+                <p className="text-white/70 text-sm mt-1">
+                  {availableGifts} disponibles, {reservedGifts} reservados
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
           
-          <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200">
-            <CardContent className="pt-6">
-              <MapPin className="w-8 h-8 text-teal-600 mb-2" />
-              <p className="text-3xl font-bold text-teal-700">{places.length}</p>
-              <p className="text-sm text-teal-600 font-medium">Lugares Turísticos</p>
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            <Card className="bg-gradient-to-br from-[#e4cabc] to-[#D4AF97] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
+              <CardContent className="pt-8 pb-6 relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <MapPin className="w-12 h-12 text-white/90" />
+                  <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                    <span className="text-xs font-bold text-white">Lugares</span>
+                  </div>
+                </div>
+                <p className="text-5xl font-black text-white mb-2">{places.length}</p>
+                <p className="text-white/90 font-semibold text-lg">Turismo</p>
+                <p className="text-white/70 text-sm mt-1">lugares recomendados</p>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-md">
-          <TabButton
-            active={activeTab === 'overview'}
-            onClick={() => setActiveTab('overview')}
-            icon={<BarChart3 className="w-4 h-4" />}
-          >
-            Resumen
-          </TabButton>
-          <TabButton
-            active={activeTab === 'rsvps'}
-            onClick={() => setActiveTab('rsvps')}
-            icon={<Users className="w-4 h-4" />}
-            badge={rsvps.length}
-          >
-            RSVPs
-          </TabButton>
-          <TabButton
-            active={activeTab === 'photos'}
-            onClick={() => setActiveTab('photos')}
-            icon={<Camera className="w-4 h-4" />}
-            badge={pendingPhotos > 0 ? pendingPhotos : undefined}
-            badgeColor="purple"
-          >
-            Fotos
-          </TabButton>
-          <TabButton
-            active={activeTab === 'songs'}
-            onClick={() => setActiveTab('songs')}
-            icon={<Music className="w-4 h-4" />}
-            badge={pendingSongs > 0 ? pendingSongs : undefined}
-            badgeColor="pink"
-          >
-            Música
-          </TabButton>
-          <TabButton
-            active={activeTab === 'gifts'}
-            onClick={() => setActiveTab('gifts')}
-            icon={<Gift className="w-4 h-4" />}
-            badge={gifts.length}
-          >
-            Regalos
-          </TabButton>
-          <TabButton
-            active={activeTab === 'places'}
-            onClick={() => setActiveTab('places')}
-            icon={<MapPin className="w-4 h-4" />}
-            badge={places.length}
-          >
-            Turismo
-          </TabButton>
+        {/* Navigation Tabs Mejoradas */}
+        <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-3 shadow-2xl border border-[#E8B4B8]/20 mb-8 relative z-10">
+          <div className="flex flex-wrap gap-2">
+            <TabButton
+              active={activeTab === 'overview'}
+              onClick={() => setActiveTab('overview')}
+              icon={<BarChart3 className="w-4 h-4" />}
+            >
+              Resumen
+            </TabButton>
+            <TabButton
+              active={activeTab === 'rsvps'}
+              onClick={() => setActiveTab('rsvps')}
+              icon={<Users className="w-4 h-4" />}
+              badge={rsvps.length}
+            >
+              RSVPs
+            </TabButton>
+            <TabButton
+              active={activeTab === 'photos'}
+              onClick={() => setActiveTab('photos')}
+              icon={<Camera className="w-4 h-4" />}
+              badge={pendingPhotos > 0 ? pendingPhotos : undefined}
+              badgeColor="purple"
+            >
+              Fotos
+            </TabButton>
+            <TabButton
+              active={activeTab === 'songs'}
+              onClick={() => setActiveTab('songs')}
+              icon={<Music className="w-4 h-4" />}
+              badge={pendingSongs > 0 ? pendingSongs : undefined}
+              badgeColor="pink"
+            >
+              Música
+            </TabButton>
+            <TabButton
+              active={activeTab === 'gifts'}
+              onClick={() => setActiveTab('gifts')}
+              icon={<Gift className="w-4 h-4" />}
+              badge={gifts.length}
+            >
+              Regalos
+            </TabButton>
+            <TabButton
+              active={activeTab === 'places'}
+              onClick={() => setActiveTab('places')}
+              icon={<MapPin className="w-4 h-4" />}
+              badge={places.length}
+            >
+              Turismo
+            </TabButton>
+          </div>
         </div>
 
         {/* Content */}
-        <div className="mt-8">
+        <motion.div 
+          className="mt-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
           {activeTab === 'overview' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Quick Stats */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5" />
+              <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-2xl">
+                <CardHeader className="border-b border-gray-100">
+                  <CardTitle className="flex items-center gap-3 text-2xl">
+                    <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-xl">
+                      <BarChart3 className="w-6 h-6 text-white" />
+                    </div>
                     Estadísticas Generales
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <div className="space-y-4">
-                    <StatRow label="Confirmaciones recibidas" value={`${attendingCount} de ${rsvps.length}`} />
+                    <StatRow label="Confirmaciones recibidas" value={`${attendingCount} de ${rsvps.length}`} progress={(attendingCount / Math.max(rsvps.length, 1)) * 100} />
                     <StatRow label="Total de invitados" value={totalGuests} />
-                    <StatRow label="Regalos reservados" value={`${reservedGifts} de ${gifts.length}`} />
+                    <StatRow label="Regalos reservados" value={`${reservedGifts} de ${gifts.length}`} progress={(reservedGifts / Math.max(gifts.length, 1)) * 100} />
                     <StatRow label="Fotos subidas" value={photos.length} />
-                    <StatRow label="Fotos aprobadas" value={photos.filter(p => p.approved).length} />
+                    <StatRow label="Fotos aprobadas" value={photos.filter(p => p.approved).length} progress={(photos.filter(p => p.approved).length / Math.max(photos.length, 1)) * 100} />
                     <StatRow label="Canciones sugeridas" value={songs.length} />
-                    <StatRow label="Canciones aprobadas" value={songs.filter(s => s.approved).length} />
+                    <StatRow label="Canciones aprobadas" value={songs.filter(s => s.approved).length} progress={(songs.filter(s => s.approved).length / Math.max(songs.length, 1)) * 100} />
                     <StatRow label="Lugares turísticos" value={places.length} />
                   </div>
                 </CardContent>
               </Card>
 
               {/* Recent Activity */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Actividad Reciente</CardTitle>
+              <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-2xl">
+                <CardHeader className="border-b border-gray-100">
+                  <CardTitle className="flex items-center gap-3 text-2xl">
+                    <div className="bg-gradient-to-br from-orange-500 to-red-500 p-3 rounded-xl">
+                      <Users className="w-6 h-6 text-white" />
+                    </div>
+                    Actividad Reciente
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <div className="space-y-3">
                     {pendingPhotos > 0 && (
                       <ActivityItem 
                         icon={<Camera className="w-5 h-5 text-purple-500" />}
-                        text={`${pendingPhotos} fotos esperando aprobación`}
+                        text={`${pendingPhotos} foto${pendingPhotos > 1 ? 's' : ''} esperando aprobación`}
                         action={() => setActiveTab('photos')}
+                        urgent
                       />
                     )}
                     {pendingSongs > 0 && (
                       <ActivityItem 
                         icon={<Music className="w-5 h-5 text-pink-500" />}
-                        text={`${pendingSongs} canciones esperando aprobación`}
+                        text={`${pendingSongs} canción${pendingSongs > 1 ? 'es' : ''} esperando aprobación`}
                         action={() => setActiveTab('songs')}
+                        urgent
                       />
                     )}
                     {availableGifts > 0 && (
                       <ActivityItem 
                         icon={<Gift className="w-5 h-5 text-orange-500" />}
-                        text={`${availableGifts} regalos disponibles`}
+                        text={`${availableGifts} regalo${availableGifts > 1 ? 's' : ''} disponible${availableGifts > 1 ? 's' : ''}`}
                         info
                       />
+                    )}
+                    {rsvps.length > 0 && (
+                      <ActivityItem 
+                        icon={<Users className="w-5 h-5 text-green-500" />}
+                        text={`${rsvps.length} confirmación${rsvps.length > 1 ? 'es' : ''} recibida${rsvps.length > 1 ? 's' : ''}`}
+                        action={() => setActiveTab('rsvps')}
+                        info
+                      />
+                    )}
+                    {pendingPhotos === 0 && pendingSongs === 0 && (
+                      <div className="text-center py-8">
+                        <div className="text-6xl mb-3">🎉</div>
+                        <p className="text-gray-600 font-medium">¡Todo al día!</p>
+                        <p className="text-gray-500 text-sm">No hay pendientes</p>
+                      </div>
                     )}
                   </div>
                 </CardContent>
@@ -369,45 +593,65 @@ export default function AdminPage() {
           )}
 
           {activeTab === 'rsvps' && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Confirmaciones de Asistencia</CardTitle>
+            <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-2xl">
+              <CardHeader className="border-b border-gray-100">
+                <CardTitle className="flex items-center gap-3 text-2xl">
+                  <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-3 rounded-xl">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  Confirmaciones de Asistencia
+                  <span className="ml-auto text-sm font-normal text-gray-500">
+                    {attendingCount} confirmados de {rsvps.length} respuestas
+                  </span>
+                </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b-2 border-gray-200">
-                        <th className="text-left py-3 px-4 font-semibold">Nombre</th>
-                        <th className="text-left py-3 px-4 font-semibold">Email</th>
-                        <th className="text-left py-3 px-4 font-semibold">Asiste</th>
-                        <th className="text-left py-3 px-4 font-semibold">Acompañantes</th>
-                        <th className="text-left py-3 px-4 font-semibold">Comentarios</th>
+                        <th className="text-left py-4 px-4 font-bold text-gray-700">Nombre</th>
+                        <th className="text-left py-4 px-4 font-bold text-gray-700">Email</th>
+                        <th className="text-left py-4 px-4 font-bold text-gray-700">Asiste</th>
+                        <th className="text-left py-4 px-4 font-bold text-gray-700">Acompañantes</th>
+                        <th className="text-left py-4 px-4 font-bold text-gray-700">Comentarios</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {rsvps.map((rsvp) => (
-                        <tr key={rsvp.id} className="border-b hover:bg-gray-50">
-                          <td className="py-3 px-4 font-medium">{rsvp.name}</td>
-                          <td className="py-3 px-4 text-gray-600">{rsvp.email}</td>
-                          <td className="py-3 px-4">
+                      {rsvps.map((rsvp, index) => (
+                        <motion.tr 
+                          key={rsvp.id} 
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="border-b hover:bg-purple-50/50 transition-colors"
+                        >
+                          <td className="py-4 px-4 font-semibold text-gray-800">{rsvp.name}</td>
+                          <td className="py-4 px-4 text-gray-600">{rsvp.email}</td>
+                          <td className="py-4 px-4">
                             {rsvp.attending ? (
-                              <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
-                                ✓ Sí
+                              <span className="px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-lg">
+                                ✓ Sí asiste
                               </span>
                             ) : (
-                              <span className="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">
-                                ✗ No
+                              <span className="px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-red-400 to-red-500 text-white shadow-lg">
+                                ✗ No asiste
                               </span>
                             )}
                           </td>
-                          <td className="py-3 px-4">
-                            <span className="font-semibold">{rsvp.guests}</span>
+                          <td className="py-4 px-4">
+                            <span className="text-xl font-bold text-purple-600">{rsvp.guests}</span>
                           </td>
-                          <td className="py-3 px-4 text-sm text-gray-600 max-w-xs truncate">
-                            {rsvp.comments || '-'}
+                          <td className="py-4 px-4 text-sm text-gray-600 max-w-xs">
+                            {rsvp.comments ? (
+                              <div className="bg-gray-50 px-3 py-2 rounded-lg">
+                                {rsvp.comments}
+                              </div>
+                            ) : (
+                              <span className="text-gray-400">-</span>
+                            )}
                           </td>
-                        </tr>
+                        </motion.tr>
                       ))}
                     </tbody>
                   </table>
@@ -531,8 +775,14 @@ export default function AdminPage() {
           {activeTab === 'gifts' && (
             <div>
               <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Lista de Regalos</h2>
-                <Button className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white">
+                <h2 className="text-2xl font-light font-playfair bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] bg-clip-text text-transparent">Lista de Regalos</h2>
+                <Button 
+                  onClick={() => {
+                    setEditingGift(undefined);
+                    setIsGiftModalOpen(true);
+                  }}
+                  className="bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] text-white hover:shadow-2xl hover:shadow-[#E8B4B8]/50"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Añadir Regalo
                 </Button>
@@ -585,11 +835,19 @@ export default function AdminPage() {
                         )}
                       </div>
                       <div className="flex gap-2">
-                        <Button size="sm" className="flex-1">
+                        <Button 
+                          size="sm" 
+                          className="flex-1 bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] text-white"
+                          onClick={() => handleEditGift(gift)}
+                        >
                           <Edit className="w-4 h-4 mr-1" />
                           Editar
                         </Button>
-                        <Button size="sm" className="bg-red-500 hover:bg-red-600 text-white">
+                        <Button 
+                          size="sm" 
+                          className="bg-red-400 hover:bg-red-500 text-white"
+                          onClick={() => handleDeleteGift(gift.id)}
+                        >
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -603,8 +861,14 @@ export default function AdminPage() {
           {activeTab === 'places' && (
             <div>
               <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Lugares Turísticos</h2>
-                <Button className="bg-gradient-to-r from-teal-500 to-teal-600 text-white">
+                <h2 className="text-2xl font-light font-playfair bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] bg-clip-text text-transparent">Lugares Turísticos</h2>
+                <Button 
+                  onClick={() => {
+                    setEditingPlace(undefined);
+                    setIsPlaceModalOpen(true);
+                  }}
+                  className="bg-gradient-to-r from-[#D4AF97] to-[#C9A7C7] text-white hover:shadow-2xl hover:shadow-[#D4AF97]/50"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Añadir Lugar
                 </Button>
@@ -642,11 +906,19 @@ export default function AdminPage() {
                         {place.priceLevel && <p>💰 {place.priceLevel}</p>}
                       </div>
                       <div className="flex gap-2">
-                        <Button size="sm" className="flex-1">
+                        <Button 
+                          size="sm" 
+                          className="flex-1 bg-gradient-to-r from-[#D4AF97] to-[#C9A7C7] text-white"
+                          onClick={() => handleEditPlace(place)}
+                        >
                           <Edit className="w-4 h-4 mr-1" />
                           Editar
                         </Button>
-                        <Button size="sm" className="bg-red-500 hover:bg-red-600 text-white">
+                        <Button 
+                          size="sm" 
+                          className="bg-red-400 hover:bg-red-500 text-white"
+                          onClick={() => handleDeletePlace(place.id)}
+                        >
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -656,8 +928,29 @@ export default function AdminPage() {
               </div>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
+
+      {/* Modals */}
+      <PlaceModal
+        isOpen={isPlaceModalOpen}
+        onClose={() => {
+          setIsPlaceModalOpen(false);
+          setEditingPlace(undefined);
+        }}
+        onSave={handleSavePlace}
+        place={editingPlace}
+      />
+
+      <GiftModal
+        isOpen={isGiftModalOpen}
+        onClose={() => {
+          setIsGiftModalOpen(false);
+          setEditingGift(undefined);
+        }}
+        onSave={handleSaveGift}
+        gift={editingGift}
+      />
     </div>
   );
 }
@@ -685,30 +978,44 @@ function TabButton({
   };
 
   return (
-    <button
+    <motion.button
       onClick={onClick}
-      className={`relative px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className={`relative px-6 py-3 rounded-2xl font-medium transition-all flex items-center gap-2 ${
         active
-          ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg scale-105'
-          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          ? 'bg-gradient-to-r from-[#E8B4B8] via-[#C9A7C7] to-[#D4AF97] text-white shadow-2xl'
+          : 'bg-gray-50 text-gray-700 hover:bg-[#E8B4B8]/10 hover:shadow-lg'
       }`}
     >
       {icon}
       {children}
       {badge !== undefined && badge > 0 && (
-        <span className={`absolute -top-1 -right-1 ${badgeColors[badgeColor]} text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center`}>
-          {badge}
+        <span className={`absolute -top-2 -right-2 ${badgeColors[badgeColor]} text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg animate-pulse`}>
+          {badge > 99 ? '99+' : badge}
         </span>
       )}
-    </button>
+    </motion.button>
   );
 }
 
-function StatRow({ label, value }: { label: string; value: string | number }) {
+function StatRow({ label, value, progress }: { label: string; value: string | number; progress?: number }) {
   return (
-    <div className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
-      <span className="text-gray-600">{label}</span>
-      <span className="font-bold text-lg">{value}</span>
+    <div className="py-3">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-gray-700 font-medium">{label}</span>
+        <span className="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{value}</span>
+      </div>
+      {progress !== undefined && (
+        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <motion.div 
+            className="h-full bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] rounded-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 1, delay: 0.2 }}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -717,25 +1024,39 @@ function ActivityItem({
   icon, 
   text, 
   action, 
-  info = false 
+  info = false,
+  urgent = false
 }: { 
   icon: React.ReactNode; 
   text: string; 
   action?: () => void;
   info?: boolean;
+  urgent?: boolean;
 }) {
   return (
-    <div 
+    <motion.div 
       onClick={action}
-      className={`flex items-center gap-3 p-3 rounded-lg ${
-        action ? 'bg-orange-50 hover:bg-orange-100 cursor-pointer' : 'bg-blue-50'
-      } transition-colors`}
+      whileHover={action ? { scale: 1.02, x: 5 } : {}}
+      className={`flex items-center gap-3 p-4 rounded-xl transition-all ${
+        action && !info 
+          ? urgent
+            ? 'bg-gradient-to-r from-[#f0c4c8] to-[#E8B4B8] hover:from-[#E8B4B8] hover:to-[#d69da3] cursor-pointer border-2 border-[#E8B4B8]'
+            : 'bg-gradient-to-r from-[#E8B4B8]/20 to-[#C9A7C7]/20 hover:from-[#E8B4B8]/30 hover:to-[#C9A7C7]/30 cursor-pointer border-2 border-[#C9A7C7]/40'
+          : 'bg-gradient-to-r from-[#D4AF97]/10 to-[#C9A7C7]/10 border-2 border-[#D4AF97]/30'
+      } shadow-md hover:shadow-lg`}
     >
-      {icon}
-      <span className="text-sm flex-1">{text}</span>
+      <div className="flex-shrink-0">
+        {icon}
+      </div>
+      <span className="text-sm font-medium flex-1 text-gray-800">{text}</span>
       {action && !info && (
-        <span className="text-xs text-orange-600 font-medium">Ver →</span>
+        <span className={`text-sm font-bold ${urgent ? 'text-[#d69da3]' : 'text-[#C9A7C7]'} flex items-center gap-1`}>
+          Ver
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
       )}
-    </div>
+    </motion.div>
   );
 }

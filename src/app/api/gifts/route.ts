@@ -51,3 +51,29 @@ export async function GET() {
     return NextResponse.json(sampleGifts);
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const data = await request.json();
+    
+    const gift = await prisma.gift.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        price: data.price ? parseFloat(data.price) : null,
+        image: data.image || null,
+        link: data.link || null,
+        reserved: false,
+        purchased: false,
+      },
+    });
+
+    return NextResponse.json(gift, { status: 201 });
+  } catch (error) {
+    console.error('Error creating gift:', error);
+    return NextResponse.json(
+      { error: 'Error al crear el regalo' },
+      { status: 500 }
+    );
+  }
+}

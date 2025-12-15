@@ -81,3 +81,27 @@ export async function GET() {
     return NextResponse.json(samplePlaces);
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const data = await request.json();
+    
+    const place = await prisma.tourismPlace.create({
+      data: {
+        name: data.name,
+        type: data.category || 'leisure',
+        description: data.description || '',
+        image: data.image || null,
+        link: data.link || null,
+      },
+    });
+
+    return NextResponse.json(place, { status: 201 });
+  } catch (error) {
+    console.error('Error creating tourism place:', error);
+    return NextResponse.json(
+      { error: 'Error al crear el lugar' },
+      { status: 500 }
+    );
+  }
+}

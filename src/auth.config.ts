@@ -6,7 +6,9 @@ export const authConfig: NextAuthConfig = {
   pages: {
     signIn: '/admin/login',
   },
-  secret: process.env.AUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+  },
   providers: [
     Credentials({
       credentials: {
