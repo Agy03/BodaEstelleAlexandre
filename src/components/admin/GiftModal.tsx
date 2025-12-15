@@ -9,11 +9,22 @@ import { Select } from '@/components/ui/Select';
 import NextImage from 'next/image';
 import { ExternalLink } from 'lucide-react';
 
+type Gift = {
+  id?: string;
+  name: string;
+  description?: string;
+  price?: number;
+  image?: string;
+  link?: string;
+  category?: string;
+  priority?: boolean;
+};
+
 type GiftModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (gift: any) => void;
-  gift?: any;
+  onSave: (gift: Partial<Gift>) => void;
+  gift?: Gift;
 };
 
 const CATEGORIES = [

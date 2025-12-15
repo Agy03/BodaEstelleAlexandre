@@ -10,7 +10,6 @@ import {
   Camera, 
   Music, 
   CheckCircle, 
-  X, 
   Gift,
   MapPin,
   Loader,
@@ -174,7 +173,7 @@ export default function AdminPage() {
   };
 
   // Gift functions
-  const handleSaveGift = async (giftData: any) => {
+  const handleSaveGift = async (giftData: Partial<Gift>) => {
     try {
       if (editingGift) {
         // Update existing gift
@@ -215,7 +214,7 @@ export default function AdminPage() {
   };
 
   // Place functions
-  const handleSavePlace = async (placeData: any) => {
+  const handleSavePlace = async (placeData: Partial<TourismPlace>) => {
     try {
       if (editingPlace) {
         // Update existing place

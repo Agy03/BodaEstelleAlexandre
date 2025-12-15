@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
         router.push('/admin');
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError('Error al iniciar sesión');
     } finally {
       setLoading(false);

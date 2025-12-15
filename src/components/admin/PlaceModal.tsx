@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Star, DollarSign, Clock, ExternalLink, Loader } from 'lucide-react';
+import { Search, MapPin, Star, ExternalLink, Loader } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -10,11 +10,36 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Select } from '@/components/ui/Select';
 import NextImage from 'next/image';
 
+type Place = {
+  id?: string;
+  name: string;
+  description?: string;
+  category: string;
+  address?: string;
+  distance?: string;
+  rating?: number;
+  priceLevel?: string;
+  hours?: string;
+  image?: string;
+  link?: string;
+  recommended?: boolean;
+};
+
+type SearchResult = {
+  id: string;
+  name: string;
+  address: string;
+  rating?: number;
+  priceLevel?: string;
+  photoUrl?: string;
+  googleMapsUrl?: string;
+};
+
 type PlaceModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (place: any) => void;
-  place?: any;
+  onSave: (place: Partial<Place>) => void;
+  place?: Place;
 };
 
 const CATEGORIES = [
@@ -49,9 +74,9 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
   });
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [selectedPlace, setSelectedPlace] = useState<SearchResult | null>(null);
 
   useEffect(() => {
     if (place) {
@@ -117,7 +142,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
     }
   };
 
-  const handleSelectSearchResult = (result: any) => {
+  const handleSelectSearchResult = (result: SearchResult) => {
     setSelectedPlace(result);
     setFormData({
       ...formData,

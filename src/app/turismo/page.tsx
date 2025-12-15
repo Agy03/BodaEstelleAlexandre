@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import NextImage from 'next/image';
 import { MapPin, Hotel, Utensils, Landmark, PartyPopper, ExternalLink, Sparkles, Heart, Search, Navigation, Star, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
-import { Input } from '@/components/ui/Input';
 
 const categories = [
   { id: 'all', label: 'Todos', icon: Sparkles, color: 'from-[var(--color-primary)] to-[var(--color-secondary)]' },
@@ -32,7 +31,6 @@ type Place = {
 
 export default function TurismoPage() {
   const [places, setPlaces] = useState<Place[]>([]);
-  const [filteredPlaces, setFilteredPlaces] = useState<Place[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');

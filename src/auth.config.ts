@@ -1,6 +1,5 @@
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import bcrypt from 'bcryptjs';
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -24,7 +23,6 @@ export const authConfig: NextAuthConfig = {
         // Usuario: estelle-alexandre
         // Contraseña: boda2025
         const validUsername = 'estelle-alexandre';
-        const validPasswordHash = '$2a$10$mQxK0YPL6YvKJXZZP9GKJeH1yGKJh5F5ZmFvZxQvKJXZZP9GKJeH1y'; // "boda2025" hasheado
         
         // Para desarrollo, puedes usar comparación simple:
         if (

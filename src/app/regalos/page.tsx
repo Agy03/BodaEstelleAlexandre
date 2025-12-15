@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import NextImage from 'next/image';
-import { Gift, ExternalLink, Check, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users } from 'lucide-react';
+import { Gift, ExternalLink, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
