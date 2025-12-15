@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Music, Plus, CheckCircle, Loader, Search, Play, Pause, ExternalLink, X } from 'lucide-react';
+import { Music, Plus, CheckCircle, Loader, Search, Play, Pause, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import Image from 'next/image';
@@ -16,6 +16,10 @@ type Song = {
   approved: boolean;
   createdAt: string;
   spotifyId?: string;
+  album?: string;
+  albumArt?: string;
+  previewUrl?: string;
+  spotifyUrl?: string;
 };
 
 type SpotifyTrack = {
@@ -41,6 +45,8 @@ export default function MusicaPage() {
   const [selectedTrack, setSelectedTrack] = useState<SpotifyTrack | null>(null);
   const [playingPreview, setPlayingPreview] = useState<string | null>(null);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [playingSongId, setPlayingSongId] = useState<string | null>(null);
+  const [songAudio, setSongAudio] = useState<HTMLAudioElement | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     artist: '',
@@ -58,8 +64,12 @@ export default function MusicaPage() {
         audio.pause();
         audio.src = '';
       }
+      if (songAudio) {
+        songAudio.pause();
+        songAudio.src = '';
+      }
     };
-  }, [audio]);
+  }, [audio, songAudio]);
 
   const fetchSongs = async () => {
     try {
@@ -129,6 +139,36 @@ export default function MusicaPage() {
     newAudio.onended = () => setPlayingPreview(null);
     setAudio(newAudio);
     setPlayingPreview(trackId);
+  };
+
+  const playSongPreview = (previewUrl: string, songId: string) => {
+    if (songAudio) {
+      songAudio.pause();
+    }
+
+    if (playingSongId === songId) {
+      setPlayingSongId(null);
+      setSongAudio(null);
+      return;
+    }
+
+    const newAudio = new Audio(previewUrl);
+    newAudio.volume = 0.5;
+    newAudio.play();
+    
+    // Limitar preview a 10 segundos
+    const timeout = setTimeout(() => {
+      newAudio.pause();
+      setPlayingSongId(null);
+    }, 10000);
+    
+    newAudio.onended = () => {
+      clearTimeout(timeout);
+      setPlayingSongId(null);
+    };
+    
+    setSongAudio(newAudio);
+    setPlayingSongId(songId);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -417,28 +457,85 @@ export default function MusicaPage() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="group p-4 bg-gradient-to-br from-gray-50 to-white rounded-2xl hover:shadow-md transition-all border border-gray-100"
+                      className="group p-4 bg-gradient-to-br from-gray-50 to-white rounded-2xl hover:shadow-lg transition-all border border-gray-100"
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-800 group-hover:text-purple-600 transition-colors">
+                      <div className="flex items-center gap-4">
+                        {/* Album Art or Play Button */}
+                        {song.albumArt ? (
+                          <div className="relative flex-shrink-0">
+                            <Image 
+                              src={song.albumArt} 
+                              alt={song.title}
+                              width={64}
+                              height={64}
+                              className="w-16 h-16 rounded-xl object-cover shadow-md"
+                            />
+                            {song.previewUrl && (
+                              <button
+                                onClick={() => playSongPreview(song.previewUrl!, song.id)}
+                                className={`absolute inset-0 flex items-center justify-center rounded-xl transition-all ${
+                                  playingSongId === song.id
+                                    ? 'bg-black/60'
+                                    : 'bg-black/0 hover:bg-black/60'
+                                } group/play`}
+                              >
+                                {playingSongId === song.id ? (
+                                  <Pause className="w-6 h-6 text-white" />
+                                ) : (
+                                  <Play className="w-6 h-6 text-white opacity-0 group-hover/play:opacity-100 transition-opacity" />
+                                )}
+                              </button>
+                            )}
+                          </div>
+                        ) : song.previewUrl ? (
+                          <button
+                            onClick={() => playSongPreview(song.previewUrl!, song.id)}
+                            className={`w-16 h-16 flex-shrink-0 rounded-xl flex items-center justify-center transition-all ${
+                              playingSongId === song.id
+                                ? 'bg-gradient-to-br from-purple-500 to-rose-500 shadow-lg scale-110'
+                                : 'bg-gradient-to-br from-purple-400 to-rose-400 hover:from-purple-500 hover:to-rose-500 hover:scale-110 shadow-md'
+                            }`}
+                          >
+                            {playingSongId === song.id ? (
+                              <Pause className="w-6 h-6 text-white" />
+                            ) : (
+                              <Play className="w-6 h-6 text-white" />
+                            )}
+                          </button>
+                        ) : (
+                          <div className="w-16 h-16 flex-shrink-0 bg-gradient-to-br from-purple-400 to-rose-400 rounded-xl flex items-center justify-center shadow-md">
+                            <Music className="w-6 h-6 text-white" />
+                          </div>
+                        )}
+
+                        {/* Song Info */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-gray-800 group-hover:text-purple-600 transition-colors truncate">
                             {song.title}
                           </h3>
-                          <p className="text-sm text-gray-600 mt-1">{song.artist}</p>
+                          <p className="text-sm text-gray-600 mt-1 truncate">{song.artist}</p>
+                          {song.album && (
+                            <p className="text-xs text-gray-400 mt-1 truncate">{song.album}</p>
+                          )}
                           {song.suggestedBy && (
-                            <p className="text-xs text-gray-400 mt-2">
+                            <p className="text-xs text-purple-500 mt-1">
                               Sugerida por {song.suggestedBy}
                             </p>
                           )}
                         </div>
-                        {song.spotifyId && (
+
+                        {/* Spotify Link */}
+                        {(song.spotifyUrl || song.spotifyId) && (
                           <a
-                            href={`https://open.spotify.com/track/${song.spotifyId}`}
+                            href={song.spotifyUrl || `https://open.spotify.com/track/${song.spotifyId}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 hover:bg-green-50 rounded-lg transition-colors group/link"
+                            className="p-2 hover:bg-green-50 rounded-lg transition-colors group/link flex-shrink-0"
+                            title="Abrir en Spotify"
                           >
-                            <ExternalLink className="w-4 h-4 text-gray-400 group-hover/link:text-green-600" />
+                            <svg className="w-5 h-5 text-gray-400 group-hover/link:text-green-600 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                            </svg>
                           </a>
                         )}
                       </div>
@@ -446,6 +543,39 @@ export default function MusicaPage() {
                   ))}
                 </div>
               )}
+
+              {/* Preview Indicator */}
+              <AnimatePresence>
+                {playingSongId && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="mt-4 p-4 bg-gradient-to-r from-purple-500 to-rose-500 rounded-2xl shadow-lg"
+                  >
+                    <div className="flex items-center justify-between text-white">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                          <Music className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-sm">Reproduciendo preview (10 seg)</p>
+                          <p className="text-xs text-white/80">🎵 Escuchando desde nuestra web</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          songAudio?.pause();
+                          setPlayingSongId(null);
+                        }}
+                        className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-sm font-medium"
+                      >
+                        ⏸ Detener
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         </div>
