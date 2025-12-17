@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe } from 'lucide-react';
 
@@ -10,10 +10,26 @@ const languages = [
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
 ];
 
+// Función para leer la cookie actual
+const getCurrentLocale = (): string => {
+  if (typeof document === 'undefined') return 'es';
+  
+  const cookie = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('NEXT_LOCALE='));
+  
+  return cookie ? cookie.split('=')[1] : 'es';
+};
+
 export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [currentLocale, setCurrentLocale] = useState('es');
+
+  // Leer el idioma actual de la cookie al montar el componente
+  useEffect(() => {
+    setCurrentLocale(getCurrentLocale());
+  }, []);
 
   const handleLanguageChange = (locale: string) => {
     startTransition(() => {

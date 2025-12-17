@@ -68,7 +68,7 @@ export default function InformacionPage() {
                 ease: "easeInOut" 
               }}
             />
-            <div className="relative bg-gradient-to-br from-rose-500 via-rose-400 to-purple-500 p-6 rounded-3xl shadow-2xl">
+            <div className="relative bg-gradient-to-br from-rose-300 via-rose-200 to-purple-300 p-6 rounded-3xl shadow-2xl">
               <Info className="w-14 h-14 text-white" />
             </div>
           </motion.div>
@@ -79,7 +79,7 @@ export default function InformacionPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
           >
-            <span className="bg-gradient-to-r from-rose-600 via-rose-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-rose-400 via-rose-300 to-purple-400 bg-clip-text text-transparent">
               {t('title')}
             </span>
           </motion.h1>
@@ -95,9 +95,9 @@ export default function InformacionPage() {
               animate={{ scaleX: [0.8, 1, 0.8] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <Sparkles className="w-5 h-5 text-rose-500" />
-            <Heart className="w-6 h-6 text-rose-500 fill-current" />
-            <Sparkles className="w-5 h-5 text-purple-500" />
+            <Sparkles className="w-5 h-5 text-rose-300" />
+            <Heart className="w-6 h-6 text-rose-300 fill-current" />
+            <Sparkles className="w-5 h-5 text-purple-300" />
             <motion.div 
               className="h-px w-20 bg-gradient-to-r from-transparent via-purple-400 to-transparent"
               animate={{ scaleX: [0.8, 1, 0.8] }}
@@ -126,7 +126,7 @@ export default function InformacionPage() {
             <h2 className="text-3xl md:text-4xl font-playfair text-gray-800 mb-3">
               Día de la Boda
             </h2>
-            <div className="h-1 w-24 bg-gradient-to-r from-rose-500 to-purple-500 mx-auto rounded-full" />
+            <div className="h-1 w-24 bg-gradient-to-r from-rose-300 to-purple-300 mx-auto rounded-full" />
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -144,7 +144,7 @@ export default function InformacionPage() {
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
-                    className="bg-gradient-to-br from-rose-500 to-rose-600 p-4 rounded-2xl shadow-lg"
+                    className="bg-gradient-to-br from-rose-300 to-rose-400 p-4 rounded-2xl shadow-lg"
                   >
                     <Calendar className="w-8 h-8 text-white" />
                   </motion.div>
@@ -152,14 +152,14 @@ export default function InformacionPage() {
                     <h3 className="text-2xl font-playfair text-gray-800 mb-1">
                       {t('dateTime.title')}
                     </h3>
-                    <div className="h-1 w-16 bg-gradient-to-r from-rose-500 to-rose-300 rounded-full" />
+                    <div className="h-1 w-16 bg-gradient-to-r from-rose-300 to-rose-200 rounded-full" />
                   </div>
                 </div>
 
                 <div className="space-y-6">
                   <div className="relative pl-6 border-l-2 border-rose-200">
-                    <div className="absolute left-0 top-0 w-2 h-2 bg-rose-500 rounded-full -translate-x-[5px]" />
-                    <p className="font-semibold text-rose-600 text-xl mb-1">
+                    <div className="absolute left-0 top-0 w-2 h-2 bg-rose-300 rounded-full -translate-x-[5px]" />
+                    <p className="font-semibold text-rose-400 text-xl mb-1">
                       {t('dateTime.dateLabel')}
                     </p>
                     <p className="text-gray-700 text-lg">{t('dateTime.year')}</p>
@@ -168,21 +168,21 @@ export default function InformacionPage() {
                   <div className="bg-gradient-to-br from-rose-50 to-purple-50 rounded-2xl p-6 space-y-4">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="bg-white p-2 rounded-lg shadow-sm">
-                        <Clock className="w-5 h-5 text-rose-500" />
+                        <Clock className="w-5 h-5 text-rose-300" />
                       </div>
                       <span className="font-semibold text-gray-800 text-lg">{t('dateTime.schedule')}</span>
                     </div>
                     <div className="space-y-3 pl-4">
                       <div className="flex items-start gap-3">
-                        <Sparkles className="w-4 h-4 text-rose-500 mt-1 flex-shrink-0" />
+                        <Sparkles className="w-4 h-4 text-rose-300 mt-1 flex-shrink-0" />
                         <span className="text-gray-700">{t('dateTime.ceremony')}</span>
                       </div>
                       <div className="flex items-start gap-3">
-                        <Wine className="w-4 h-4 text-rose-500 mt-1 flex-shrink-0" />
+                        <Wine className="w-4 h-4 text-rose-300 mt-1 flex-shrink-0" />
                         <span className="text-gray-700">{t('dateTime.cocktail')}</span>
                       </div>
                       <div className="flex items-start gap-3">
-                        <Music className="w-4 h-4 text-rose-500 mt-1 flex-shrink-0" />
+                        <Music className="w-4 h-4 text-rose-300 mt-1 flex-shrink-0" />
                         <span className="text-gray-700">{t('dateTime.dinnerParty')}</span>
                       </div>
                     </div>
@@ -205,7 +205,7 @@ export default function InformacionPage() {
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
-                    className="bg-gradient-to-br from-purple-500 to-purple-600 p-4 rounded-2xl shadow-lg"
+                    className="bg-gradient-to-br from-purple-300 to-purple-400 p-4 rounded-2xl shadow-lg"
                   >
                     <MapPin className="w-8 h-8 text-white" />
                   </motion.div>
@@ -213,14 +213,14 @@ export default function InformacionPage() {
                     <h3 className="text-2xl font-playfair text-gray-800 mb-1">
                       {t('location.title')}
                     </h3>
-                    <div className="h-1 w-16 bg-gradient-to-r from-purple-500 to-purple-300 rounded-full" />
+                    <div className="h-1 w-16 bg-gradient-to-r from-purple-300 to-purple-200 rounded-full" />
                   </div>
                 </div>
 
                 <div className="space-y-6">
                   <div className="relative pl-6 border-l-2 border-purple-200">
-                    <div className="absolute left-0 top-0 w-2 h-2 bg-purple-500 rounded-full -translate-x-[5px]" />
-                    <p className="font-semibold text-purple-600 text-xl mb-1">
+                    <div className="absolute left-0 top-0 w-2 h-2 bg-purple-300 rounded-full -translate-x-[5px]" />
+                    <p className="font-semibold text-purple-400 text-xl mb-1">
                       {t('location.place')}
                     </p>
                     <p className="text-gray-700 text-lg">{t('location.city')}</p>
@@ -229,7 +229,7 @@ export default function InformacionPage() {
                   <div className="bg-gradient-to-br from-purple-50 to-rose-50 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="bg-white p-2 rounded-lg shadow-sm">
-                        <Car className="w-5 h-5 text-purple-500" />
+                        <Car className="w-5 h-5 text-purple-300" />
                       </div>
                       <span className="font-semibold text-gray-800 text-lg">{t('location.howToGet')}</span>
                     </div>
@@ -255,7 +255,7 @@ export default function InformacionPage() {
             <h2 className="text-3xl md:text-4xl font-playfair text-gray-800 mb-3">
               Estilo & Ambiente
             </h2>
-            <div className="h-1 w-24 bg-gradient-to-r from-rose-500 to-purple-500 mx-auto rounded-full" />
+            <div className="h-1 w-24 bg-gradient-to-r from-rose-300 to-purple-300 mx-auto rounded-full" />
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -272,7 +272,7 @@ export default function InformacionPage() {
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
-                    className="bg-gradient-to-br from-rose-500 to-pink-500 p-4 rounded-2xl shadow-lg"
+                    className="bg-gradient-to-br from-rose-300 to-pink-300 p-4 rounded-2xl shadow-lg"
                   >
                     <Shirt className="w-8 h-8 text-white" />
                   </motion.div>
@@ -280,7 +280,7 @@ export default function InformacionPage() {
                     <h3 className="text-2xl font-playfair text-gray-800 mb-1">
                       {t('dressCode.title')}
                     </h3>
-                    <div className="h-1 w-16 bg-gradient-to-r from-rose-500 to-pink-400 rounded-full" />
+                    <div className="h-1 w-16 bg-gradient-to-r from-rose-300 to-pink-300 rounded-full" />
                   </div>
                 </div>
 
@@ -297,11 +297,11 @@ export default function InformacionPage() {
                         <span className="text-gray-700">{t('dressCode.suit')}</span>
                       </div>
                       <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-rose-500 mt-2 flex-shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-rose-300 mt-2 flex-shrink-0" />
                         <span className="text-gray-700">{t('dressCode.shoes')}</span>
                       </div>
                       <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-rose-500 mt-2 flex-shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-rose-300 mt-2 flex-shrink-0" />
                         <span className="text-gray-700">{t('dressCode.weather')}</span>
                       </div>
                     </div>
@@ -323,7 +323,7 @@ export default function InformacionPage() {
                   <motion.div
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
-                    className="bg-gradient-to-br from-purple-500 to-indigo-500 p-4 rounded-2xl shadow-lg"
+                    className="bg-gradient-to-br from-purple-300 to-indigo-300 p-4 rounded-2xl shadow-lg"
                   >
                     <Palette className="w-8 h-8 text-white" />
                   </motion.div>
@@ -331,7 +331,7 @@ export default function InformacionPage() {
                     <h3 className="text-2xl font-playfair text-gray-800 mb-1">
                       {t('colorPalette.title')}
                     </h3>
-                    <div className="h-1 w-16 bg-gradient-to-r from-purple-500 to-indigo-400 rounded-full" />
+                    <div className="h-1 w-16 bg-gradient-to-r from-purple-300 to-indigo-300 rounded-full" />
                   </div>
                 </div>
 
@@ -343,7 +343,7 @@ export default function InformacionPage() {
                   {/* Winter Palette */}
                   <div className="bg-gradient-to-br from-blue-50 to-slate-50 rounded-2xl p-6">
                     <p className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-blue-500" />
+                      <Sparkles className="w-4 h-4 text-blue-300" />
                       {t('colorPalette.winter')}
                     </p>
                     <div className="grid grid-cols-3 gap-3">
@@ -374,7 +374,7 @@ export default function InformacionPage() {
                   {/* Spring Palette */}
                   <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6">
                     <p className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-purple-500" />
+                      <Sparkles className="w-4 h-4 text-purple-300" />
                       {t('colorPalette.spring')}
                     </p>
                     <div className="grid grid-cols-3 gap-3">
@@ -428,7 +428,7 @@ export default function InformacionPage() {
                 <motion.div
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.6 }}
-                  className="bg-gradient-to-br from-blue-500 to-cyan-500 p-5 rounded-2xl shadow-lg flex-shrink-0"
+                  className="bg-gradient-to-br from-blue-300 to-cyan-300 p-5 rounded-2xl shadow-lg flex-shrink-0"
                 >
                   <Cloud className="w-10 h-10 text-white" />
                 </motion.div>
@@ -437,7 +437,7 @@ export default function InformacionPage() {
                   <h3 className="text-2xl md:text-3xl font-playfair text-gray-800 mb-3">
                     {t('weather.title')}
                   </h3>
-                  <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full mb-6" />
+                  <div className="h-1 w-20 bg-gradient-to-r from-blue-300 to-cyan-300 rounded-full mb-6" />
                   
                   <p className="text-gray-700 text-lg leading-relaxed mb-4">
                     {t('weather.description')}
@@ -463,7 +463,7 @@ export default function InformacionPage() {
                 <motion.div
                   animate={{ rotate: [0, 10, -10, 0] }}
                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                  className="bg-gradient-to-br from-rose-500 to-purple-500 p-4 rounded-2xl shadow-lg"
+                  className="bg-gradient-to-br from-rose-300 to-purple-300 p-4 rounded-2xl shadow-lg"
                 >
                   <Heart className="w-8 h-8 text-white fill-current" />
                 </motion.div>
@@ -471,7 +471,7 @@ export default function InformacionPage() {
                   <h3 className="text-2xl md:text-3xl font-playfair text-gray-800">
                     Información Adicional
                   </h3>
-                  <div className="h-1 w-20 bg-gradient-to-r from-rose-500 to-purple-500 rounded-full mt-2" />
+                  <div className="h-1 w-20 bg-gradient-to-r from-rose-300 to-purple-300 rounded-full mt-2" />
                 </div>
               </div>
 
@@ -516,8 +516,8 @@ function InfoItem({ icon, title, description, color }: {
   color: 'rose' | 'purple';
 }) {
   const colorClasses = {
-    rose: 'from-rose-500 to-pink-500 text-rose-500',
-    purple: 'from-purple-500 to-indigo-500 text-purple-500'
+    rose: 'from-rose-300 to-pink-300 text-rose-300',
+    purple: 'from-purple-300 to-indigo-300 text-purple-300'
   };
 
   return (
