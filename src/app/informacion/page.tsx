@@ -123,7 +123,7 @@ export default function InformacionPage() {
           className="mb-20"
         >
           <motion.div variants={itemVariants} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-playfair text-gray-800 mb-3">
+            <h2 className="text-3xl md:text-4xl font-light font-playfair text-gray-800 mb-3">
               Día de la Boda
             </h2>
             <div className="h-1 w-24 bg-gradient-to-r from-rose-300 to-purple-300 mx-auto rounded-full" />
@@ -149,7 +149,7 @@ export default function InformacionPage() {
                     <Calendar className="w-8 h-8 text-white" />
                   </motion.div>
                   <div>
-                    <h3 className="text-2xl font-playfair text-gray-800 mb-1">
+                    <h3 className="text-2xl font-light font-playfair text-gray-800 mb-1">
                       {t('dateTime.title')}
                     </h3>
                     <div className="h-1 w-16 bg-gradient-to-r from-rose-300 to-rose-200 rounded-full" />
@@ -210,7 +210,7 @@ export default function InformacionPage() {
                     <MapPin className="w-8 h-8 text-white" />
                   </motion.div>
                   <div>
-                    <h3 className="text-2xl font-playfair text-gray-800 mb-1">
+                    <h3 className="text-2xl font-light font-playfair text-gray-800 mb-1">
                       {t('location.title')}
                     </h3>
                     <div className="h-1 w-16 bg-gradient-to-r from-purple-300 to-purple-200 rounded-full" />
@@ -252,7 +252,7 @@ export default function InformacionPage() {
           className="mb-20"
         >
           <motion.div variants={itemVariants} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-playfair text-gray-800 mb-3">
+            <h2 className="text-3xl md:text-4xl font-light font-playfair text-gray-800 mb-3">
               Estilo & Ambiente
             </h2>
             <div className="h-1 w-24 bg-gradient-to-r from-rose-300 to-purple-300 mx-auto rounded-full" />
@@ -277,7 +277,7 @@ export default function InformacionPage() {
                     <Shirt className="w-8 h-8 text-white" />
                   </motion.div>
                   <div>
-                    <h3 className="text-2xl font-playfair text-gray-800 mb-1">
+                    <h3 className="text-2xl font-light font-playfair text-gray-800 mb-1">
                       {t('dressCode.title')}
                     </h3>
                     <div className="h-1 w-16 bg-gradient-to-r from-rose-300 to-pink-300 rounded-full" />
@@ -293,7 +293,7 @@ export default function InformacionPage() {
                     <p className="text-gray-700 mb-4">{t('dressCode.recommendations')}</p>
                     <div className="space-y-3">
                       <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-rose-500 mt-2 flex-shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-rose-300 mt-2 flex-shrink-0" />
                         <span className="text-gray-700">{t('dressCode.suit')}</span>
                       </div>
                       <div className="flex items-start gap-3">
@@ -328,7 +328,7 @@ export default function InformacionPage() {
                     <Palette className="w-8 h-8 text-white" />
                   </motion.div>
                   <div>
-                    <h3 className="text-2xl font-playfair text-gray-800 mb-1">
+                    <h3 className="text-2xl font-light font-playfair text-gray-800 mb-1">
                       {t('colorPalette.title')}
                     </h3>
                     <div className="h-1 w-16 bg-gradient-to-r from-purple-300 to-indigo-300 rounded-full" />
@@ -434,7 +434,7 @@ export default function InformacionPage() {
                 </motion.div>
                 
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-playfair text-gray-800 mb-3">
+                  <h3 className="text-2xl md:text-3xl font-light font-playfair text-gray-800 mb-3">
                     {t('weather.title')}
                   </h3>
                   <div className="h-1 w-20 bg-gradient-to-r from-blue-300 to-cyan-300 rounded-full mb-6" />
@@ -468,7 +468,7 @@ export default function InformacionPage() {
                   <Heart className="w-8 h-8 text-white fill-current" />
                 </motion.div>
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-playfair text-gray-800">
+                  <h3 className="text-2xl md:text-3xl font-light font-playfair text-gray-800">
                     Información Adicional
                   </h3>
                   <div className="h-1 w-20 bg-gradient-to-r from-rose-300 to-purple-300 rounded-full mt-2" />
