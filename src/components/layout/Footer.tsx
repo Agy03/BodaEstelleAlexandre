@@ -3,15 +3,17 @@
 import { Heart, Instagram, Mail, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const quickLinks = [
-  { href: '/rsvp', label: 'Confirmar' },
-  { href: '/turismo', label: 'Turismo' },
-  { href: '/regalos', label: 'Regalos' },
-  { href: '/galeria', label: 'Galería' },
+  { href: '/rsvp', label: 'nav.rsvp' },
+  { href: '/turismo', label: 'nav.tourism' },
+  { href: '/regalos', label: 'nav.gifts' },
+  { href: '/galeria', label: 'nav.gallery' },
 ];
 
 export function Footer() {
+  const t = useTranslations();
   return (
     <footer className="relative mt-20 overflow-hidden">
       {/* Gradient background */}
@@ -53,7 +55,7 @@ export function Footer() {
               <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--color-accent)]">2026</span>
             </Link>
             <p className="text-gray-600 leading-relaxed text-sm">
-              Gracias por compartir este día especial con nosotros. Vuestra presencia es el mejor regalo.
+              {t('footer.description')}
             </p>
           </motion.div>
 
@@ -65,7 +67,7 @@ export function Footer() {
             transition={{ delay: 0.15, duration: 0.6 }}
             className="text-center"
           >
-            <h4 className="text-sm font-light tracking-[0.3em] uppercase text-[var(--color-accent)] mb-6">Enlaces</h4>
+            <h4 className="text-sm font-light tracking-[0.3em] uppercase text-[var(--color-accent)] mb-6">{t('footer.quickLinks')}</h4>
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <motion.li 
@@ -82,7 +84,7 @@ export function Footer() {
                     <motion.span 
                       className="w-0 group-hover:w-6 transition-all duration-300 h-px bg-gradient-to-r from-[var(--color-rose)] to-transparent"
                     />
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">{t(link.label)}</span>
                   </Link>
                 </motion.li>
               ))}
@@ -97,7 +99,7 @@ export function Footer() {
             transition={{ delay: 0.25, duration: 0.6 }}
             className="text-center md:text-right"
           >
-            <h4 className="text-sm font-light tracking-[0.3em] uppercase text-[var(--color-accent)] mb-6">Contacto</h4>
+            <h4 className="text-sm font-light tracking-[0.3em] uppercase text-[var(--color-accent)] mb-6">{t('footer.contact')}</h4>
             <div className="space-y-4 text-gray-600 text-sm">
               <motion.a
                 href="mailto:contacto@bodaestelle.com"
@@ -115,7 +117,7 @@ export function Footer() {
                 transition={{ delay: 0.4 }}
               >
                 <MapPin className="w-4 h-4 text-[var(--color-rose)]" />
-                <span>Lugar por confirmar</span>
+                <span>{t('footer.locationPending')}</span>
               </motion.div>
               
               {/* Social Icons */}
@@ -144,18 +146,18 @@ export function Footer() {
         >
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-gray-500">
             <p className="flex items-center gap-1.5">
-              <span>© {new Date().getFullYear()} Estelle & Alexandre</span>
+              <span>© {new Date().getFullYear()} {t('footer.copyright')}</span>
             </p>
             <span className="hidden sm:inline text-gray-300">•</span>
             <p className="flex items-center gap-1.5">
-              <span>Hecho con</span>
+              <span>{t('footer.madeWith')}</span>
               <motion.span
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               >
                 <Heart className="w-3 h-3 inline fill-current text-red-500" />
               </motion.span>
-              <span>y mucha ilusión</span>
+              <span>{t('footer.andLove')}</span>
             </p>
           </div>
         </motion.div>

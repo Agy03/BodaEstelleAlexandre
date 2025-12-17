@@ -138,7 +138,7 @@ export default function Home() {
               className="mb-6"
             >
               <p className="text-sm tracking-[0.3em] uppercase text-[var(--color-accent)] font-light">
-                Nuestro Día Especial
+                {t('home.hero.specialDay')}
               </p>
             </motion.div>
 
@@ -150,7 +150,7 @@ export default function Home() {
               transition={{ delay: 0.6, duration: 1 }}
               style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
             >
-              <span className="block text-4xl md:text-5xl mb-4 text-[var(--color-rose)] font-light">La Boda de</span>
+              <span className="block text-4xl md:text-5xl mb-4 text-[var(--color-rose)] font-light">{t('home.hero.weddingOf')}</span>
               <span className="italic bg-gradient-to-r from-[var(--color-rose)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">Estelle & Alexandre</span>
             </motion.h1>
 
@@ -180,7 +180,7 @@ export default function Home() {
               className="max-w-2xl mx-auto mb-12"
             >
               <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed italic mb-12">
-                &ldquo;Dos almas, un corazón, una vida juntos&rdquo;
+                &ldquo;{t('home.hero.quote')}&rdquo;
               </p>
 
               {/* Info cards */}
@@ -192,8 +192,8 @@ export default function Home() {
                         <Calendar className="w-6 h-6 text-[var(--color-rose)]" />
                       </div>
                       <div className="text-left">
-                        <p className="text-sm text-gray-500 font-medium">Fecha</p>
-                        <p className="font-semibold">Por confirmar</p>
+                        <p className="text-sm text-gray-500 font-medium">{t('home.hero.dateLabel')}</p>
+                        <p className="font-semibold">{t('home.hero.dateValue')}</p>
                       </div>
                     </div>
                     <div className="hidden sm:block w-px h-10 bg-gray-200" />
@@ -202,8 +202,8 @@ export default function Home() {
                         <MapPin className="w-6 h-6 text-[var(--color-primary)]" />
                       </div>
                       <div className="text-left">
-                        <p className="text-sm text-gray-500 font-medium">Lugar</p>
-                        <p className="font-semibold">Por confirmar</p>
+                        <p className="text-sm text-gray-500 font-medium">{t('home.hero.locationLabel')}</p>
+                        <p className="font-semibold">{t('home.hero.locationValue')}</p>
                       </div>
                     </div>
                   </div>
@@ -222,7 +222,7 @@ export default function Home() {
                   className="group relative overflow-hidden shadow-2xl hover:shadow-[var(--color-primary)]/50 transition-all duration-300 px-12 py-6 text-lg"
                 >
                   <span className="relative z-10 flex items-center gap-2">
-                    Confirmar Asistencia
+                    {t('home.hero.confirmAttendance')}
                     <motion.span
                       animate={{ x: [0, 5, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
@@ -276,23 +276,23 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <Sparkles className="w-5 h-5 text-[var(--color-accent)]" />
                 <span className="text-sm font-light tracking-[0.3em] text-[var(--color-accent)] uppercase">
-                  Todo en un lugar
+                  {t('home.features.sectionTitle')}
                 </span>
                 <Sparkles className="w-5 h-5 text-[var(--color-accent)]" />
               </div>
             </motion.div>
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 font-playfair text-[var(--color-text)]">
-              Descubre Todos los{' '}
+              {t('home.features.title')}{' '}
               <span className="relative inline-block">
                 <span className="relative z-10 bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent italic">
-                  Detalles
+                  {t('home.features.titleHighlight')}
                 </span>
               </span>
             </h2>
 
             <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-light">
-              Encuentra toda la información que necesitas para acompañarnos en este día tan especial
+              {t('home.features.subtitle')}
             </p>
           </motion.div>
 
@@ -394,13 +394,11 @@ export default function Home() {
             </motion.div>
 
             <h2 className="text-4xl md:text-5xl font-light mb-6 font-playfair bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-              ¿Nos Acompañas?
+              {t('home.cta.title')}
             </h2>
 
             <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto font-light">
-              Tu presencia es el mejor regalo que podríamos recibir.
-              Por favor, confirma tu asistencia lo antes posible para que podamos
-              organizar todo perfectamente.
+              {t('home.cta.subtitle')}
             </p>
 
             <Link href="/rsvp">
@@ -410,7 +408,7 @@ export default function Home() {
               >
                 <span className="relative z-10 flex items-center gap-3">
                   <Users className="w-6 h-6" />
-                  Confirmar Ahora
+                  {t('home.cta.button')}
                   <motion.span
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}

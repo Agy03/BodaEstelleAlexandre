@@ -2,8 +2,10 @@
 
 import { motion } from 'framer-motion';
 import { Heart, Sparkles } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Loading() {
+  const t = useTranslations('loading');
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-[var(--color-background)] via-white to-[var(--color-background)]">
       {/* Decorative background elements */}
@@ -86,7 +88,7 @@ export default function Loading() {
               ease: "easeInOut",
             }}
           >
-            Estelle & Alexandre
+            {t('title')}
           </motion.h2>
           <motion.p
             className="text-sm tracking-[0.3em] uppercase text-[var(--color-accent)]"
@@ -100,7 +102,7 @@ export default function Loading() {
               delay: 0.5,
             }}
           >
-            Cargando...
+            {t('text')}
           </motion.p>
         </div>
 

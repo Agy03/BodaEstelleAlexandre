@@ -469,7 +469,7 @@ export default function InformacionPage() {
                 </motion.div>
                 <div>
                   <h3 className="text-2xl md:text-3xl font-light font-playfair text-gray-800">
-                    Información Adicional
+                    {t('additional.title')}
                   </h3>
                   <div className="h-1 w-20 bg-gradient-to-r from-rose-300 to-purple-300 rounded-full mt-2" />
                 </div>
@@ -478,26 +478,26 @@ export default function InformacionPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <InfoItem 
                   icon={<MapPin className="w-5 h-5" />}
-                  title="Alojamiento"
-                  description="Consulta nuestra sección de turismo para ver hoteles recomendados en la zona."
+                  title={t('additional.accommodation.title')}
+                  description={t('additional.accommodation.description')}
                   color="rose"
                 />
                 <InfoItem 
                   icon={<Users className="w-5 h-5" />}
-                  title="Niños"
-                  description="Los niños son bienvenidos a nuestra celebración."
+                  title={t('additional.children.title')}
+                  description={t('additional.children.description')}
                   color="purple"
                 />
                 <InfoItem 
                   icon={<Wine className="w-5 h-5" />}
-                  title="Restricciones alimentarias"
-                  description="Por favor, indícanos cualquier alergia o restricción en el formulario de confirmación."
+                  title={t('additional.dietary.title')}
+                  description={t('additional.dietary.description')}
                   color="rose"
                 />
                 <InfoItem 
                   icon={<Camera className="w-5 h-5" />}
-                  title="Fotos"
-                  description="Habrá fotógrafo profesional, pero también nos encantaría que compartas tus fotos en nuestra galería."
+                  title={t('additional.photos.title')}
+                  description={t('additional.photos.description')}
                   color="purple"
                 />
               </div>

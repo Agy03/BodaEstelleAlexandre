@@ -1,4 +1,8 @@
 {
+  "loading": {
+    "title": "Estelle & Alexandre",
+    "text": "Loading..."
+  },
   "nav": {
     "home": "Home",
     "info": "Information",
@@ -9,17 +13,21 @@
     "tourism": "Tourism"
   },
   "home": {
-    "title": "Estelle & Alexandre",
-    "subtitle": "We're getting married!",
-    "date": "June 21, 2025",
-    "location": "Paris, France",
-    "countdown": {
-      "days": "Days",
-      "hours": "Hours",
-      "minutes": "Minutes",
-      "seconds": "Seconds"
+    "hero": {
+      "specialDay": "Our Special Day",
+      "weddingOf": "The Wedding of",
+      "quote": "Two souls, one heart, a life together",
+      "dateLabel": "Date",
+      "dateValue": "To be confirmed",
+      "locationLabel": "Location",
+      "locationValue": "To be confirmed",
+      "confirmAttendance": "RSVP"
     },
     "features": {
+      "sectionTitle": "All in one place",
+      "title": "Discover All the",
+      "titleHighlight": "Details",
+      "subtitle": "Find all the information you need to join us on this special day",
       "rsvp": {
         "title": "RSVP",
         "description": "Let us know so we can prepare everything perfectly"
@@ -44,7 +52,21 @@
         "title": "Suggest Music",
         "description": "Help us create the perfect playlist"
       }
+    },
+    "cta": {
+      "title": "Will You Join Us?",
+      "subtitle": "Your presence is the best gift we could receive. Please confirm your attendance as soon as possible so we can organize everything perfectly.",
+      "button": "Confirm Now"
     }
+  },
+  "footer": {
+    "description": "Thank you for sharing this special day with us. Your presence is the best gift.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "locationPending": "Location to be confirmed",
+    "copyright": "Estelle & Alexandre",
+    "madeWith": "Made with",
+    "andLove": "and lots of love"
   },
   "info": {
     "title": "General Information",
@@ -96,6 +118,25 @@
       "time": "7:00 PM",
       "location": "Château de Versailles",
       "address": "Place d'Armes, 78000 Versailles"
+    },
+    "additional": {
+      "title": "Additional Information",
+      "accommodation": {
+        "title": "Accommodation",
+        "description": "Check our tourism section for recommended hotels in the area."
+      },
+      "children": {
+        "title": "Children",
+        "description": "Children are welcome at our celebration."
+      },
+      "dietary": {
+        "title": "Dietary Restrictions",
+        "description": "Please let us know about any allergies or restrictions in the confirmation form."
+      },
+      "photos": {
+        "title": "Photos",
+        "description": "There will be a professional photographer, but we would also love for you to share your photos in our gallery."
+      }
     }
   },
   "rsvp": {

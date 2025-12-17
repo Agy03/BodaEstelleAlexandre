@@ -1,4 +1,8 @@
 {
+  "loading": {
+    "title": "Estelle & Alexandre",
+    "text": "Cargando..."
+  },
   "nav": {
     "home": "Inicio",
     "info": "Información",
@@ -9,17 +13,21 @@
     "tourism": "Turismo"
   },
   "home": {
-    "title": "Estelle & Alexandre",
-    "subtitle": "¡Nos casamos!",
-    "date": "21 de Junio, 2025",
-    "location": "París, Francia",
-    "countdown": {
-      "days": "Días",
-      "hours": "Horas",
-      "minutes": "Minutos",
-      "seconds": "Segundos"
+    "hero": {
+      "specialDay": "Nuestro Día Especial",
+      "weddingOf": "La Boda de",
+      "quote": "Dos almas, un corazón, una vida juntos",
+      "dateLabel": "Fecha",
+      "dateValue": "Por confirmar",
+      "locationLabel": "Lugar",
+      "locationValue": "Por confirmar",
+      "confirmAttendance": "Confirmar Asistencia"
     },
     "features": {
+      "sectionTitle": "Todo en un lugar",
+      "title": "Descubre Todos los",
+      "titleHighlight": "Detalles",
+      "subtitle": "Encuentra toda la información que necesitas para acompañarnos en este día tan especial",
       "rsvp": {
         "title": "Confirma tu Asistencia",
         "description": "Háznoslo saber para poder preparar todo perfectamente"
@@ -44,7 +52,21 @@
         "title": "Sugiere Música",
         "description": "Ayúdanos a crear la playlist perfecta"
       }
+    },
+    "cta": {
+      "title": "¿Nos Acompañas?",
+      "subtitle": "Tu presencia es el mejor regalo que podríamos recibir. Por favor, confirma tu asistencia lo antes posible para que podamos organizar todo perfectamente.",
+      "button": "Confirmar Ahora"
     }
+  },
+  "footer": {
+    "description": "Gracias por compartir este día especial con nosotros. Vuestra presencia es el mejor regalo.",
+    "quickLinks": "Enlaces",
+    "contact": "Contacto",
+    "locationPending": "Lugar por confirmar",
+    "copyright": "Estelle & Alexandre",
+    "madeWith": "Hecho con",
+    "andLove": "y mucha ilusión"
   },
   "info": {
     "title": "Información General",
@@ -96,6 +118,25 @@
       "time": "19:00",
       "location": "Château de Versailles",
       "address": "Place d'Armes, 78000 Versalles"
+    },
+    "additional": {
+      "title": "Información Adicional",
+      "accommodation": {
+        "title": "Alojamiento",
+        "description": "Consulta nuestra sección de turismo para ver hoteles recomendados en la zona."
+      },
+      "children": {
+        "title": "Niños",
+        "description": "Los niños son bienvenidos a nuestra celebración."
+      },
+      "dietary": {
+        "title": "Restricciones alimentarias",
+        "description": "Por favor, indícanos cualquier alergia o restricción en el formulario de confirmación."
+      },
+      "photos": {
+        "title": "Fotos",
+        "description": "Habrá fotógrafo profesional, pero también nos encantaría que compartas tus fotos en nuestra galería."
+      }
     }
   },
   "rsvp": {
