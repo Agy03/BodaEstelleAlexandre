@@ -18,8 +18,7 @@ export async function POST(
 
     // Calcular fecha de expiración (7 días desde ahora)
     const now = new Date();
-    const expiresAt = new Date(now);
-    expiresAt.setDate(expiresAt.getDate() + 7);
+    const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
     const gift = await prisma.gift.update({
       where: { id },

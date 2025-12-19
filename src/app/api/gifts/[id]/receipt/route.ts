@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import { supabase } from '@/lib/supabase';
 
 export async function POST(
   req: NextRequest,
@@ -37,25 +36,39 @@ export async function POST(
       );
     }
 
-    // Guardar el archivo
+    // Subir archivo a Supabase Storage
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
-    // Crear directorio si no existe
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'receipts');
-    await mkdir(uploadsDir, { recursive: true });
-
-    // Generar nombre único para el archivo
-    const filename = `receipt_${id}_${Date.now()}${path.extname(file.name)}`;
-    const filepath = path.join(uploadsDir, filename);
     
-    await writeFile(filepath, buffer);
+    // Generar nombre único para el archivo
+    const fileExt = file.name.split('.').pop();
+    const filename = `receipts/receipt_${id}_${Date.now()}.${fileExt}`;
+    
+    const { error: uploadError } = await supabase.storage
+      .from('photos')
+      .upload(filename, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error('Error uploading to Supabase:', uploadError);
+      return NextResponse.json(
+        { error: 'Failed to upload receipt' },
+        { status: 500 }
+      );
+    }
+
+    // Obtener la URL pública
+    const { data: { publicUrl } } = supabase.storage
+      .from('photos')
+      .getPublicUrl(filename);
 
     // Actualizar el regalo con la URL del recibo
     const updatedGift = await prisma.gift.update({
       where: { id },
       data: {
-        receiptUrl: `/uploads/receipts/${filename}`,
+        receiptUrl: publicUrl,
         receiptStatus: 'pending',
       },
     });

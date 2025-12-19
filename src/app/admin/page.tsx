@@ -1267,65 +1267,91 @@ export default function AdminPage() {
 
                         {/* Información de reserva */}
                         {gift.reserved && gift.reservedBy && (
-                          <div className="bg-blue-50 p-2 rounded text-xs space-y-1">
-                            <p className="font-semibold text-blue-900">
-                              👤 Reservado por: {gift.reservedBy}
-                            </p>
-                            {gift.reservedAt && (
-                              <p className="text-blue-700">
-                                📅 {new Date(gift.reservedAt).toLocaleDateString('es-ES', { 
-                                  day: '2-digit', 
-                                  month: '2-digit', 
-                                  year: 'numeric' 
-                                })}
-                              </p>
-                            )}
-                            {gift.reservationExpiresAt && !gift.receiptUrl && (
-                              <p className="text-orange-700">
-                                ⏰ Expira: {new Date(gift.reservationExpiresAt).toLocaleDateString('es-ES', { 
-                                  day: '2-digit', 
-                                  month: '2-digit' 
-                                })}
-                              </p>
-                            )}
+                          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3 space-y-2">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-sm font-bold">
+                                {gift.reservedBy.charAt(0).toUpperCase()}
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-xs text-blue-600 font-medium">Reservado por</p>
+                                <p className="font-bold text-blue-900">{gift.reservedBy}</p>
+                              </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-blue-200">
+                              {gift.reservedAt && (
+                                <div className="flex items-start gap-1.5">
+                                  <span className="text-blue-500 mt-0.5">📅</span>
+                                  <div>
+                                    <p className="text-xs text-blue-600">Fecha</p>
+                                    <p className="text-xs font-semibold text-blue-900">
+                                      {new Date(gift.reservedAt).toLocaleDateString('es-ES', { 
+                                        day: '2-digit', 
+                                        month: 'short'
+                                      })}
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+                              {gift.reservationExpiresAt && !gift.receiptUrl && (
+                                <div className="flex items-start gap-1.5">
+                                  <span className="text-orange-500 mt-0.5">⏰</span>
+                                  <div>
+                                    <p className="text-xs text-orange-600">Expira</p>
+                                    <p className="text-xs font-semibold text-orange-900">
+                                      {new Date(gift.reservationExpiresAt).toLocaleDateString('es-ES', { 
+                                        day: '2-digit', 
+                                        month: 'short'
+                                      })}
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
 
                         {/* Estado del recibo */}
                         {gift.receiptUrl && (
-                          <div className="bg-purple-50 p-2 rounded text-xs space-y-2">
+                          <div className="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-3 space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="font-semibold text-purple-900">📄 Recibo subido</span>
+                              <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                                  <span className="text-white text-sm">📄</span>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-purple-600 font-medium">Recibo de compra</p>
+                                  <p className="text-xs font-bold text-purple-900">
+                                    {gift.receiptStatus === 'pending' && 'Pendiente de revisión'}
+                                    {gift.receiptStatus === 'approved' && 'Aprobado ✓'}
+                                    {gift.receiptStatus === 'rejected' && 'Rechazado'}
+                                  </p>
+                                </div>
+                              </div>
                               <a 
                                 href={gift.receiptUrl} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-purple-600 hover:text-purple-800 underline"
+                                className="px-3 py-1.5 bg-white border border-purple-300 text-purple-700 hover:bg-purple-50 rounded-lg text-xs font-medium transition-colors"
                               >
                                 Ver
                               </a>
                             </div>
                             {gift.receiptStatus === 'pending' && (
-                              <div className="flex gap-1">
+                              <div className="flex gap-2 pt-2 border-t border-purple-200">
                                 <button
                                   onClick={() => handleApproveReceipt(gift.id, true)}
-                                  className="flex-1 px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs font-medium transition-colors"
+                                  className="flex-1 px-3 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg text-xs font-semibold transition-all shadow-sm hover:shadow"
                                 >
                                   ✓ Aprobar
                                 </button>
                                 <button
                                   onClick={() => handleApproveReceipt(gift.id, false)}
-                                  className="flex-1 px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs font-medium transition-colors"
+                                  className="flex-1 px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg text-xs font-semibold transition-all shadow-sm hover:shadow"
                                 >
                                   ✗ Rechazar
                                 </button>
                               </div>
-                            )}
-                            {gift.receiptStatus === 'approved' && (
-                              <span className="text-green-700 font-medium">✓ Aprobado</span>
-                            )}
-                            {gift.receiptStatus === 'rejected' && (
-                              <span className="text-red-700 font-medium">✗ Rechazado</span>
                             )}
                           </div>
                         )}
