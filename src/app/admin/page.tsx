@@ -830,7 +830,7 @@ export default function AdminPage() {
                       alt={photo.caption || ''}
                       width={400}
                       height={192}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-48 object-contain bg-gray-100"
                     />
                     <CardContent className="pt-4">
                       {photo.caption && <p className="text-sm mb-2 font-medium">{photo.caption}</p>}
@@ -1228,7 +1228,7 @@ export default function AdminPage() {
                         alt={gift.name}
                         width={400}
                         height={192}
-                        className="w-full h-40 object-cover"
+                        className="w-full h-40 object-contain bg-gray-100"
                       />
                     )}
                     <CardContent className="pt-4">
@@ -1415,7 +1415,7 @@ export default function AdminPage() {
                         alt={place.name}
                         width={400}
                         height={192}
-                        className="w-full h-40 object-cover"
+                        className="w-full h-40 object-contain bg-gray-100"
                       />
                     )}
                     <CardContent className="pt-4">

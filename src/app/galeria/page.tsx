@@ -266,14 +266,15 @@ export default function GaleriaPage() {
                   className="break-inside-avoid mb-4 group"
                 >
                   <Card hover className="overflow-hidden relative">
-                    {/* Imagen con overlay gradiente al hover */}
-                    <div className="relative overflow-hidden">
+                    {/* Imagen con aspecto ratio flexible */}
+                    <div className="relative bg-gray-100">
                       <NextImage
                         src={photo.url}
                         alt={photo.caption || 'Gallery photo'}
                         width={600}
-                        height={400}
-                        className={`w-full ${heightClass} object-cover transition-transform duration-500 group-hover:scale-110`}
+                        height={600}
+                        className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
+                        style={{ maxHeight: '600px' }}
                       />
                       
                       {/* Overlay romántico al hover */}
