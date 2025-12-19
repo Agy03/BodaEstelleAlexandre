@@ -39,6 +39,25 @@ const sampleGifts = [
 
 export async function GET() {
   try {
+    // Primero, desbloquear los regalos cuya reserva ha expirado
+    const now = new Date();
+    await prisma.gift.updateMany({
+      where: {
+        reserved: true,
+        receiptUrl: null, // Solo si no hay recibo subido
+        reservationExpiresAt: {
+          lt: now, // La fecha de expiración es menor que ahora
+        },
+      },
+      data: {
+        reserved: false,
+        reservedBy: null,
+        reservedAt: null,
+        reservationExpiresAt: null,
+        receiptStatus: 'pending',
+      },
+    });
+
     const gifts = await prisma.gift.findMany({
       orderBy: { createdAt: 'asc' },
     });

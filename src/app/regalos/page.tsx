@@ -20,6 +20,10 @@ type GiftItem = {
   category?: string;
   priority?: boolean;
   reservedBy?: string;
+  reservedAt?: string;
+  reservationExpiresAt?: string;
+  receiptUrl?: string;
+  receiptStatus?: string;
 };
 
 export default function RegalosPage() {
@@ -40,6 +44,8 @@ export default function RegalosPage() {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [showReserveModal, setShowReserveModal] = useState(false);
   const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [uploadingReceipt, setUploadingReceipt] = useState(false);
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -136,15 +142,61 @@ export default function RegalosPage() {
       });
 
       if (response.ok) {
+        // Guardar el nombre en localStorage para usarlo luego
+        localStorage.setItem(`gift_${selectedGift.id}_reservedBy`, name);
+        
         fetchGifts();
         setShowReserveModal(false);
         setSelectedGift(null);
         // Show success animation
-        alert('¡Regalo reservado! Gracias por tu generosidad. 💝');
+        alert('¡Regalo reservado! Recuerda subir el recibo de compra en los próximos 7 días. 💝');
       }
     } catch (error) {
       console.error('Error reserving gift:', error);
       alert('Error al reservar el regalo. Por favor, inténtalo de nuevo.');
+    }
+  };
+
+  const handleUploadReceipt = async (gift: GiftItem) => {
+    setSelectedGift(gift);
+    setShowReceiptModal(true);
+  };
+
+  const uploadReceipt = async (file: File) => {
+    if (!selectedGift) return;
+
+    const reservedBy = localStorage.getItem(`gift_${selectedGift.id}_reservedBy`);
+    if (!reservedBy) {
+      alert('No se encontró información de reserva. Por favor, contacta con los novios.');
+      return;
+    }
+
+    setUploadingReceipt(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('receipt', file);
+      formData.append('reservedBy', reservedBy);
+
+      const response = await fetch(`/api/gifts/${selectedGift.id}/receipt`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        fetchGifts();
+        setShowReceiptModal(false);
+        setSelectedGift(null);
+        alert('¡Recibo subido con éxito! Los novios lo revisarán pronto. 💝');
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Error al subir el recibo');
+      }
+    } catch (error) {
+      console.error('Error uploading receipt:', error);
+      alert('Error al subir el recibo. Por favor, inténtalo de nuevo.');
+    } finally {
+      setUploadingReceipt(false);
     }
   };
 
@@ -356,6 +408,7 @@ export default function RegalosPage() {
                       isFavorite={isFavorite}
                       onToggleFavorite={toggleFavorite}
                       onReserve={handleReserve}
+                      onUploadReceipt={handleUploadReceipt}
                       isPriority
                     />
                   </motion.div>
@@ -436,6 +489,7 @@ export default function RegalosPage() {
                       isFavorite={isFavorite}
                       onToggleFavorite={toggleFavorite}
                       onReserve={handleReserve}
+                      onUploadReceipt={handleUploadReceipt}
                     />
                   </motion.div>
                 );
@@ -488,6 +542,76 @@ export default function RegalosPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Receipt Upload Modal */}
+      <AnimatePresence>
+        {showReceiptModal && selectedGift && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowReceiptModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
+            >
+              <div className="text-center mb-6">
+                <div className="bg-gradient-to-br from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-3xl">📄</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">Subir Recibo</h3>
+                <p className="text-gray-600">{selectedGift.name}</p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Sube el recibo de compra para confirmar tu regalo
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  id="receipt-upload"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      uploadReceipt(file);
+                    }
+                  }}
+                  disabled={uploadingReceipt}
+                />
+                <label
+                  htmlFor="receipt-upload"
+                  className={`block w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-lg py-4 rounded-xl text-center font-semibold cursor-pointer hover:shadow-xl transition-all ${
+                    uploadingReceipt ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {uploadingReceipt ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader className="w-5 h-5 animate-spin" />
+                      Subiendo...
+                    </span>
+                  ) : (
+                    'Seleccionar archivo'
+                  )}
+                </label>
+                <Button
+                  onClick={() => setShowReceiptModal(false)}
+                  className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 py-4"
+                  disabled={uploadingReceipt}
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -498,15 +622,19 @@ function GiftCard({
   isFavorite, 
   onToggleFavorite, 
   onReserve,
+  onUploadReceipt,
   isPriority = false 
 }: { 
   gift: GiftItem; 
   isFavorite: boolean;
   onToggleFavorite: (id: string) => void;
   onReserve: (gift: GiftItem) => void;
+  onUploadReceipt: (gift: GiftItem) => void;
   isPriority?: boolean;
 }) {
   const isAvailable = !gift.reserved && !gift.purchased;
+  const canUploadReceipt = gift.reserved && !gift.receiptUrl && !gift.purchased;
+  const hasReceipt = !!gift.receiptUrl;
 
   return (
     <Card className={`group relative overflow-hidden transition-all duration-300 hover:shadow-2xl ${
@@ -601,9 +729,9 @@ function GiftCard({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-2">
             {isAvailable ? (
-              <>
+              <div className="flex gap-3">
                 <Button
                   onClick={() => onReserve(gift)}
                   className="flex-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white hover:shadow-xl transition-all"
@@ -619,17 +747,38 @@ function GiftCard({
                     <ExternalLink className="w-4 h-4" />
                   </Button>
                 )}
-              </>
+              </div>
             ) : (
-              gift.link && (
-                <Button
-                  onClick={() => window.open(gift.link, '_blank')}
-                  className="flex-1 bg-gray-100 text-gray-700 hover:bg-gray-200"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Ver en tienda
-                </Button>
-              )
+              <div className="flex gap-3">
+                {gift.link && (
+                  <Button
+                    onClick={() => window.open(gift.link, '_blank')}
+                    className="flex-1 bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Ver en tienda
+                  </Button>
+                )}
+              </div>
+            )}
+            
+            {/* Upload receipt button for reserved gifts */}
+            {canUploadReceipt && (
+              <Button
+                onClick={() => onUploadReceipt(gift)}
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-xl transition-all"
+              >
+                📄 Subir Recibo
+              </Button>
+            )}
+
+            {/* Receipt status */}
+            {hasReceipt && (
+              <div className="bg-purple-100 text-purple-800 text-xs px-3 py-2 rounded text-center font-medium">
+                {gift.receiptStatus === 'pending' && '⏳ Recibo en revisión'}
+                {gift.receiptStatus === 'approved' && '✓ Recibo aprobado'}
+                {gift.receiptStatus === 'rejected' && '✗ Recibo rechazado'}
+              </div>
             )}
           </div>
 

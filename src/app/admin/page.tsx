@@ -78,6 +78,11 @@ type Gift = {
   link?: string;
   reserved: boolean;
   purchased: boolean;
+  reservedBy?: string;
+  reservedAt?: string;
+  reservationExpiresAt?: string;
+  receiptUrl?: string;
+  receiptStatus?: string;
   category?: string;
   priority?: boolean;
 };
@@ -334,6 +339,26 @@ export default function AdminPage() {
       fetchData();
     } catch (error) {
       console.error('Error deleting gift:', error);
+    }
+  };
+
+  const handleApproveReceipt = async (giftId: string, approved: boolean) => {
+    try {
+      const response = await fetch(`/api/gifts/${giftId}/receipt/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ approved }),
+      });
+
+      if (response.ok) {
+        fetchData();
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Error al procesar el recibo');
+      }
+    } catch (error) {
+      console.error('Error processing receipt:', error);
+      alert('Error al procesar el recibo');
     }
   };
 
@@ -1216,26 +1241,96 @@ export default function AdminPage() {
                           {gift.price}€
                         </p>
                       )}
-                      <div className="flex items-center gap-2 mb-3 flex-wrap">
-                        {gift.purchased ? (
-                          <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium">
-                            ✓ Comprado
-                          </span>
-                        ) : gift.reserved ? (
-                          <span className="px-2 py-1 bg-orange-200 text-orange-700 rounded text-xs font-medium">
-                            ⏳ Reservado
-                          </span>
-                        ) : (
-                          <span className="px-2 py-1 bg-green-200 text-green-700 rounded text-xs font-medium">
-                            ✓ Disponible
-                          </span>
+                      
+                      {/* Estado de reserva y recibo */}
+                      <div className="mb-3 space-y-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {gift.purchased ? (
+                            <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium">
+                              ✓ Comprado
+                            </span>
+                          ) : gift.reserved ? (
+                            <span className="px-2 py-1 bg-orange-200 text-orange-700 rounded text-xs font-medium">
+                              ⏳ Reservado
+                            </span>
+                          ) : (
+                            <span className="px-2 py-1 bg-green-200 text-green-700 rounded text-xs font-medium">
+                              ✓ Disponible
+                            </span>
+                          )}
+                          {gift.category && (
+                            <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
+                              {gift.category}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Información de reserva */}
+                        {gift.reserved && gift.reservedBy && (
+                          <div className="bg-blue-50 p-2 rounded text-xs space-y-1">
+                            <p className="font-semibold text-blue-900">
+                              👤 Reservado por: {gift.reservedBy}
+                            </p>
+                            {gift.reservedAt && (
+                              <p className="text-blue-700">
+                                📅 {new Date(gift.reservedAt).toLocaleDateString('es-ES', { 
+                                  day: '2-digit', 
+                                  month: '2-digit', 
+                                  year: 'numeric' 
+                                })}
+                              </p>
+                            )}
+                            {gift.reservationExpiresAt && !gift.receiptUrl && (
+                              <p className="text-orange-700">
+                                ⏰ Expira: {new Date(gift.reservationExpiresAt).toLocaleDateString('es-ES', { 
+                                  day: '2-digit', 
+                                  month: '2-digit' 
+                                })}
+                              </p>
+                            )}
+                          </div>
                         )}
-                        {gift.category && (
-                          <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
-                            {gift.category}
-                          </span>
+
+                        {/* Estado del recibo */}
+                        {gift.receiptUrl && (
+                          <div className="bg-purple-50 p-2 rounded text-xs space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="font-semibold text-purple-900">📄 Recibo subido</span>
+                              <a 
+                                href={gift.receiptUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-purple-600 hover:text-purple-800 underline"
+                              >
+                                Ver
+                              </a>
+                            </div>
+                            {gift.receiptStatus === 'pending' && (
+                              <div className="flex gap-1">
+                                <button
+                                  onClick={() => handleApproveReceipt(gift.id, true)}
+                                  className="flex-1 px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs font-medium transition-colors"
+                                >
+                                  ✓ Aprobar
+                                </button>
+                                <button
+                                  onClick={() => handleApproveReceipt(gift.id, false)}
+                                  className="flex-1 px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs font-medium transition-colors"
+                                >
+                                  ✗ Rechazar
+                                </button>
+                              </div>
+                            )}
+                            {gift.receiptStatus === 'approved' && (
+                              <span className="text-green-700 font-medium">✓ Aprobado</span>
+                            )}
+                            {gift.receiptStatus === 'rejected' && (
+                              <span className="text-red-700 font-medium">✗ Rechazado</span>
+                            )}
+                          </div>
                         )}
                       </div>
+
                       <div className="flex gap-2">
                         <Button 
                           size="sm" 

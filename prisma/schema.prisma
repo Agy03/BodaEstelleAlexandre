@@ -101,17 +101,21 @@ model TourismPlace {
 
 // Gift Registry Model
 model Gift {
-  id          String   @id @default(cuid())
-  name        String
-  description String?  @db.Text
-  price       Float?
-  image       String?
-  link        String?
-  reserved    Boolean  @default(false)
-  purchased   Boolean  @default(false)
-  reservedBy  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                   String   @id @default(cuid())
+  name                 String
+  description          String?  @db.Text
+  price                Float?
+  image                String?
+  link                 String?
+  reserved             Boolean  @default(false)
+  purchased            Boolean  @default(false)
+  reservedBy           String?
+  reservedAt           DateTime?
+  reservationExpiresAt DateTime?
+  receiptUrl           String?
+  receiptStatus        String?  @default("pending") // pending, approved, rejected
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   @@map("gifts")
 }
