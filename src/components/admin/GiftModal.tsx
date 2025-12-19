@@ -201,13 +201,19 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
         </div>
 
         {/* Botones */}
-        <div className="flex gap-3 justify-end pt-4 border-t border-gray-100">
-          <Button type="button" onClick={onClose} className="bg-gray-200 text-gray-700 hover:bg-gray-300">
+        <div className="flex flex-col sm:flex-row gap-3 justify-end pt-4 border-t border-gray-100">
+          <Button 
+            type="button" 
+            onClick={onClose} 
+            variant="ghost"
+            className="w-full sm:w-auto order-2 sm:order-1"
+          >
             Cancelar
           </Button>
           <Button
             type="submit"
-            className="bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] text-white hover:shadow-2xl"
+            variant="primary"
+            className="w-full sm:w-auto order-1 sm:order-2"
           >
             {gift ? 'Guardar Cambios' : 'Añadir Regalo'}
           </Button>

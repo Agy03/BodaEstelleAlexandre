@@ -2,17 +2,18 @@ import { auth } from '@/auth';
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
-  const isOnAdmin = req.nextUrl.pathname.startsWith('/admin');
   const isOnLogin = req.nextUrl.pathname.startsWith('/admin/login');
+  const isOnAdminDashboard = req.nextUrl.pathname === '/admin' || 
+    (req.nextUrl.pathname.startsWith('/admin') && !isOnLogin);
 
-  // Proteger rutas /admin/* excepto /admin/login
-  if (isOnAdmin && !isOnLogin && !isLoggedIn) {
-    return Response.redirect(new URL('/admin/login', req.nextUrl));
+  // Permitir siempre acceso a /admin/login
+  if (isOnLogin) {
+    return undefined;
   }
 
-  // Si ya está logueado y trata de ir a /admin/login, redirigir a /admin
-  if (isOnLogin && isLoggedIn) {
-    return Response.redirect(new URL('/admin', req.nextUrl));
+  // Proteger solo el dashboard /admin y sus sub-rutas (excepto login)
+  if (isOnAdminDashboard && !isLoggedIn) {
+    return Response.redirect(new URL('/admin/login', req.nextUrl));
   }
 
   return undefined;

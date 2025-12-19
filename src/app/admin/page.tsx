@@ -394,63 +394,65 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen py-20 px-4 bg-gradient-to-br from-[#FFF9F5] via-[#FCF5F1] to-[#F9F2EE] relative">
-      {/* Patrón sutil de encaje de fondo */}
-      <div className="fixed inset-0 pointer-events-none opacity-30">
-        <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-[#E8B4B8]/20 to-[#C9A7C7]/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-tr from-[#C9A7C7]/10 to-[#D4AF97]/5 rounded-full blur-3xl" />
+    <div className="min-h-screen py-8 md:py-12 px-4 relative">
+      {/* Fondo con degradados suaves */}
+      <div className="fixed inset-0 pointer-events-none -z-10">
+        <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-[var(--color-rose)]/15 to-[var(--color-secondary)]/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-tr from-[var(--color-secondary)]/10 to-[var(--color-accent)]/8 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '5s' }} />
       </div>
+      
       <div className="max-w-7xl mx-auto">
-        {/* Header con degradado y sombra elegante */}
+        {/* Header elegante y responsive */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-12 relative z-10"
+          className="mb-8 md:mb-12 relative z-10"
         >
-          <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-[#E8B4B8]/30">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div>
-                <h1 className="text-4xl md:text-6xl font-light mb-3 bg-gradient-to-r from-[#E8B4B8] via-[#C9A7C7] to-[#D4AF97] bg-clip-text text-transparent font-playfair">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg border border-[var(--color-rose)]/20">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="w-full md:w-auto">
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-playfair font-light mb-2 md:mb-3 bg-gradient-to-r from-[var(--color-rose)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
                   {t('title')}
                 </h1>
-                <p className="text-xl text-gray-600 flex items-center gap-2 font-light">
-                  <span>Bienvenid@s,</span>
-                  <span className="font-semibold bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] bg-clip-text text-transparent">
+                <p className="text-base md:text-xl text-gray-600 flex flex-wrap items-center gap-2 font-light">
+                  <span>Bienvenid@,</span>
+                  <span className="font-medium bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
                     {session?.user?.name || 'Novios'}
                   </span>
-                  <span className="text-2xl">💝</span>
+                  <span className="text-xl md:text-2xl">💝</span>
                 </p>
               </div>
               <Button
                 onClick={handleLogout}
-                className="bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] text-white hover:shadow-2xl hover:shadow-[#E8B4B8]/50 hover:scale-105 transition-all px-8 py-4 text-lg"
+                variant="primary"
+                size="md"
+                className="w-full md:w-auto whitespace-nowrap"
               >
-                <LogOut className="w-5 h-5 mr-2" />
+                <LogOut className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 Cerrar sesión
               </Button>
             </div>
           </div>
         </motion.div>
 
-        {/* Stats Overview con estética romántica */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 relative z-10">
+        {/* Stats Overview - Mejorado para responsive */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12 relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
           >
-            <Card className="bg-gradient-to-br from-[#E8B4B8] to-[#d69da3] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
-              <CardContent className="pt-8 pb-6 relative z-10">
-                <div className="flex items-start justify-between mb-4">
-                  <Users className="w-12 h-12 text-white/90" />
-                  <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+            <Card className="bg-gradient-to-br from-[var(--color-rose)] to-[#d69da3] border-0 shadow-lg overflow-hidden relative group hover:scale-105 transition-transform">
+              <CardContent className="pt-6 pb-5">
+                <div className="flex items-start justify-between mb-3">
+                  <Users className="w-10 h-10 md:w-12 md:h-12 text-white/90" />
+                  <div className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full">
                     <span className="text-xs font-bold text-white">RSVPs</span>
                   </div>
                 </div>
-                <p className="text-5xl font-black text-white mb-2">{attendingCount}</p>
-                <p className="text-white/90 font-semibold text-lg">Confirmados</p>
-                <p className="text-white/70 text-sm mt-1">de {rsvps.length} respuestas</p>
+                <p className="text-4xl md:text-5xl font-black text-white mb-1">{attendingCount}</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">Confirmados</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">de {rsvps.length} respuestas</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -460,18 +462,17 @@ export default function AdminPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="bg-gradient-to-br from-[#C9A7C7] to-[#b08db5] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
-              <CardContent className="pt-8 pb-6 relative z-10">
-                <div className="flex items-start justify-between mb-4">
-                  <Users className="w-12 h-12 text-white/90" />
-                  <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+            <Card className="bg-gradient-to-br from-[var(--color-secondary)] to-[#b08db5] border-0 shadow-lg overflow-hidden relative group hover:scale-105 transition-transform">
+              <CardContent className="pt-6 pb-5">
+                <div className="flex items-start justify-between mb-3">
+                  <Users className="w-10 h-10 md:w-12 md:h-12 text-white/90" />
+                  <div className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full">
                     <span className="text-xs font-bold text-white">Total</span>
                   </div>
                 </div>
-                <p className="text-5xl font-black text-white mb-2">{totalGuests}</p>
-                <p className="text-white/90 font-semibold text-lg">Invitados</p>
-                <p className="text-white/70 text-sm mt-1">incluyendo acompañantes</p>
+                <p className="text-4xl md:text-5xl font-black text-white mb-1">{totalGuests}</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">Invitados</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">incluyendo acompañantes</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -481,20 +482,19 @@ export default function AdminPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <Card className="bg-gradient-to-br from-[#D4AF97] to-[#c29d84] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
-              <CardContent className="pt-8 pb-6 relative z-10">
-                <div className="flex items-start justify-between mb-4">
-                  <Camera className="w-12 h-12 text-white/90" />
+            <Card className="bg-gradient-to-br from-[var(--color-accent)] to-[#c29d84] border-0 shadow-lg overflow-hidden relative group hover:scale-105 transition-transform">
+              <CardContent className="pt-6 pb-5">
+                <div className="flex items-start justify-between mb-3">
+                  <Camera className="w-10 h-10 md:w-12 md:h-12 text-white/90" />
                   {pendingPhotos > 0 && (
-                    <div className="bg-red-500 text-white px-3 py-1 rounded-full animate-pulse">
+                    <div className="bg-red-500 text-white px-2 py-1 rounded-full animate-pulse">
                       <span className="text-xs font-bold">{pendingPhotos}</span>
                     </div>
                   )}
                 </div>
-                <p className="text-5xl font-black text-white mb-2">{photos.length}</p>
-                <p className="text-white/90 font-semibold text-lg">Fotos</p>
-                <p className="text-white/70 text-sm mt-1">
+                <p className="text-4xl md:text-5xl font-black text-white mb-1">{photos.length}</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">Fotos</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">
                   {pendingPhotos > 0 ? `${pendingPhotos} por aprobar` : 'Todas aprobadas ✓'}
                 </p>
               </CardContent>
@@ -506,20 +506,19 @@ export default function AdminPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <Card className="bg-gradient-to-br from-[#f0c4c8] to-[#E8B4B8] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
-              <CardContent className="pt-8 pb-6 relative z-10">
-                <div className="flex items-start justify-between mb-4">
-                  <Music className="w-12 h-12 text-white/90" />
+            <Card className="bg-gradient-to-br from-[#f0c4c8] to-[var(--color-rose)] border-0 shadow-lg overflow-hidden relative group hover:scale-105 transition-transform">
+              <CardContent className="pt-6 pb-5">
+                <div className="flex items-start justify-between mb-3">
+                  <Music className="w-10 h-10 md:w-12 md:h-12 text-white/90" />
                   {pendingSongs > 0 && (
-                    <div className="bg-red-500 text-white px-3 py-1 rounded-full animate-pulse">
+                    <div className="bg-red-500 text-white px-2 py-1 rounded-full animate-pulse">
                       <span className="text-xs font-bold">{pendingSongs}</span>
                     </div>
                   )}
                 </div>
-                <p className="text-5xl font-black text-white mb-2">{songs.length}</p>
-                <p className="text-white/90 font-semibold text-lg">Canciones</p>
-                <p className="text-white/70 text-sm mt-1">
+                <p className="text-4xl md:text-5xl font-black text-white mb-1">{songs.length}</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">Canciones</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">
                   {pendingSongs > 0 ? `${pendingSongs} por aprobar` : 'Todas aprobadas ✓'}
                 </p>
               </CardContent>
@@ -531,18 +530,17 @@ export default function AdminPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <Card className="bg-gradient-to-br from-[#d9c7d7] to-[#C9A7C7] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
-              <CardContent className="pt-8 pb-6 relative z-10">
-                <div className="flex items-start justify-between mb-4">
-                  <Gift className="w-12 h-12 text-white/90" />
-                  <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+            <Card className="bg-gradient-to-br from-[#d9c7d7] to-[var(--color-secondary)] border-0 shadow-lg overflow-hidden relative group hover:scale-105 transition-transform">
+              <CardContent className="pt-6 pb-5">
+                <div className="flex items-start justify-between mb-3">
+                  <Gift className="w-10 h-10 md:w-12 md:h-12 text-white/90" />
+                  <div className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full">
                     <span className="text-xs font-bold text-white">{availableGifts}</span>
                   </div>
                 </div>
-                <p className="text-5xl font-black text-white mb-2">{gifts.length}</p>
-                <p className="text-white/90 font-semibold text-lg">Regalos</p>
-                <p className="text-white/70 text-sm mt-1">
+                <p className="text-4xl md:text-5xl font-black text-white mb-1">{gifts.length}</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">Regalos</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">
                   {availableGifts} disponibles, {reservedGifts} reservados
                 </p>
               </CardContent>
@@ -554,26 +552,25 @@ export default function AdminPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6 }}
           >
-            <Card className="bg-gradient-to-br from-[#e4cabc] to-[#D4AF97] border-0 shadow-2xl overflow-hidden relative group hover:scale-105 transition-transform">
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all" />
-              <CardContent className="pt-8 pb-6 relative z-10">
-                <div className="flex items-start justify-between mb-4">
-                  <MapPin className="w-12 h-12 text-white/90" />
-                  <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+            <Card className="bg-gradient-to-br from-[#e4cabc] to-[var(--color-accent)] border-0 shadow-lg overflow-hidden relative group hover:scale-105 transition-transform">
+              <CardContent className="pt-6 pb-5">
+                <div className="flex items-start justify-between mb-3">
+                  <MapPin className="w-10 h-10 md:w-12 md:h-12 text-white/90" />
+                  <div className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full">
                     <span className="text-xs font-bold text-white">Lugares</span>
                   </div>
                 </div>
-                <p className="text-5xl font-black text-white mb-2">{places.length}</p>
-                <p className="text-white/90 font-semibold text-lg">Turismo</p>
-                <p className="text-white/70 text-sm mt-1">lugares recomendados</p>
+                <p className="text-4xl md:text-5xl font-black text-white mb-1">{places.length}</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">Turismo</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">lugares recomendados</p>
               </CardContent>
             </Card>
           </motion.div>
         </div>
 
-        {/* Navigation Tabs Mejoradas */}
-        <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-3 shadow-2xl border border-[#E8B4B8]/20 mb-8 relative z-10">
-          <div className="flex flex-wrap gap-2">
+        {/* Navigation Tabs - Mejorado para responsive */}
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl md:rounded-3xl p-2 md:p-3 shadow-lg border border-[var(--color-rose)]/20 mb-6 md:mb-8 relative z-10 overflow-x-auto">
+          <div className="flex gap-2 min-w-max md:min-w-0 md:flex-wrap">
             <TabButton
               active={activeTab === 'overview'}
               onClick={() => setActiveTab('overview')}
@@ -634,19 +631,19 @@ export default function AdminPage() {
           transition={{ delay: 0.3 }}
         >
           {activeTab === 'overview' && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
               {/* Quick Stats */}
-              <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-2xl">
-                <CardHeader className="border-b border-gray-100">
-                  <CardTitle className="flex items-center gap-3 text-2xl">
-                    <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-xl">
-                      <BarChart3 className="w-6 h-6 text-white" />
+              <Card className="bg-white/70 backdrop-blur-xl border-0 shadow-lg">
+                <CardHeader className="border-b border-gray-100 pb-4">
+                  <CardTitle className="flex items-center gap-2 md:gap-3 text-lg md:text-2xl font-playfair">
+                    <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-2 md:p-3 rounded-xl">
+                      <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </div>
                     Estadísticas Generales
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-6">
-                  <div className="space-y-4">
+                <CardContent className="pt-4 md:pt-6">
+                  <div className="space-y-3 md:space-y-4">
                     <StatRow label="Confirmaciones recibidas" value={`${attendingCount} de ${rsvps.length}`} progress={(attendingCount / Math.max(rsvps.length, 1)) * 100} />
                     <StatRow label="Total de invitados" value={totalGuests} />
                     <StatRow label="Regalos reservados" value={`${reservedGifts} de ${gifts.length}`} progress={(reservedGifts / Math.max(gifts.length, 1)) * 100} />
@@ -660,17 +657,17 @@ export default function AdminPage() {
               </Card>
 
               {/* Recent Activity */}
-              <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-2xl">
-                <CardHeader className="border-b border-gray-100">
-                  <CardTitle className="flex items-center gap-3 text-2xl">
-                    <div className="bg-gradient-to-br from-orange-500 to-red-500 p-3 rounded-xl">
-                      <Users className="w-6 h-6 text-white" />
+              <Card className="bg-white/70 backdrop-blur-xl border-0 shadow-lg">
+                <CardHeader className="border-b border-gray-100 pb-4">
+                  <CardTitle className="flex items-center gap-2 md:gap-3 text-lg md:text-2xl font-playfair">
+                    <div className="bg-gradient-to-br from-orange-500 to-red-500 p-2 md:p-3 rounded-xl">
+                      <Users className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </div>
                     Actividad Reciente
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pt-6">
-                  <div className="space-y-3">
+                <CardContent className="pt-4 md:pt-6">
+                  <div className="space-y-2 md:space-y-3">
                     {pendingPhotos > 0 && (
                       <ActivityItem 
                         icon={<Camera className="w-5 h-5 text-purple-500" />}
@@ -703,8 +700,8 @@ export default function AdminPage() {
                       />
                     )}
                     {pendingPhotos === 0 && pendingSongs === 0 && (
-                      <div className="text-center py-8">
-                        <div className="text-6xl mb-3">🎉</div>
+                      <div className="text-center py-6 md:py-8">
+                        <div className="text-5xl md:text-6xl mb-3">🎉</div>
                         <p className="text-gray-600 font-medium">¡Todo al día!</p>
                         <p className="text-gray-500 text-sm">No hay pendientes</p>
                       </div>
@@ -716,68 +713,75 @@ export default function AdminPage() {
           )}
 
           {activeTab === 'rsvps' && (
-            <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-2xl">
-              <CardHeader className="border-b border-gray-100">
-                <CardTitle className="flex items-center gap-3 text-2xl">
-                  <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-3 rounded-xl">
-                    <Users className="w-6 h-6 text-white" />
+            <Card className="bg-white/70 backdrop-blur-xl border-0 shadow-lg">
+              <CardHeader className="border-b border-gray-100 pb-4">
+                <CardTitle className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 text-lg md:text-2xl font-playfair">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-2 md:p-3 rounded-xl">
+                      <Users className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                    </div>
+                    Confirmaciones de Asistencia
                   </div>
-                  Confirmaciones de Asistencia
-                  <span className="ml-auto text-sm font-normal text-gray-500">
+                  <span className="text-xs md:text-sm font-normal text-gray-500 md:ml-auto">
                     {attendingCount} confirmados de {rsvps.length} respuestas
                   </span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pt-6">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b-2 border-gray-200">
-                        <th className="text-left py-4 px-4 font-bold text-gray-700">Nombre</th>
-                        <th className="text-left py-4 px-4 font-bold text-gray-700">Email</th>
-                        <th className="text-left py-4 px-4 font-bold text-gray-700">Asiste</th>
-                        <th className="text-left py-4 px-4 font-bold text-gray-700">Acompañantes</th>
-                        <th className="text-left py-4 px-4 font-bold text-gray-700">Comentarios</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rsvps.map((rsvp, index) => (
-                        <motion.tr 
-                          key={rsvp.id} 
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="border-b hover:bg-purple-50/50 transition-colors"
-                        >
-                          <td className="py-4 px-4 font-semibold text-gray-800">{rsvp.name}</td>
-                          <td className="py-4 px-4 text-gray-600">{rsvp.email}</td>
-                          <td className="py-4 px-4">
-                            {rsvp.attending ? (
-                              <span className="px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-lg">
-                                ✓ Sí asiste
-                              </span>
-                            ) : (
-                              <span className="px-4 py-2 rounded-full text-sm font-bold bg-gradient-to-r from-red-400 to-red-500 text-white shadow-lg">
-                                ✗ No asiste
-                              </span>
-                            )}
-                          </td>
-                          <td className="py-4 px-4">
-                            <span className="text-xl font-bold text-purple-600">{rsvp.guests}</span>
-                          </td>
-                          <td className="py-4 px-4 text-sm text-gray-600 max-w-xs">
-                            {rsvp.comments ? (
-                              <div className="bg-gray-50 px-3 py-2 rounded-lg">
-                                {rsvp.comments}
-                              </div>
-                            ) : (
-                              <span className="text-gray-400">-</span>
-                            )}
-                          </td>
-                        </motion.tr>
-                      ))}
-                    </tbody>
-                  </table>
+              <CardContent className="pt-4 md:pt-6">
+                <div className="overflow-x-auto -mx-4 md:mx-0">
+                  <div className="inline-block min-w-full align-middle">
+                    <table className="min-w-full">
+                      <thead>
+                        <tr className="border-b-2 border-gray-200">
+                          <th className="text-left py-3 md:py-4 px-3 md:px-4 font-bold text-gray-700 text-sm md:text-base">Nombre</th>
+                          <th className="text-left py-3 md:py-4 px-3 md:px-4 font-bold text-gray-700 text-sm md:text-base hidden md:table-cell">Email</th>
+                          <th className="text-left py-3 md:py-4 px-3 md:px-4 font-bold text-gray-700 text-sm md:text-base">Asiste</th>
+                          <th className="text-left py-3 md:py-4 px-3 md:px-4 font-bold text-gray-700 text-sm md:text-base hidden sm:table-cell">Acomp.</th>
+                          <th className="text-left py-3 md:py-4 px-3 md:px-4 font-bold text-gray-700 text-sm md:text-base hidden lg:table-cell">Comentarios</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rsvps.map((rsvp, index) => (
+                          <motion.tr 
+                            key={rsvp.id} 
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            className="border-b hover:bg-purple-50/50 transition-colors"
+                          >
+                            <td className="py-3 md:py-4 px-3 md:px-4">
+                              <div className="font-semibold text-gray-800 text-sm md:text-base">{rsvp.name}</div>
+                              <div className="text-xs text-gray-500 md:hidden">{rsvp.email}</div>
+                            </td>
+                            <td className="py-3 md:py-4 px-3 md:px-4 text-gray-600 text-sm hidden md:table-cell">{rsvp.email}</td>
+                            <td className="py-3 md:py-4 px-3 md:px-4">
+                              {rsvp.attending ? (
+                                <span className="inline-flex px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-md whitespace-nowrap">
+                                  ✓ Sí
+                                </span>
+                              ) : (
+                                <span className="inline-flex px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold bg-gradient-to-r from-red-400 to-red-500 text-white shadow-md whitespace-nowrap">
+                                  ✗ No
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3 md:py-4 px-3 md:px-4 hidden sm:table-cell">
+                              <span className="text-lg md:text-xl font-bold text-purple-600">{rsvp.guests}</span>
+                            </td>
+                            <td className="py-3 md:py-4 px-3 md:px-4 text-xs md:text-sm text-gray-600 max-w-xs hidden lg:table-cell">
+                              {rsvp.comments ? (
+                                <div className="bg-gray-50 px-3 py-2 rounded-lg">
+                                  {rsvp.comments}
+                                </div>
+                              ) : (
+                                <span className="text-gray-400">-</span>
+                              )}
+                            </td>
+                          </motion.tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -785,21 +789,23 @@ export default function AdminPage() {
 
           {activeTab === 'photos' && (
             <div>
-              <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Galería de Fotos</h2>
+              <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <h2 className="text-xl md:text-2xl font-playfair font-light bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
+                  Galería de Fotos
+                </h2>
                 <span className="text-sm text-gray-600">
                   {photos.filter(p => p.approved).length} aprobadas de {photos.length} total
                 </span>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {photos.map((photo) => (
-                  <Card key={photo.id} className={photo.approved ? 'border-green-200' : 'border-orange-200'}>
+                  <Card key={photo.id} className={`${photo.approved ? 'border-green-200' : 'border-orange-200'} overflow-hidden`}>
                     <NextImage
                       src={photo.url}
                       alt={photo.caption || ''}
                       width={400}
                       height={192}
-                      className="w-full h-48 object-cover rounded-t-xl"
+                      className="w-full h-48 object-cover"
                     />
                     <CardContent className="pt-4">
                       {photo.caption && <p className="text-sm mb-2 font-medium">{photo.caption}</p>}
@@ -811,10 +817,11 @@ export default function AdminPage() {
                           <Button
                             size="sm"
                             onClick={() => approvePhoto(photo.id)}
-                            className="flex-1 bg-green-500 hover:bg-green-600"
+                            className="flex-1 bg-green-500 hover:bg-green-600 text-white"
                           >
                             <CheckCircle className="w-4 h-4 mr-1" />
-                            Aprobar
+                            <span className="hidden sm:inline">Aprobar</span>
+                            <span className="sm:hidden">✓</span>
                           </Button>
                         )}
                         <Button
@@ -823,7 +830,8 @@ export default function AdminPage() {
                           className="flex-1 bg-red-500 hover:bg-red-600 text-white"
                         >
                           <Trash2 className="w-4 h-4 mr-1" />
-                          Eliminar
+                          <span className="hidden sm:inline">Eliminar</span>
+                          <span className="sm:hidden">✗</span>
                         </Button>
                       </div>
                       {photo.approved && (
@@ -838,15 +846,17 @@ export default function AdminPage() {
 
           {activeTab === 'songs' && (
             <div>
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold mb-4">Sugerencias Musicales</h2>
+              <div className="mb-4 md:mb-6">
+                <h2 className="text-xl md:text-2xl font-playfair font-light bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent mb-4">
+                  Sugerencias Musicales
+                </h2>
                 
                 {/* Spotify Search Section */}
-                <Card className="mb-6 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-                  <CardContent className="pt-6">
+                <Card className="mb-4 md:mb-6 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+                  <CardContent className="pt-4 md:pt-6">
                     <div className="flex items-center gap-2 mb-4">
-                      <Music className="w-6 h-6 text-green-600" />
-                      <h3 className="text-lg font-bold text-green-900">Añadir desde Spotify</h3>
+                      <Music className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
+                      <h3 className="text-base md:text-lg font-bold text-green-900">Añadir desde Spotify</h3>
                     </div>
                     
                     <div className="relative mb-4">
@@ -855,7 +865,7 @@ export default function AdminPage() {
                         value={spotifySearchQuery}
                         onChange={(e) => setSpotifySearchQuery(e.target.value)}
                         placeholder="Buscar canción en Spotify..."
-                        className="w-full px-4 py-3 rounded-xl border-2 border-green-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                        className="w-full px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 border-green-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all text-sm md:text-base"
                       />
                       {spotifyLoading && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -1162,22 +1172,26 @@ export default function AdminPage() {
 
           {activeTab === 'gifts' && (
             <div>
-              <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-2xl font-light font-playfair bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] bg-clip-text text-transparent">Lista de Regalos</h2>
+              <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <h2 className="text-xl md:text-2xl font-playfair font-light bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
+                  Lista de Regalos
+                </h2>
                 <Button 
                   onClick={() => {
                     setEditingGift(undefined);
                     setIsGiftModalOpen(true);
                   }}
-                  className="bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] text-white hover:shadow-2xl hover:shadow-[#E8B4B8]/50"
+                  variant="primary"
+                  size="sm"
+                  className="w-full sm:w-auto"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Añadir Regalo
                 </Button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {gifts.map((gift) => (
-                  <Card key={gift.id} className="relative">
+                  <Card key={gift.id} className="relative overflow-hidden">
                     {gift.priority && (
                       <div className="absolute top-2 left-2 z-10 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                         ⭐ Prioritario
@@ -1189,20 +1203,20 @@ export default function AdminPage() {
                         alt={gift.name}
                         width={400}
                         height={192}
-                        className="w-full h-40 object-cover rounded-t-xl"
+                        className="w-full h-40 object-cover"
                       />
                     )}
                     <CardContent className="pt-4">
-                      <h3 className="font-bold mb-2">{gift.name}</h3>
+                      <h3 className="font-bold mb-2 font-playfair">{gift.name}</h3>
                       {gift.description && (
-                        <p className="text-sm text-gray-600 mb-2">{gift.description}</p>
+                        <p className="text-sm text-gray-600 mb-2 line-clamp-2">{gift.description}</p>
                       )}
                       {gift.price && (
                         <p className="text-lg font-bold text-[var(--color-primary)] mb-2">
                           {gift.price}€
                         </p>
                       )}
-                      <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-2 mb-3 flex-wrap">
                         {gift.purchased ? (
                           <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium">
                             ✓ Comprado
@@ -1225,11 +1239,12 @@ export default function AdminPage() {
                       <div className="flex gap-2">
                         <Button 
                           size="sm" 
-                          className="flex-1 bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] text-white"
+                          variant="primary"
+                          className="flex-1"
                           onClick={() => handleEditGift(gift)}
                         >
                           <Edit className="w-4 h-4 mr-1" />
-                          Editar
+                          <span className="hidden sm:inline">Editar</span>
                         </Button>
                         <Button 
                           size="sm" 
@@ -1248,22 +1263,26 @@ export default function AdminPage() {
 
           {activeTab === 'places' && (
             <div>
-              <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-2xl font-light font-playfair bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] bg-clip-text text-transparent">Lugares Turísticos</h2>
+              <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <h2 className="text-xl md:text-2xl font-playfair font-light bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
+                  Lugares Turísticos
+                </h2>
                 <Button 
                   onClick={() => {
                     setEditingPlace(undefined);
                     setIsPlaceModalOpen(true);
                   }}
-                  className="bg-gradient-to-r from-[#D4AF97] to-[#C9A7C7] text-white hover:shadow-2xl hover:shadow-[#D4AF97]/50"
+                  variant="primary"
+                  size="sm"
+                  className="w-full sm:w-auto"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Añadir Lugar
                 </Button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {places.map((place) => (
-                  <Card key={place.id} className="relative">
+                  <Card key={place.id} className="relative overflow-hidden">
                     {place.recommended && (
                       <div className="absolute top-2 left-2 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold">
                         ⭐ Recomendado
@@ -1275,18 +1294,18 @@ export default function AdminPage() {
                         alt={place.name}
                         width={400}
                         height={192}
-                        className="w-full h-40 object-cover rounded-t-xl"
+                        className="w-full h-40 object-cover"
                       />
                     )}
                     <CardContent className="pt-4">
-                      <h3 className="font-bold mb-1">{place.name}</h3>
+                      <h3 className="font-bold mb-1 font-playfair">{place.name}</h3>
                       {place.category && (
                         <span className="inline-block px-2 py-1 bg-teal-100 text-teal-700 rounded text-xs mb-2">
                           {place.category}
                         </span>
                       )}
                       {place.description && (
-                        <p className="text-sm text-gray-600 mb-2">{place.description}</p>
+                        <p className="text-sm text-gray-600 mb-2 line-clamp-2">{place.description}</p>
                       )}
                       <div className="space-y-1 text-xs text-gray-500 mb-3">
                         {place.distance && <p>📍 {place.distance}</p>}
@@ -1296,11 +1315,12 @@ export default function AdminPage() {
                       <div className="flex gap-2">
                         <Button 
                           size="sm" 
-                          className="flex-1 bg-gradient-to-r from-[#D4AF97] to-[#C9A7C7] text-white"
+                          variant="primary"
+                          className="flex-1"
                           onClick={() => handleEditPlace(place)}
                         >
                           <Edit className="w-4 h-4 mr-1" />
-                          Editar
+                          <span className="hidden sm:inline">Editar</span>
                         </Button>
                         <Button 
                           size="sm" 
@@ -1368,18 +1388,18 @@ function TabButton({
   return (
     <motion.button
       onClick={onClick}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className={`relative px-6 py-3 rounded-2xl font-medium transition-all flex items-center gap-2 ${
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+      className={`relative px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all flex items-center gap-2 text-sm md:text-base whitespace-nowrap ${
         active
-          ? 'bg-gradient-to-r from-[#E8B4B8] via-[#C9A7C7] to-[#D4AF97] text-white shadow-2xl'
-          : 'bg-gray-50 text-gray-700 hover:bg-[#E8B4B8]/10 hover:shadow-lg'
+          ? 'bg-gradient-to-r from-[var(--color-rose)] via-[var(--color-secondary)] to-[var(--color-accent)] text-white shadow-lg'
+          : 'bg-gray-50 text-gray-700 hover:bg-[var(--color-rose)]/10 hover:shadow-md'
       }`}
     >
       {icon}
-      {children}
+      <span className="hidden sm:inline">{children}</span>
       {badge !== undefined && badge > 0 && (
-        <span className={`absolute -top-2 -right-2 ${badgeColors[badgeColor]} text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg animate-pulse`}>
+        <span className={`absolute -top-1 -right-1 md:-top-2 md:-right-2 ${badgeColors[badgeColor]} text-white text-xs font-bold rounded-full w-5 h-5 md:w-6 md:h-6 flex items-center justify-center shadow-lg animate-pulse`}>
           {badge > 99 ? '99+' : badge}
         </span>
       )}
@@ -1389,15 +1409,15 @@ function TabButton({
 
 function StatRow({ label, value, progress }: { label: string; value: string | number; progress?: number }) {
   return (
-    <div className="py-3">
+    <div className="py-2 md:py-3">
       <div className="flex justify-between items-center mb-2">
-        <span className="text-gray-700 font-medium">{label}</span>
-        <span className="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{value}</span>
+        <span className="text-gray-700 font-medium text-sm md:text-base">{label}</span>
+        <span className="font-bold text-lg md:text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{value}</span>
       </div>
       {progress !== undefined && (
         <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
           <motion.div 
-            className="h-full bg-gradient-to-r from-[#E8B4B8] to-[#C9A7C7] rounded-full"
+            className="h-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 1, delay: 0.2 }}
@@ -1424,23 +1444,23 @@ function ActivityItem({
   return (
     <motion.div 
       onClick={action}
-      whileHover={action ? { scale: 1.02, x: 5 } : {}}
-      className={`flex items-center gap-3 p-4 rounded-xl transition-all ${
+      whileHover={action ? { scale: 1.01, x: 5 } : {}}
+      className={`flex items-center gap-3 p-3 md:p-4 rounded-xl transition-all ${
         action && !info 
           ? urgent
-            ? 'bg-gradient-to-r from-[#f0c4c8] to-[#E8B4B8] hover:from-[#E8B4B8] hover:to-[#d69da3] cursor-pointer border-2 border-[#E8B4B8]'
-            : 'bg-gradient-to-r from-[#E8B4B8]/20 to-[#C9A7C7]/20 hover:from-[#E8B4B8]/30 hover:to-[#C9A7C7]/30 cursor-pointer border-2 border-[#C9A7C7]/40'
-          : 'bg-gradient-to-r from-[#D4AF97]/10 to-[#C9A7C7]/10 border-2 border-[#D4AF97]/30'
+            ? 'bg-gradient-to-r from-[#f0c4c8] to-[var(--color-rose)] hover:from-[var(--color-rose)] hover:to-[#d69da3] cursor-pointer border-2 border-[var(--color-rose)]'
+            : 'bg-gradient-to-r from-[var(--color-rose)]/20 to-[var(--color-secondary)]/20 hover:from-[var(--color-rose)]/30 hover:to-[var(--color-secondary)]/30 cursor-pointer border-2 border-[var(--color-secondary)]/40'
+          : 'bg-gradient-to-r from-[var(--color-accent)]/10 to-[var(--color-secondary)]/10 border-2 border-[var(--color-accent)]/30'
       } shadow-md hover:shadow-lg`}
     >
       <div className="flex-shrink-0">
         {icon}
       </div>
-      <span className="text-sm font-medium flex-1 text-gray-800">{text}</span>
+      <span className="text-xs md:text-sm font-medium flex-1 text-gray-800">{text}</span>
       {action && !info && (
-        <span className={`text-sm font-bold ${urgent ? 'text-[#d69da3]' : 'text-[#C9A7C7]'} flex items-center gap-1`}>
+        <span className={`text-xs md:text-sm font-bold ${urgent ? 'text-[#d69da3]' : 'text-[var(--color-secondary)]'} flex items-center gap-1`}>
           Ver
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </span>
