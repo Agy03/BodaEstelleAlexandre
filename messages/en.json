@@ -176,6 +176,13 @@
     "link": "View in store",
     "filter": "Filter by category",
     "all": "All",
+    "searchPlaceholder": "Search gift by name or description...",
+    "showing": "Showing",
+    "gift": "gift",
+    "gifts": "gifts",
+    "for": "for",
+    "mostWanted": "Most Wanted",
+    "mostWantedSubtitle": "Gifts that would make us especially happy",
     "categories": {
       "all": "All",
       "home": "Home",

@@ -176,6 +176,13 @@
     "link": "Ver en tienda",
     "filter": "Filtrar por categoría",
     "all": "Todos",
+    "searchPlaceholder": "Buscar regalo por nombre o descripción...",
+    "showing": "Mostrando",
+    "gift": "regalo",
+    "gifts": "regalos",
+    "for": "para",
+    "mostWanted": "Más deseados",
+    "mostWantedSubtitle": "Regalos que nos harían especialmente felices",
     "categories": {
       "all": "Todos",
       "home": "Hogar",

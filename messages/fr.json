@@ -176,6 +176,13 @@
     "link": "Voir en boutique",
     "filter": "Filtrer par catégorie",
     "all": "Tous",
+    "searchPlaceholder": "Rechercher un cadeau par nom ou description...",
+    "showing": "Affichage de",
+    "gift": "cadeau",
+    "gifts": "cadeaux",
+    "for": "pour",
+    "mostWanted": "Les Plus Désirés",
+    "mostWantedSubtitle": "Cadeaux qui nous rendraient particulièrement heureux",
     "categories": {
       "all": "Tous",
       "home": "Maison",

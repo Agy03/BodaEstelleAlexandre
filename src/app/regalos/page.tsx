@@ -312,7 +312,7 @@ export default function RegalosPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Buscar regalo por nombre o descripción..."
+              placeholder={t('searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/90 backdrop-blur-sm border-2 border-gray-100 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10 transition-all outline-none text-gray-700 placeholder:text-gray-400 shadow-lg"
@@ -387,9 +387,9 @@ export default function RegalosPage() {
           >
             <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3 font-playfair">
-                💝 Más deseados
+                💝 {t('mostWanted')}
               </h2>
-              <p className="text-gray-600">Regalos que nos harían especialmente felices</p>
+              <p className="text-gray-600">{t('mostWantedSubtitle')}</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -428,8 +428,8 @@ export default function RegalosPage() {
             className="text-center mb-8"
           >
             <p className="text-gray-600">
-              Mostrando <span className="font-semibold text-[var(--color-primary)]">{displayedGifts.length}</span> {displayedGifts.length === 1 ? 'regalo' : 'regalos'}
-              {searchQuery && <span className="ml-1">para &ldquo;{searchQuery}&rdquo;</span>}
+              {t('showing')} <span className="font-semibold text-[var(--color-primary)]">{displayedGifts.length}</span> {displayedGifts.length === 1 ? t('gift') : t('gifts')}
+              {searchQuery && <span className="ml-1">{t('for')} &ldquo;{searchQuery}&rdquo;</span>}
             </p>
           </motion.div>
         )}
