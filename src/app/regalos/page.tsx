@@ -561,7 +561,7 @@ export default function RegalosPage() {
               className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
             >
               <div className="text-center mb-6">
-                <div className="bg-gradient-to-br from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-3xl">📄</span>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">Subir Recibo</h3>
@@ -587,7 +587,7 @@ export default function RegalosPage() {
                 />
                 <label
                   htmlFor="receipt-upload"
-                  className={`block w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white text-lg py-4 rounded-xl text-center font-semibold cursor-pointer hover:shadow-xl transition-all ${
+                  className={`block w-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] text-white text-lg py-4 rounded-xl text-center font-semibold cursor-pointer hover:shadow-xl transition-all ${
                     uploadingReceipt ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                 >
@@ -766,7 +766,7 @@ function GiftCard({
             {canUploadReceipt && (
               <Button
                 onClick={() => onUploadReceipt(gift)}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-xl transition-all"
+                className="w-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] text-white hover:shadow-xl transition-all"
               >
                 📄 Subir Recibo
               </Button>
@@ -774,7 +774,7 @@ function GiftCard({
 
             {/* Receipt status */}
             {hasReceipt && (
-              <div className="bg-purple-100 text-purple-800 text-xs px-3 py-2 rounded text-center font-medium">
+              <div className="bg-[var(--color-rose)]/10 text-[var(--color-rose)] text-xs px-3 py-2 rounded text-center font-medium">
                 {gift.receiptStatus === 'pending' && '⏳ Recibo en revisión'}
                 {gift.receiptStatus === 'approved' && '✓ Recibo aprobado'}
                 {gift.receiptStatus === 'rejected' && '✗ Recibo rechazado'}

@@ -200,9 +200,9 @@ export default function MusicaPage() {
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
       {/* Enhanced Decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 via-white to-rose-50/30 -z-10" />
-      <div className="absolute top-20 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-purple-200/30 via-rose-200/20 to-transparent rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDuration: '5s' }} />
-      <div className="absolute bottom-20 right-1/3 w-[500px] h-[500px] bg-gradient-to-tl from-rose-300/30 via-purple-200/20 to-transparent rounded-full blur-3xl -z-10 animate-pulse" style={{ animationDuration: '7s' }} />
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/5 via-[var(--color-background)] to-[var(--color-secondary)]/5" />
+      <div className="absolute top-20 left-0 w-96 h-96 bg-gradient-to-br from-[var(--color-rose)]/10 to-transparent rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-0 w-96 h-96 bg-gradient-to-tl from-[var(--color-secondary)]/10 to-transparent rounded-full blur-3xl" />
       
       <div className="max-w-7xl mx-auto relative">
         {/* Hero Section */}
@@ -218,16 +218,16 @@ export default function MusicaPage() {
             className="relative inline-block mb-8"
           >
             <motion.div 
-              className="absolute inset-0 bg-gradient-to-br from-purple-400 to-rose-500 rounded-full blur-2xl opacity-40"
+              className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] rounded-full blur-2xl opacity-40"
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 3, repeat: Infinity }}
             />
-            <div className="relative bg-gradient-to-br from-purple-500 to-rose-500 p-6 rounded-3xl shadow-2xl">
+            <div className="relative bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] p-6 rounded-3xl shadow-2xl">
               <Music className="w-14 h-14 text-white" />
             </div>
           </motion.div>
           <h1 className="text-5xl md:text-7xl font-light font-playfair mb-6">
-            <span className="bg-gradient-to-r from-purple-600 via-rose-500 to-rose-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[var(--color-rose)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
               {t('title')}
             </span>
           </h1>
@@ -243,11 +243,11 @@ export default function MusicaPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-purple-100/50">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-purple-100/50 to-transparent rounded-full blur-2xl -z-10" />
+            <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[var(--color-rose)]/20">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[var(--color-rose)]/10 to-transparent rounded-full blur-2xl -z-10" />
               
               <h2 className="text-2xl font-playfair text-gray-800 mb-6 flex items-center gap-3">
-                <div className="bg-gradient-to-br from-purple-500 to-rose-500 p-2 rounded-lg">
+                <div className="bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] p-2 rounded-lg">
                   <Plus className="w-5 h-5 text-white" />
                 </div>
                 {t('form.submit')}
@@ -266,10 +266,10 @@ export default function MusicaPage() {
                       value={searchQuery}
                       onChange={(e) => handleSearchChange(e.target.value)}
                       placeholder="Nombre de la canción o artista..."
-                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-400 focus:ring-2 focus:ring-purple-100 transition-all"
+                      className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[var(--color-rose)] focus:ring-2 focus:ring-[var(--color-rose)]/20 transition-all"
                     />
                     {searching && (
-                      <Loader className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-500 animate-spin" />
+                      <Loader className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-rose)] animate-spin" />
                     )}
                   </div>
 
@@ -280,7 +280,7 @@ export default function MusicaPage() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="mt-2 bg-white border-2 border-purple-100 rounded-2xl shadow-lg max-h-80 overflow-y-auto"
+                        className="mt-2 bg-white border-2 border-[var(--color-rose)]/20 rounded-2xl shadow-lg max-h-80 overflow-y-auto"
                       >
                         {searchResults.map((track) => (
                           <div

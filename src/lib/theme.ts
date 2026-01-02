@@ -37,5 +37,6 @@ export function getThemeCSSVariables(colors: ThemeColors): Record<string, string
     '--color-accent': colors.accent,
     '--color-background': colors.background,
     '--color-text': colors.text,
+    '--color-rose': colors.primary, // Alias for primary color
   };
 }
