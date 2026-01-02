@@ -202,7 +202,7 @@ export default function TurismoPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Buscar por nombre, tipo o descripción..."
+              placeholder={t('searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/90 backdrop-blur-sm border-2 border-gray-100 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10 transition-all outline-none text-gray-700 placeholder:text-gray-400 shadow-lg"
@@ -230,9 +230,9 @@ export default function TurismoPage() {
           >
             <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3 font-playfair">
-                ✨ Imprescindibles
+                ✨ {t('mustSee')}
               </h2>
-              <p className="text-gray-600">Nuestras recomendaciones especiales para ti</p>
+              <p className="text-gray-600">{t('mustSeeSubtitle')}</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -263,7 +263,7 @@ export default function TurismoPage() {
                           {/* Featured badge */}
                           <div className="absolute top-4 left-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl flex items-center gap-2">
                             <Star className="w-4 h-4 fill-current" />
-                            Destacado
+                            {t('featured')}
                           </div>
                           
                           {/* Favorite button */}
@@ -340,7 +340,7 @@ export default function TurismoPage() {
                               rel="noopener noreferrer"
                               className="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-white px-4 py-2 rounded-xl font-semibold hover:shadow-lg transition-all group/btn"
                             >
-                              <span>Más info</span>
+                              <span>{t('moreInfo')}</span>
                               <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
                             </a>
                           )}
@@ -417,7 +417,7 @@ export default function TurismoPage() {
             >
               <Sparkles className="w-16 h-16 text-[var(--color-primary)]" />
             </motion.div>
-            <p className="mt-6 text-gray-600 text-lg">Descubriendo lugares mágicos...</p>
+            <p className="mt-6 text-gray-600 text-lg">{t('discoveringPlaces')}</p>
           </motion.div>
         ) : !Array.isArray(displayedPlaces) || displayedPlaces.length === 0 ? (
           <motion.div 
@@ -430,23 +430,23 @@ export default function TurismoPage() {
                 {searchQuery ? (
                   <>
                     <Search className="w-20 h-20 mx-auto mb-6 text-gray-400" />
-                    <h3 className="text-2xl font-bold text-gray-800 mb-4">No hay resultados</h3>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">{t('noResults')}</h3>
                     <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                      No encontramos lugares que coincidan con &ldquo;{searchQuery}&rdquo;
+                      {t('noResultsFor')} &ldquo;{searchQuery}&rdquo;
                     </p>
                     <button
                       onClick={() => setSearchQuery('')}
                       className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
                     >
-                      Limpiar búsqueda
+                      {t('clearSearch')}
                     </button>
                   </>
                 ) : (
                   <>
                     <MapPin className="w-20 h-20 mx-auto mb-6 text-[var(--color-primary)] opacity-50" />
-                    <h3 className="text-2xl font-bold text-gray-800 mb-4">Próximamente</h3>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">{t('comingSoon')}</h3>
                     <p className="text-gray-600 text-lg leading-relaxed">
-                      Estamos preparando una selección especial de lugares recomendados para que disfrutes al máximo tu visita.
+                      {t('comingSoonMessage')}
                     </p>
                   </>
                 )}
@@ -463,9 +463,9 @@ export default function TurismoPage() {
             >
               <p className="text-gray-600">
                 {searchQuery ? (
-                  <>Encontrados <span className="font-bold text-[var(--color-primary)]">{displayedPlaces.length}</span> {displayedPlaces.length === 1 ? 'lugar' : 'lugares'}</>
+                  <>{t('found')} <span className="font-bold text-[var(--color-primary)]">{displayedPlaces.length}</span> {displayedPlaces.length === 1 ? t('place') : t('places')}</>
                 ) : (
-                  <>Mostrando <span className="font-bold text-[var(--color-primary)]">{displayedPlaces.length}</span> {displayedPlaces.length === 1 ? 'lugar' : 'lugares'}</>
+                  <>{t('showing')} <span className="font-bold text-[var(--color-primary)]">{displayedPlaces.length}</span> {displayedPlaces.length === 1 ? t('place') : t('places')}</>
                 )}
               </p>
             </motion.div>
@@ -573,7 +573,7 @@ export default function TurismoPage() {
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-secondary)] font-semibold transition-colors group/link text-sm"
                             >
-                              <span>Más información</span>
+                              <span>{t('moreInformation')}</span>
                               <ExternalLink className="w-3 h-3 transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
                             </a>
                           )}
