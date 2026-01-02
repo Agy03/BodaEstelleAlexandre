@@ -85,9 +85,9 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={gift ? 'Editar Regalo' : 'Añadir Regalo'} size="md">
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
             Nombre del Regalo *
           </label>
           <Input
@@ -99,7 +99,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
             Descripción
           </label>
           <Textarea
@@ -110,9 +110,9 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Precio (€)
             </label>
             <Input
@@ -126,7 +126,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Categoría
             </label>
             <Select
@@ -143,7 +143,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
             URL de la Imagen
           </label>
           <Input
@@ -165,7 +165,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
             Enlace (tienda online, Amazon, etc.)
           </label>
           <div className="flex gap-2">
@@ -179,23 +179,23 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
                 href={formData.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
+                className="p-2 md:p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors flex-shrink-0"
               >
-                <ExternalLink className="w-5 h-5 text-gray-600" />
+                <ExternalLink className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
               </a>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <input
             type="checkbox"
             id="priority"
             checked={formData.priority}
             onChange={(e) => setFormData({ ...formData, priority: e.target.checked })}
-            className="w-4 h-4 text-[#E8B4B8] rounded focus:ring-[#E8B4B8]"
+            className="w-4 h-4 text-[#E8B4B8] rounded focus:ring-[#E8B4B8] flex-shrink-0"
           />
-          <label htmlFor="priority" className="text-sm font-medium text-gray-700">
+          <label htmlFor="priority" className="text-xs md:text-sm font-medium text-gray-700">
             ⭐ Marcar como prioritario
           </label>
         </div>

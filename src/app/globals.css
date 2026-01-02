@@ -118,6 +118,7 @@ html {
 /* Custom scrollbar con estilo boda */
 ::-webkit-scrollbar {
   width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -132,6 +133,42 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, var(--color-primary), var(--color-accent));
+}
+
+/* Scrollbar delgado para contenedores específicos */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-rose);
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* Variantes de colores para scrollbar */
+.scrollbar-thumb-purple-300::-webkit-scrollbar-thumb {
+  background: rgb(216, 180, 254);
+}
+
+.scrollbar-thumb-purple-300::-webkit-scrollbar-thumb:hover {
+  background: rgb(192, 132, 252);
+}
+
+.scrollbar-thumb-purple-400::-webkit-scrollbar-thumb:hover {
+  background: rgb(192, 132, 252);
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Selection color */

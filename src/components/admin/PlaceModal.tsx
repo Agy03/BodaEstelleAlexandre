@@ -168,15 +168,15 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={place ? 'Editar Lugar' : 'Añadir Lugar Turístico'} size="lg">
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         {/* Búsqueda en Google Maps */}
         {!place && (
-          <div className="p-6 bg-gradient-to-br from-[#E8B4B8]/10 to-[#C9A7C7]/10 rounded-2xl border-2 border-dashed border-[#E8B4B8]/30">
-            <div className="flex items-center gap-2 mb-4">
-              <MapPin className="w-5 h-5 text-[#E8B4B8]" />
-              <h3 className="font-semibold text-gray-800">Buscar en Google Maps</h3>
+          <div className="p-4 md:p-6 bg-gradient-to-br from-[#E8B4B8]/10 to-[#C9A7C7]/10 rounded-2xl border-2 border-dashed border-[#E8B4B8]/30">
+            <div className="flex items-center gap-2 mb-3 md:mb-4">
+              <MapPin className="w-4 h-4 md:w-5 md:h-5 text-[#E8B4B8] flex-shrink-0" />
+              <h3 className="text-sm md:text-base font-semibold text-gray-800">Buscar en Google Maps</h3>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
               Busca un lugar en Google Maps para rellenar automáticamente la información
             </p>
             <div className="flex gap-2">
@@ -253,9 +253,9 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
         )}
 
         {/* Formulario */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Nombre del Lugar *
             </label>
             <Input
@@ -267,7 +267,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Categoría *
             </label>
             <Select
@@ -285,7 +285,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
             Descripción
           </label>
           <Textarea
@@ -296,9 +296,9 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Dirección
             </label>
             <Input
@@ -309,7 +309,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Distancia
             </label>
             <Input
@@ -320,9 +320,9 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Valoración (0-5)
             </label>
             <Input
@@ -337,7 +337,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Precio
             </label>
             <Select
@@ -353,7 +353,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
               Horario
             </label>
             <Input
@@ -365,7 +365,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
             URL de la Imagen
           </label>
           <Input
@@ -387,7 +387,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
             Enlace (Google Maps, web oficial, etc.)
           </label>
           <div className="flex gap-2">
@@ -401,23 +401,23 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
                 href={formData.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
+                className="p-2 md:p-3 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors flex-shrink-0"
               >
-                <ExternalLink className="w-5 h-5 text-gray-600" />
+                <ExternalLink className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
               </a>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <input
             type="checkbox"
             id="recommended"
             checked={formData.recommended}
             onChange={(e) => setFormData({ ...formData, recommended: e.target.checked })}
-            className="w-4 h-4 text-[#E8B4B8] rounded focus:ring-[#E8B4B8]"
+            className="w-4 h-4 text-[#E8B4B8] rounded focus:ring-[#E8B4B8] flex-shrink-0"
           />
-          <label htmlFor="recommended" className="text-sm font-medium text-gray-700">
+          <label htmlFor="recommended" className="text-xs md:text-sm font-medium text-gray-700">
             ⭐ Marcar como recomendado
           </label>
         </div>
