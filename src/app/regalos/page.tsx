@@ -287,11 +287,11 @@ export default function RegalosPage() {
               <div className="text-sm text-gray-600">{t('title')}</div>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
-              <div className="text-3xl font-bold text-green-600 mb-1">{stats.available}</div>
+              <div className="text-3xl font-bold text-[var(--color-accent)] mb-1">{stats.available}</div>
               <div className="text-sm text-gray-600">{t('stats.available')}</div>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
-              <div className="text-3xl font-bold text-orange-600 mb-1">{stats.reserved}</div>
+              <div className="text-3xl font-bold text-[var(--color-secondary)] mb-1">{stats.reserved}</div>
               <div className="text-sm text-gray-600">{t('stats.reserved')}</div>
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
@@ -655,8 +655,8 @@ function GiftCard({
         onClick={() => onToggleFavorite(gift.id)}
         className={`absolute top-4 right-4 z-20 w-12 h-12 rounded-full backdrop-blur-sm shadow-lg transition-all flex items-center justify-center ${
           isFavorite 
-            ? 'bg-red-500 text-white' 
-            : 'bg-white/90 text-gray-400 hover:text-red-500'
+            ? 'bg-[var(--color-rose)] text-white' 
+            : 'bg-white/90 text-gray-400 hover:text-[var(--color-rose)]'
         }`}
       >
         <Heart className={`w-6 h-6 ${isFavorite ? 'fill-current' : ''}`} />
@@ -690,7 +690,7 @@ function GiftCard({
               <div className={`px-6 py-3 rounded-full font-bold text-white shadow-lg ${
                 gift.purchased 
                   ? 'bg-gradient-to-r from-gray-500 to-gray-700' 
-                  : 'bg-gradient-to-r from-orange-500 to-orange-700'
+                  : 'bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-accent)]'
               }`}>
                 {gift.purchased ? '✓ Comprado' : '⏳ Reservado'}
               </div>

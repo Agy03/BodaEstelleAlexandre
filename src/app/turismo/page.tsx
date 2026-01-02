@@ -261,7 +261,7 @@ export default function TurismoPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                           
                           {/* Featured badge */}
-                          <div className="absolute top-4 left-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl flex items-center gap-2">
+                          <div className="absolute top-4 left-4 bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl flex items-center gap-2">
                             <Star className="w-4 h-4 fill-current" />
                             {t('featured')}
                           </div>
@@ -275,7 +275,7 @@ export default function TurismoPage() {
                           >
                             <Heart
                               className={`w-5 h-5 transition-colors ${
-                                isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'
+                                isFavorite ? 'fill-[var(--color-rose)] text-[var(--color-rose)]' : 'text-gray-600'
                               }`}
                             />
                           </motion.button>
@@ -512,7 +512,7 @@ export default function TurismoPage() {
                             >
                               <Heart
                                 className={`w-4 h-4 transition-colors ${
-                                  isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'
+                                  isFavorite ? 'fill-[var(--color-rose)] text-[var(--color-rose)]' : 'text-gray-600'
                                 }`}
                               />
                             </motion.button>
