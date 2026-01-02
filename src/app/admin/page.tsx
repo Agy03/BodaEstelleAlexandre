@@ -209,7 +209,7 @@ export default function AdminPage() {
   };
 
   const deletePhoto = async (photoId: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta foto?')) return;
+    if (!confirm(t('photos.deleteConfirm'))) return;
     
     try {
       await fetch(`/api/photos/${photoId}`, { method: 'DELETE' });
@@ -291,7 +291,7 @@ export default function AdminPage() {
   };
 
   const deleteSong = async (songId: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar esta canción?')) return;
+    if (!confirm(t('songs.deleteConfirm'))) return;
     
     try {
       await fetch(`/api/songs/${songId}`, { method: 'DELETE' });
@@ -332,7 +332,7 @@ export default function AdminPage() {
   };
 
   const handleDeleteGift = async (giftId: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar este regalo?')) return;
+    if (!confirm(t('gifts.deleteConfirm'))) return;
     
     try {
       await fetch(`/api/gifts/${giftId}`, { method: 'DELETE' });
@@ -393,7 +393,7 @@ export default function AdminPage() {
   };
 
   const handleDeletePlace = async (placeId: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar este lugar?')) return;
+    if (!confirm(t('places.deleteConfirm'))) return;
     
     try {
       await fetch(`/api/tourism/${placeId}`, { method: 'DELETE' });
@@ -440,9 +440,9 @@ export default function AdminPage() {
                   {t('title')}
                 </h1>
                 <p className="text-base md:text-xl text-gray-600 flex flex-wrap items-center gap-2 font-light">
-                  <span>Bienvenid@,</span>
+                  <span>{t('welcome')},</span>
                   <span className="font-medium bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-                    {session?.user?.name || 'Novios'}
+                    {session?.user?.name || t('couple')}
                   </span>
                   <span className="text-xl md:text-2xl">💝</span>
                 </p>
@@ -454,7 +454,7 @@ export default function AdminPage() {
                 className="w-full md:w-auto whitespace-nowrap"
               >
                 <LogOut className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-                Cerrar sesión
+                {t('logout')}
               </Button>
             </div>
           </div>
@@ -476,8 +476,8 @@ export default function AdminPage() {
                   </div>
                 </div>
                 <p className="text-4xl md:text-5xl font-black text-white mb-1">{attendingCount}</p>
-                <p className="text-white/90 font-semibold text-base md:text-lg">Confirmados</p>
-                <p className="text-white/70 text-xs md:text-sm mt-1">de {rsvps.length} respuestas</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">{t('stats.confirmed')}</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">{t('stats.of')} {rsvps.length} {t('stats.responses')}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -496,8 +496,8 @@ export default function AdminPage() {
                   </div>
                 </div>
                 <p className="text-4xl md:text-5xl font-black text-white mb-1">{totalGuests}</p>
-                <p className="text-white/90 font-semibold text-base md:text-lg">Invitados</p>
-                <p className="text-white/70 text-xs md:text-sm mt-1">incluyendo acompañantes</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">{t('stats.guests')}</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">{t('stats.includingGuests')}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -518,9 +518,9 @@ export default function AdminPage() {
                   )}
                 </div>
                 <p className="text-4xl md:text-5xl font-black text-white mb-1">{photos.length}</p>
-                <p className="text-white/90 font-semibold text-base md:text-lg">Fotos</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">{t('stats.photos')}</p>
                 <p className="text-white/70 text-xs md:text-sm mt-1">
-                  {pendingPhotos > 0 ? `${pendingPhotos} por aprobar` : 'Todas aprobadas ✓'}
+                  {pendingPhotos > 0 ? `${pendingPhotos} ${t('stats.toApprove')}` : t('stats.allApproved')}
                 </p>
               </CardContent>
             </Card>
@@ -542,9 +542,9 @@ export default function AdminPage() {
                   )}
                 </div>
                 <p className="text-4xl md:text-5xl font-black text-white mb-1">{songs.length}</p>
-                <p className="text-white/90 font-semibold text-base md:text-lg">Canciones</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">{t('stats.songs')}</p>
                 <p className="text-white/70 text-xs md:text-sm mt-1">
-                  {pendingSongs > 0 ? `${pendingSongs} por aprobar` : 'Todas aprobadas ✓'}
+                  {pendingSongs > 0 ? `${pendingSongs} ${t('stats.toApprove')}` : t('stats.allApproved')}
                 </p>
               </CardContent>
             </Card>
@@ -564,9 +564,9 @@ export default function AdminPage() {
                   </div>
                 </div>
                 <p className="text-4xl md:text-5xl font-black text-white mb-1">{gifts.length}</p>
-                <p className="text-white/90 font-semibold text-base md:text-lg">Regalos</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">{t('stats.gifts')}</p>
                 <p className="text-white/70 text-xs md:text-sm mt-1">
-                  {availableGifts} disponibles, {reservedGifts} reservados
+                  {availableGifts} {t('stats.available')}, {reservedGifts} {t('stats.reserved')}
                 </p>
               </CardContent>
             </Card>
@@ -586,8 +586,8 @@ export default function AdminPage() {
                   </div>
                 </div>
                 <p className="text-4xl md:text-5xl font-black text-white mb-1">{places.length}</p>
-                <p className="text-white/90 font-semibold text-base md:text-lg">Turismo</p>
-                <p className="text-white/70 text-xs md:text-sm mt-1">lugares recomendados</p>
+                <p className="text-white/90 font-semibold text-base md:text-lg">{t('stats.tourism')}</p>
+                <p className="text-white/70 text-xs md:text-sm mt-1">{t('stats.recommendedPlaces')}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -602,7 +602,7 @@ export default function AdminPage() {
                 onClick={() => setActiveTab('overview')}
                 icon={<BarChart3 className="w-4 h-4" />}
               >
-                Resumen
+                {t('tabs.overview')}
               </TabButton>
               <TabButton
                 active={activeTab === 'rsvps'}
@@ -619,7 +619,7 @@ export default function AdminPage() {
                 badge={pendingPhotos > 0 ? pendingPhotos : undefined}
                 badgeColor="purple"
               >
-                Fotos
+                {t('tabs.photos')}
               </TabButton>
               <TabButton
                 active={activeTab === 'songs'}
@@ -628,7 +628,7 @@ export default function AdminPage() {
                 badge={pendingSongs > 0 ? pendingSongs : undefined}
                 badgeColor="pink"
               >
-                Música
+                {t('tabs.songs')}
               </TabButton>
               <TabButton
                 active={activeTab === 'gifts'}
@@ -636,7 +636,7 @@ export default function AdminPage() {
                 icon={<Gift className="w-4 h-4" />}
                 badge={gifts.length}
               >
-                Regalos
+                {t('tabs.gifts')}
               </TabButton>
               <TabButton
                 active={activeTab === 'places'}
@@ -644,7 +644,7 @@ export default function AdminPage() {
                 icon={<MapPin className="w-4 h-4" />}
                 badge={places.length}
               >
-                Turismo
+                {t('tabs.places')}
               </TabButton>
             </div>
           </div>
@@ -666,19 +666,19 @@ export default function AdminPage() {
                     <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-2 md:p-3 rounded-xl">
                       <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </div>
-                    Estadísticas Generales
+                    {t('stats.generalStats')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4 md:pt-6">
                   <div className="space-y-3 md:space-y-4">
-                    <StatRow label="Confirmaciones recibidas" value={`${attendingCount} de ${rsvps.length}`} progress={(attendingCount / Math.max(rsvps.length, 1)) * 100} />
-                    <StatRow label="Total de invitados" value={totalGuests} />
-                    <StatRow label="Regalos reservados" value={`${reservedGifts} de ${gifts.length}`} progress={(reservedGifts / Math.max(gifts.length, 1)) * 100} />
-                    <StatRow label="Fotos subidas" value={photos.length} />
-                    <StatRow label="Fotos aprobadas" value={photos.filter(p => p.approved).length} progress={(photos.filter(p => p.approved).length / Math.max(photos.length, 1)) * 100} />
-                    <StatRow label="Canciones sugeridas" value={songs.length} />
-                    <StatRow label="Canciones aprobadas" value={songs.filter(s => s.approved).length} progress={(songs.filter(s => s.approved).length / Math.max(songs.length, 1)) * 100} />
-                    <StatRow label="Lugares turísticos" value={places.length} />
+                    <StatRow label={t('stats.confirmationsReceived')} value={`${attendingCount} ${t('stats.of')} ${rsvps.length}`} progress={(attendingCount / Math.max(rsvps.length, 1)) * 100} />
+                    <StatRow label={t('stats.totalGuests')} value={totalGuests} />
+                    <StatRow label={t('stats.reservedGifts')} value={`${reservedGifts} ${t('stats.of')} ${gifts.length}`} progress={(reservedGifts / Math.max(gifts.length, 1)) * 100} />
+                    <StatRow label={t('stats.uploadedPhotos')} value={photos.length} />
+                    <StatRow label={t('stats.approvedPhotos')} value={photos.filter(p => p.approved).length} progress={(photos.filter(p => p.approved).length / Math.max(photos.length, 1)) * 100} />
+                    <StatRow label={t('stats.suggestedSongs')} value={songs.length} />
+                    <StatRow label={t('stats.approvedSongs')} value={songs.filter(s => s.approved).length} progress={(songs.filter(s => s.approved).length / Math.max(songs.length, 1)) * 100} />
+                    <StatRow label={t('stats.touristPlaces')} value={places.length} />
                   </div>
                 </CardContent>
               </Card>
@@ -690,7 +690,7 @@ export default function AdminPage() {
                     <div className="bg-gradient-to-br from-orange-500 to-red-500 p-2 md:p-3 rounded-xl">
                       <Users className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </div>
-                    Actividad Reciente
+                    {t('stats.recentActivity')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4 md:pt-6">
@@ -698,7 +698,7 @@ export default function AdminPage() {
                     {pendingPhotos > 0 && (
                       <ActivityItem 
                         icon={<Camera className="w-5 h-5 text-purple-500" />}
-                        text={`${pendingPhotos} foto${pendingPhotos > 1 ? 's' : ''} esperando aprobación`}
+                        text={`${pendingPhotos} ${pendingPhotos > 1 ? t('stats.photosWaiting') : t('stats.photoWaiting')}`}
                         action={() => setActiveTab('photos')}
                         urgent
                       />
@@ -706,7 +706,7 @@ export default function AdminPage() {
                     {pendingSongs > 0 && (
                       <ActivityItem 
                         icon={<Music className="w-5 h-5 text-pink-500" />}
-                        text={`${pendingSongs} canción${pendingSongs > 1 ? 'es' : ''} esperando aprobación`}
+                        text={`${pendingSongs} ${pendingSongs > 1 ? t('stats.songsWaiting') : t('stats.songWaiting')}`}
                         action={() => setActiveTab('songs')}
                         urgent
                       />
@@ -714,14 +714,14 @@ export default function AdminPage() {
                     {availableGifts > 0 && (
                       <ActivityItem 
                         icon={<Gift className="w-5 h-5 text-orange-500" />}
-                        text={`${availableGifts} regalo${availableGifts > 1 ? 's' : ''} disponible${availableGifts > 1 ? 's' : ''}`}
+                        text={`${availableGifts} ${availableGifts > 1 ? t('stats.giftsAvailable') : t('stats.giftAvailable')}`}
                         info
                       />
                     )}
                     {rsvps.length > 0 && (
                       <ActivityItem 
                         icon={<Users className="w-5 h-5 text-green-500" />}
-                        text={`${rsvps.length} confirmación${rsvps.length > 1 ? 'es' : ''} recibida${rsvps.length > 1 ? 's' : ''}`}
+                        text={`${rsvps.length} ${rsvps.length > 1 ? t('stats.confirmationsReceivedCount') : t('stats.confirmationReceived')}`}
                         action={() => setActiveTab('rsvps')}
                         info
                       />
@@ -729,8 +729,8 @@ export default function AdminPage() {
                     {pendingPhotos === 0 && pendingSongs === 0 && (
                       <div className="text-center py-6 md:py-8">
                         <div className="text-5xl md:text-6xl mb-3">🎉</div>
-                        <p className="text-gray-600 font-medium">¡Todo al día!</p>
-                        <p className="text-gray-500 text-sm">No hay pendientes</p>
+                        <p className="text-gray-600 font-medium">{t('stats.allUpToDate')}</p>
+                        <p className="text-gray-500 text-sm">{t('stats.noPending')}</p>
                       </div>
                     )}
                   </div>
@@ -747,10 +747,10 @@ export default function AdminPage() {
                     <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-2 md:p-3 rounded-xl">
                       <Users className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </div>
-                    Confirmaciones de Asistencia
+                    {t('rsvp.title')}
                   </div>
                   <span className="text-xs md:text-sm font-normal text-gray-500 md:ml-auto">
-                    {attendingCount} confirmados de {rsvps.length} respuestas
+                    {attendingCount} {t('rsvp.confirmedOf')} {rsvps.length} {t('stats.responses')}
                   </span>
                 </CardTitle>
               </CardHeader>
@@ -760,11 +760,11 @@ export default function AdminPage() {
                     <table className="min-w-full">
                       <thead>
                         <tr className="border-b-2 border-gray-200">
-                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base sticky left-0 bg-white/90 backdrop-blur-sm z-10">Nombre</th>
-                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">Email</th>
-                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">Asiste</th>
-                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">Acomp.</th>
-                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base min-w-[200px]">Comentarios</th>
+                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base sticky left-0 bg-white/90 backdrop-blur-sm z-10">{t('rsvp.name')}</th>
+                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">{t('rsvp.email')}</th>
+                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">{t('rsvp.attends')}</th>
+                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">{t('rsvp.guests')}</th>
+                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base min-w-[200px]">{t('rsvp.comments')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -783,11 +783,11 @@ export default function AdminPage() {
                             <td className="py-3 md:py-4 px-2 md:px-4">
                               {rsvp.attending ? (
                                 <span className="inline-flex px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-md whitespace-nowrap">
-                                  ✓ Sí
+                                  ✓ {t('rsvp.yes')}
                                 </span>
                               ) : (
                                 <span className="inline-flex px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold bg-gradient-to-r from-red-400 to-red-500 text-white shadow-md whitespace-nowrap">
-                                  ✗ No
+                                  ✗ {t('rsvp.no')}
                                 </span>
                               )}
                             </td>
@@ -817,10 +817,10 @@ export default function AdminPage() {
             <div>
               <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 className="text-xl md:text-2xl font-playfair font-light bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-                  Galería de Fotos
+                  {t('photos.title')}
                 </h2>
                 <span className="text-sm text-gray-600">
-                  {photos.filter(p => p.approved).length} aprobadas de {photos.length} total
+                  {photos.filter(p => p.approved).length} {t('photos.approvedOf')} {photos.length} {t('photos.total')}
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -836,7 +836,7 @@ export default function AdminPage() {
                     <CardContent className="pt-4">
                       {photo.caption && <p className="text-sm mb-2 font-medium">{photo.caption}</p>}
                       {photo.uploaderName && (
-                        <p className="text-xs text-gray-500 mb-3">Subida por: {photo.uploaderName}</p>
+                        <p className="text-xs text-gray-500 mb-3">{t('photos.uploadedBy')}: {photo.uploaderName}</p>
                       )}
                       <div className="flex gap-2">
                         {!photo.approved && (
@@ -846,7 +846,7 @@ export default function AdminPage() {
                             className="flex-1 bg-green-500 hover:bg-green-600 text-white"
                           >
                             <CheckCircle className="w-4 h-4 mr-1" />
-                            <span className="hidden sm:inline">Aprobar</span>
+                            <span className="hidden sm:inline">{t('actions.approve')}</span>
                             <span className="sm:hidden">✓</span>
                           </Button>
                         )}
@@ -856,12 +856,12 @@ export default function AdminPage() {
                           className="flex-1 bg-red-500 hover:bg-red-600 text-white"
                         >
                           <Trash2 className="w-4 h-4 mr-1" />
-                          <span className="hidden sm:inline">Eliminar</span>
+                          <span className="hidden sm:inline">{t('actions.delete')}</span>
                           <span className="sm:hidden">✗</span>
                         </Button>
                       </div>
                       {photo.approved && (
-                        <p className="text-xs text-green-600 mt-2 text-center font-medium">✓ Aprobada</p>
+                        <p className="text-xs text-green-600 mt-2 text-center font-medium">✓ {t('photos.approved')}</p>
                       )}
                     </CardContent>
                   </Card>
@@ -874,7 +874,7 @@ export default function AdminPage() {
             <div>
               <div className="mb-4 md:mb-6">
                 <h2 className="text-xl md:text-2xl font-playfair font-light bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent mb-4">
-                  Sugerencias Musicales
+                  {t('songs.title')}
                 </h2>
                 
                 {/* Spotify Search Section */}
@@ -882,7 +882,7 @@ export default function AdminPage() {
                   <CardContent className="pt-4 md:pt-6">
                     <div className="flex items-center gap-2 mb-4">
                       <Music className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
-                      <h3 className="text-base md:text-lg font-bold text-green-900">Añadir desde Spotify</h3>
+                      <h3 className="text-base md:text-lg font-bold text-green-900">{t('songs.addFromSpotify')}</h3>
                     </div>
                     
                     <div className="relative mb-4">
@@ -890,7 +890,7 @@ export default function AdminPage() {
                         type="text"
                         value={spotifySearchQuery}
                         onChange={(e) => setSpotifySearchQuery(e.target.value)}
-                        placeholder="Buscar canción en Spotify..."
+                        placeholder={t('songs.searchSpotify')}
                         className="w-full px-3 md:px-4 py-2 md:py-3 rounded-xl border-2 border-green-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all text-sm md:text-base"
                       />
                       {spotifyLoading && (
@@ -944,7 +944,7 @@ export default function AdminPage() {
                                       : 'bg-green-500 hover:bg-green-600'
                                   } text-white`}
                                 >
-                                  {currentAudioUrl === track.previewUrl && isPlaying ? '⏸ Pausar' : '▶ Preview'}
+                                  {currentAudioUrl === track.previewUrl && isPlaying ? `⏸ ${t('songs.pause')}` : `▶ ${t('songs.preview')}`}
                                 </Button>
                               )}
                             </div>
@@ -979,7 +979,7 @@ export default function AdminPage() {
                             className="bg-green-600 hover:bg-green-700 text-white"
                           >
                             <Plus className="w-4 h-4 mr-2" />
-                            Añadir Canción
+                            {t('songs.addSong')}
                           </Button>
                         </div>
                       </motion.div>
@@ -990,7 +990,7 @@ export default function AdminPage() {
                 {/* Stats */}
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-sm text-gray-600">
-                    {songs.filter(s => s.approved).length} aprobadas de {songs.length} total
+                    {songs.filter(s => s.approved).length} {t('songs.approvedOf')} {songs.length} {t('songs.total')}
                   </span>
                 </div>
               </div>
@@ -1003,8 +1003,8 @@ export default function AdminPage() {
                       <Music className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">Playlist de la Boda</h3>
-                      <p className="text-sm text-gray-600">{songs.length} canciones • {songs.filter(s => s.approved).length} aprobadas</p>
+                      <h3 className="text-xl font-bold text-gray-900">{t('songs.weddingPlaylist')}</h3>
+                      <p className="text-sm text-gray-600">{songs.length} {t('songs.songCount')} • {songs.filter(s => s.approved).length} {t('songs.approvedCount')}</p>
                     </div>
                   </div>
                   {songs.some(s => !s.approved) && (
@@ -1017,7 +1017,7 @@ export default function AdminPage() {
                         className="bg-green-500 hover:bg-green-600 text-white"
                       >
                         <CheckCircle className="w-4 h-4 mr-2" />
-                        Aprobar Todas
+                        {t('songs.approveAll')}
                       </Button>
                     </div>
                   )}
@@ -1026,9 +1026,9 @@ export default function AdminPage() {
                 {/* Playlist Header - Mejorado para móvil */}
                 <div className="hidden md:grid grid-cols-[auto_1fr_auto_80px] gap-4 px-4 py-2 border-b border-purple-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                   <div className="w-12">#</div>
-                  <div>Canción</div>
-                  <div className="text-center">Estado</div>
-                  <div className="text-center">Acciones</div>
+                  <div>{t('songs.song')}</div>
+                  <div className="text-center">{t('songs.status')}</div>
+                  <div className="text-center">{t('songs.actions')}</div>
                 </div>
 
                 {/* Songs - Layout responsive */}
@@ -1036,8 +1036,8 @@ export default function AdminPage() {
                   {songs.length === 0 ? (
                     <div className="text-center py-12 text-gray-500">
                       <Music className="w-16 h-16 mx-auto mb-4 opacity-30" />
-                      <p className="text-lg">No hay canciones sugeridas aún</p>
-                      <p className="text-sm mt-2">Usa el buscador de Spotify arriba para añadir canciones</p>
+                      <p className="text-lg">{t('songs.noSuggestions')}</p>
+                      <p className="text-sm mt-2">{t('songs.useSpotifySearch')}</p>
                     </div>
                   ) : (
                     songs.map((song, index) => (
@@ -1110,7 +1110,7 @@ export default function AdminPage() {
                             )}
                             {song.suggestedBy && (
                               <p className="text-xs text-purple-600 mt-1">
-                                Sugerida por <span className="font-medium">{song.suggestedBy}</span>
+                                {t('songs.suggestedBy')} <span className="font-medium">{song.suggestedBy}</span>
                               </p>
                             )}
                           </div>
@@ -1125,13 +1125,13 @@ export default function AdminPage() {
                           {song.approved ? (
                             <span className="inline-flex items-center gap-1 px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
                               <CheckCircle className="w-3 h-3" />
-                              <span className="hidden sm:inline">Aprobada</span>
+                              <span className="hidden sm:inline">{t('songs.approved')}</span>
                               <span className="sm:hidden">✓</span>
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 px-2 md:px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium animate-pulse">
                               <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-                              <span className="hidden sm:inline">Pendiente</span>
+                              <span className="hidden sm:inline">{t('songs.pending')}</span>
                               <span className="sm:hidden">⏳</span>
                             </span>
                           )}
@@ -1185,8 +1185,8 @@ export default function AdminPage() {
                           <Music className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="font-bold text-sm">Reproduciendo preview (10 segundos)</p>
-                          <p className="text-xs text-white/80">Escuchando desde nuestra API</p>
+                          <p className="font-bold text-sm">{t('songs.playingPreview')}</p>
+                          <p className="text-xs text-white/80">{t('songs.listeningFromAPI')}</p>
                         </div>
                       </div>
                       <button
@@ -1196,7 +1196,7 @@ export default function AdminPage() {
                         }}
                         className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
                       >
-                        ⏸ Detener
+                        ⏸ {t('songs.stop')}
                       </button>
                     </div>
                   </motion.div>
@@ -1209,7 +1209,7 @@ export default function AdminPage() {
             <div>
               <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 className="text-xl md:text-2xl font-playfair font-light bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-                  Lista de Regalos
+                  {t('gifts.title')}
                 </h2>
                 <Button 
                   onClick={() => {
@@ -1221,7 +1221,7 @@ export default function AdminPage() {
                   className="w-full sm:w-auto"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Añadir Regalo
+                  {t('gifts.addGift')}
                 </Button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1229,7 +1229,7 @@ export default function AdminPage() {
                   <Card key={gift.id} className="relative overflow-hidden">
                     {gift.priority && (
                       <div className="absolute top-2 left-2 z-10 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                        ⭐ Prioritario
+                        ⭐ {t('gifts.priority')}
                       </div>
                     )}
                     {gift.image && (
@@ -1257,15 +1257,15 @@ export default function AdminPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           {gift.purchased ? (
                             <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium">
-                              ✓ Comprado
+                              ✓ {t('gifts.purchased')}
                             </span>
                           ) : gift.reserved ? (
                             <span className="px-2 py-1 bg-orange-200 text-orange-700 rounded text-xs font-medium">
-                              ⏳ Reservado
+                              ⏳ {t('gifts.reserved')}
                             </span>
                           ) : (
                             <span className="px-2 py-1 bg-green-200 text-green-700 rounded text-xs font-medium">
-                              ✓ Disponible
+                              ✓ {t('gifts.available')}
                             </span>
                           )}
                           {gift.category && (
@@ -1283,7 +1283,7 @@ export default function AdminPage() {
                                 {gift.reservedBy.charAt(0).toUpperCase()}
                               </div>
                               <div className="flex-1">
-                                <p className="text-xs text-blue-600 font-medium">Reservado por</p>
+                                <p className="text-xs text-blue-600 font-medium">{t('gifts.reservedBy')}</p>
                                 <p className="font-bold text-blue-900">{gift.reservedBy}</p>
                               </div>
                             </div>
@@ -1293,7 +1293,7 @@ export default function AdminPage() {
                                 <div className="flex items-start gap-1.5">
                                   <span className="text-blue-500 mt-0.5">📅</span>
                                   <div>
-                                    <p className="text-xs text-blue-600">Fecha</p>
+                                    <p className="text-xs text-blue-600">{t('gifts.date')}</p>
                                     <p className="text-xs font-semibold text-blue-900">
                                       {new Date(gift.reservedAt).toLocaleDateString('es-ES', { 
                                         day: '2-digit', 
@@ -1307,7 +1307,7 @@ export default function AdminPage() {
                                 <div className="flex items-start gap-1.5">
                                   <span className="text-orange-500 mt-0.5">⏰</span>
                                   <div>
-                                    <p className="text-xs text-orange-600">Expira</p>
+                                    <p className="text-xs text-orange-600">{t('gifts.expires')}</p>
                                     <p className="text-xs font-semibold text-orange-900">
                                       {new Date(gift.reservationExpiresAt).toLocaleDateString('es-ES', { 
                                         day: '2-digit', 
@@ -1330,11 +1330,11 @@ export default function AdminPage() {
                                   <span className="text-white text-sm">📄</span>
                                 </div>
                                 <div>
-                                  <p className="text-xs text-purple-600 font-medium">Recibo de compra</p>
+                                  <p className="text-xs text-purple-600 font-medium">{t('gifts.receipt')}</p>
                                   <p className="text-xs font-bold text-purple-900">
-                                    {gift.receiptStatus === 'pending' && 'Pendiente de revisión'}
-                                    {gift.receiptStatus === 'approved' && 'Aprobado ✓'}
-                                    {gift.receiptStatus === 'rejected' && 'Rechazado'}
+                                    {gift.receiptStatus === 'pending' && t('gifts.pendingReview')}
+                                    {gift.receiptStatus === 'approved' && t('gifts.approvedReceipt')}
+                                    {gift.receiptStatus === 'rejected' && t('gifts.rejected')}
                                   </p>
                                 </div>
                               </div>
@@ -1344,7 +1344,7 @@ export default function AdminPage() {
                                 rel="noopener noreferrer"
                                 className="px-3 py-1.5 bg-white border border-purple-300 text-purple-700 hover:bg-purple-50 rounded-lg text-xs font-medium transition-colors"
                               >
-                                Ver
+                                {t('gifts.view')}
                               </a>
                             </div>
                             {gift.receiptStatus === 'pending' && (
@@ -1353,13 +1353,13 @@ export default function AdminPage() {
                                   onClick={() => handleApproveReceipt(gift.id, true)}
                                   className="flex-1 px-3 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg text-xs font-semibold transition-all shadow-sm hover:shadow"
                                 >
-                                  ✓ Aprobar
+                                  ✓ {t('gifts.approve')}
                                 </button>
                                 <button
                                   onClick={() => handleApproveReceipt(gift.id, false)}
                                   className="flex-1 px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg text-xs font-semibold transition-all shadow-sm hover:shadow"
                                 >
-                                  ✗ Rechazar
+                                  ✗ {t('gifts.reject')}
                                 </button>
                               </div>
                             )}
@@ -1375,7 +1375,7 @@ export default function AdminPage() {
                           onClick={() => handleEditGift(gift)}
                         >
                           <Edit className="w-4 h-4 mr-1" />
-                          <span className="hidden sm:inline">Editar</span>
+                          <span className="hidden sm:inline">{t('actions.edit')}</span>
                         </Button>
                         <Button 
                           size="sm" 
@@ -1396,7 +1396,7 @@ export default function AdminPage() {
             <div>
               <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 className="text-xl md:text-2xl font-playfair font-light bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-                  Lugares Turísticos
+                  {t('places.title')}
                 </h2>
                 <Button 
                   onClick={() => {
@@ -1408,7 +1408,7 @@ export default function AdminPage() {
                   className="w-full sm:w-auto"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Añadir Lugar
+                  {t('places.addPlace')}
                 </Button>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1416,7 +1416,7 @@ export default function AdminPage() {
                   <Card key={place.id} className="relative overflow-hidden">
                     {place.recommended && (
                       <div className="absolute top-2 left-2 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                        ⭐ Recomendado
+                        ⭐ {t('places.recommended')}
                       </div>
                     )}
                     {place.image && (
@@ -1451,7 +1451,7 @@ export default function AdminPage() {
                           onClick={() => handleEditPlace(place)}
                         >
                           <Edit className="w-4 h-4 mr-1" />
-                          <span className="hidden sm:inline">Editar</span>
+                          <span className="hidden sm:inline">{t('actions.edit')}</span>
                         </Button>
                         <Button 
                           size="sm" 
@@ -1572,6 +1572,8 @@ function ActivityItem({
   info?: boolean;
   urgent?: boolean;
 }) {
+  const t = useTranslations('admin');
+  
   return (
     <motion.div 
       onClick={action}
@@ -1590,7 +1592,7 @@ function ActivityItem({
       <span className="text-xs md:text-sm font-medium flex-1 text-gray-800">{text}</span>
       {action && !info && (
         <span className={`text-xs md:text-sm font-bold ${urgent ? 'text-[#d69da3]' : 'text-[var(--color-secondary)]'} flex items-center gap-1`}>
-          Ver
+          {t('stats.see')}
           <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
