@@ -160,7 +160,7 @@ export default function GaleriaPage() {
                             {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
                           </p>
                           <p className="text-xs text-[var(--color-rose)] mt-2">
-                            Click para cambiar
+                            {t('clickToChange')}
                           </p>
                         </div>
                       ) : (
@@ -169,10 +169,10 @@ export default function GaleriaPage() {
                             <Camera className="w-8 h-8 text-[var(--color-rose)]" />
                           </div>
                           <p className="mb-2 text-sm font-medium text-gray-700">
-                            <span className="text-[var(--color-rose)]">Click</span> o arrastra una imagen
+                            <span className="text-[var(--color-rose)]">Click</span> {t('dragAndDrop')}
                           </p>
                           <p className="text-xs text-gray-500">
-                            PNG, JPG, WEBP hasta 10MB
+                            {t('fileFormat')}
                           </p>
                         </div>
                       )}

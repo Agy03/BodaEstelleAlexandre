@@ -199,7 +199,10 @@
     "caption": "Description (optionnel)",
     "yourName": "Votre nom (optionnel)",
     "pending": "Photo téléchargée! Elle sera visible après approbation.",
-    "selectPhoto": "Sélectionnez une photo"
+    "selectPhoto": "Sélectionnez une photo",
+    "dragAndDrop": "ou glissez-déposez une image",
+    "fileFormat": "PNG, JPG, WEBP jusqu'à 10 Mo",
+    "clickToChange": "Cliquez pour modifier"
   },
   "music": {
     "title": "Suggestions Musicales",
