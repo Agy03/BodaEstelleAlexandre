@@ -267,7 +267,7 @@ export default function GaleriaPage() {
                 >
                   <Card hover className="overflow-hidden relative">
                     {/* Imagen con aspecto ratio flexible */}
-                    <div className="relative bg-gray-100">
+                    <div className={`relative bg-gray-100 ${heightClass}`}>
                       <NextImage
                         src={photo.url}
                         alt={photo.caption || 'Gallery photo'}
