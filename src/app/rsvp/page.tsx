@@ -8,8 +8,13 @@ import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { CheckCircle, Users, Mail, User, Heart, Sparkles, Flower2 } from 'lucide-react';
+import { CheckCircle, Users, Mail, User, Heart, Sparkles, Flower2, Plus, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+interface GuestInfo {
+  name: string;
+  email: string;
+}
 
 export default function RSVPPage() {
   const t = useTranslations('rsvp');
@@ -20,6 +25,7 @@ export default function RSVPPage() {
     guests: 0,
     comments: '',
   });
+  const [guestList, setGuestList] = useState<GuestInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -31,7 +37,10 @@ export default function RSVPPage() {
       const response = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          guestList,
+        }),
       });
 
       if (response.ok) {
@@ -43,6 +52,30 @@ export default function RSVPPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Update guest list when number of guests changes
+  const handleGuestsChange = (newGuestCount: number) => {
+    setFormData({ ...formData, guests: newGuestCount });
+    
+    // Adjust guestList array to match new count
+    if (newGuestCount > guestList.length) {
+      // Add empty guests
+      const newGuests = Array(newGuestCount - guestList.length).fill(null).map(() => ({
+        name: '',
+        email: '',
+      }));
+      setGuestList([...guestList, ...newGuests]);
+    } else if (newGuestCount < guestList.length) {
+      // Remove extra guests
+      setGuestList(guestList.slice(0, newGuestCount));
+    }
+  };
+
+  const updateGuest = (index: number, field: 'name' | 'email', value: string) => {
+    const newGuestList = [...guestList];
+    newGuestList[index] = { ...newGuestList[index], [field]: value };
+    setGuestList(newGuestList);
   };
 
   if (submitted) {
@@ -242,9 +275,7 @@ export default function RSVPPage() {
                   <Select
                     label={t('form.guests')}
                     value={formData.guests.toString()}
-                    onChange={(e) =>
-                      setFormData({ ...formData, guests: parseInt(e.target.value) || 0 })
-                    }
+                    onChange={(e) => handleGuestsChange(parseInt(e.target.value) || 0)}
                     icon={<Users className="w-5 h-5" />}
                     options={[
                       { value: '0', label: t('form.guestsOptions.0') },
@@ -255,6 +286,58 @@ export default function RSVPPage() {
                       { value: '5', label: t('form.guestsOptions.5') },
                     ]}
                   />
+                </motion.div>
+              )}
+
+              {/* Información de los acompañantes */}
+              {formData.attending && formData.guests > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="space-y-4"
+                >
+                  <div className="flex items-center gap-2 text-sm font-light text-gray-600 mb-3">
+                    <Users className="w-4 h-4 text-[var(--color-rose)]" />
+                    <span>{t('form.addGuestInfo')}</span>
+                  </div>
+                  
+                  {guestList.map((guest, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="p-4 rounded-lg border-2 border-[var(--color-accent)]/20 bg-gradient-to-br from-[var(--color-rose)]/5 to-[var(--color-secondary)]/5 space-y-3"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-sm font-medium text-gray-700">
+                          {t('form.guestDetails')} {index + 1}
+                        </h3>
+                      </div>
+                      
+                      <Input
+                        label={t('form.guestName')}
+                        type="text"
+                        required
+                        value={guest.name}
+                        onChange={(e) => updateGuest(index, 'name', e.target.value)}
+                        placeholder={t('form.guestName')}
+                        icon={<User className="w-4 h-4" />}
+                      />
+                      
+                      <Input
+                        label={t('form.guestEmail')}
+                        type="email"
+                        required
+                        value={guest.email}
+                        onChange={(e) => updateGuest(index, 'email', e.target.value)}
+                        placeholder={t('form.guestEmail')}
+                        icon={<Mail className="w-4 h-4" />}
+                      />
+                    </motion.div>
+                  ))}
                 </motion.div>
               )}
 

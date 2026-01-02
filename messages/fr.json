@@ -159,6 +159,10 @@
         "4": "4 accompagnants",
         "5": "5 accompagnants"
       },
+      "guestDetails": "Informations des accompagnants",
+      "guestName": "Nom de l'accompagnant",
+      "guestEmail": "Email de l'accompagnant",
+      "addGuestInfo": "Veuillez fournir les informations de vos accompagnants",
       "comments": "Commentaires ou restrictions alimentaires",
       "submit": "Confirmer ma Présence",
       "submitting": "Envoi en cours..."

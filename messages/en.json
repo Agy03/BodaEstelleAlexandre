@@ -158,8 +158,10 @@
         "3": "3 guests",
         "4": "4 guests",
         "5": "5 guests"
-      },
-      "comments": "Comments or dietary restrictions",
+      },      "guestDetails": "Guest Information",
+      "guestName": "Guest name",
+      "guestEmail": "Guest email",
+      "addGuestInfo": "Please provide your guests' information",      "comments": "Comments or dietary restrictions",
       "submit": "Confirm Attendance",
       "submitting": "Sending..."
     },

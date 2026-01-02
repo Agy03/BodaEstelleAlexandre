@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+interface GuestInfo {
+  name: string;
+  email: string;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, attending, guests, comments } = body;
+    const { name, email, attending, guests, comments, guestList } = body;
 
     // Validate required fields
     if (!name || !email) {
@@ -15,7 +20,7 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-      // Create RSVP in database
+      // Create RSVP in database with guest list
       const rsvp = await prisma.rSVP.create({
         data: {
           name,
@@ -23,6 +28,15 @@ export async function POST(req: NextRequest) {
           attending: attending ?? true,
           guests: guests ?? 0,
           comments: comments || null,
+          guestList: guestList && guestList.length > 0 ? {
+            create: guestList.map((guest: GuestInfo) => ({
+              name: guest.name,
+              email: guest.email,
+            })),
+          } : undefined,
+        },
+        include: {
+          guestList: true,
         },
       });
 
@@ -40,6 +54,7 @@ export async function POST(req: NextRequest) {
         attending: attending ?? true,
         guests: guests ?? 0,
         comments: comments || null,
+        guestList: guestList || [],
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -58,6 +73,9 @@ export async function GET() {
   try {
     const rsvps = await prisma.rSVP.findMany({
       orderBy: { createdAt: 'desc' },
+      include: {
+        guestList: true,
+      },
     });
 
     return NextResponse.json(rsvps);

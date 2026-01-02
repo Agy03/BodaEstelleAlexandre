@@ -77,10 +77,24 @@ model RSVP {
   comments    String?  @db.Text
   userId      String?
   user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  guestList   Guest[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@map("rsvps")
+}
+
+// Guest Model - Additional guests for RSVPs
+model Guest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  rsvpId    String
+  rsvp      RSVP     @relation(fields: [rsvpId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("guests")
 }
 
 // Tourism Model
