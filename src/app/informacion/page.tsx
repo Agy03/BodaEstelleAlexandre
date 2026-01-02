@@ -123,7 +123,7 @@ export default function InformacionPage() {
         >
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-light font-playfair text-gray-800 mb-3">
-              Día de la Boda
+              {t('weddingDay')}
             </h2>
             <div className="h-1 w-24 bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] mx-auto rounded-full" />
           </motion.div>
@@ -252,7 +252,7 @@ export default function InformacionPage() {
         >
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-light font-playfair text-gray-800 mb-3">
-              Estilo & Ambiente
+              {t('styleAndAmbience')}
             </h2>
             <div className="h-1 w-24 bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] mx-auto rounded-full" />
           </motion.div>

@@ -71,6 +71,8 @@
   "info": {
     "title": "Información General",
     "subtitle": "Todo lo que necesitas saber sobre nuestro gran día",
+    "weddingDay": "Día de la Boda",
+    "styleAndAmbience": "Estilo & Ambiente",
     "dateTime": {
       "title": "Fecha y Hora",
       "dateLabel": "Fecha por confirmar",
@@ -214,6 +216,16 @@
   "music": {
     "title": "Sugerencias Musicales",
     "subtitle": "¿Qué canción no puede faltar?",
+    "searchSpotify": "Buscar en Spotify",
+    "searchPlaceholder": "Nombre de la canción o artista...",
+    "orManually": "o ingresa manualmente",
+    "optional": "Opcional",
+    "confirmedSongs": "Canciones Confirmadas",
+    "suggestedBy": "Sugerida por",
+    "openSpotify": "Abrir en Spotify",
+    "playingPreview": "Reproduciendo preview (10 seg)",
+    "listeningFromWeb": "🎵 Escuchando desde nuestra web",
+    "stop": "⏸ Detener",
     "form": {
       "song": "Nombre de la canción",
       "artist": "Artista",
