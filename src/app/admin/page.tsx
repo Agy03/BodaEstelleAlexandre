@@ -49,6 +49,7 @@ type Song = {
   title: string;
   artist: string;
   suggestedBy?: string;
+  proposedBy?: string;
   approved: boolean;
   createdAt: string;
   spotifyId?: string;
@@ -125,6 +126,7 @@ export default function AdminPage() {
   const [spotifyResults, setSpotifyResults] = useState<SpotifyTrack[]>([]);
   const [spotifyLoading, setSpotifyLoading] = useState(false);
   const [selectedSpotifyTrack, setSelectedSpotifyTrack] = useState<SpotifyTrack | null>(null);
+  const [proposedBy, setProposedBy] = useState<'Estelle' | 'Alexandre'>('Estelle');
   const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
@@ -243,7 +245,7 @@ export default function AdminPage() {
           albumArt: selectedSpotifyTrack.image,
           previewUrl: selectedSpotifyTrack.previewUrl,
           spotifyUrl: selectedSpotifyTrack.spotifyUrl,
-          suggestedBy: 'Admin',
+          proposedBy: proposedBy,
           approved: true,
         }),
       });
@@ -958,30 +960,60 @@ export default function AdminPage() {
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-4 p-4 bg-green-100 rounded-xl border-2 border-green-500"
+                        className="mt-4 p-4 bg-green-100 rounded-xl border-2 border-green-500 space-y-4"
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <NextImage
-                              src={selectedSpotifyTrack.image}
-                              alt={selectedSpotifyTrack.name}
-                              width={48}
-                              height={48}
-                              className="rounded-lg shadow-md"
-                            />
-                            <div>
-                              <p className="font-bold text-green-900">{selectedSpotifyTrack.name}</p>
-                              <p className="text-sm text-green-700">{selectedSpotifyTrack.artist}</p>
-                            </div>
+                        <div className="flex items-center gap-4">
+                          <NextImage
+                            src={selectedSpotifyTrack.image}
+                            alt={selectedSpotifyTrack.name}
+                            width={48}
+                            height={48}
+                            className="rounded-lg shadow-md"
+                          />
+                          <div className="flex-1">
+                            <p className="font-bold text-green-900">{selectedSpotifyTrack.name}</p>
+                            <p className="text-sm text-green-700">{selectedSpotifyTrack.artist}</p>
                           </div>
-                          <Button
-                            onClick={addSpotifySong}
-                            className="bg-green-600 hover:bg-green-700 text-white"
-                          >
-                            <Plus className="w-4 h-4 mr-2" />
-                            {t('songs.addSong')}
-                          </Button>
                         </div>
+
+                        {/* Selector de quién propone */}
+                        <div className="border-t border-green-300 pt-4">
+                          <label className="block text-sm font-semibold text-green-900 mb-2">
+                            {t('songs.proposedBy') || 'Propuesto por'}
+                          </label>
+                          <div className="flex gap-3">
+                            <button
+                              type="button"
+                              onClick={() => setProposedBy('Estelle')}
+                              className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                                proposedBy === 'Estelle'
+                                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg scale-105'
+                                  : 'bg-white text-gray-700 hover:bg-pink-50 border-2 border-gray-200'
+                              }`}
+                            >
+                              💕 Estelle
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setProposedBy('Alexandre')}
+                              className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
+                                proposedBy === 'Alexandre'
+                                  ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg scale-105'
+                                  : 'bg-white text-gray-700 hover:bg-blue-50 border-2 border-gray-200'
+                              }`}
+                            >
+                              💙 Alexandre
+                            </button>
+                          </div>
+                        </div>
+
+                        <Button
+                          onClick={addSpotifySong}
+                          className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          {t('songs.addSong')}
+                        </Button>
                       </motion.div>
                     )}
                   </CardContent>
@@ -1108,7 +1140,15 @@ export default function AdminPage() {
                             {song.album && (
                               <p className="text-xs text-gray-500 truncate">{song.album}</p>
                             )}
-                            {song.suggestedBy && (
+                            {song.proposedBy ? (
+                              <p className="text-xs mt-1">
+                                {song.proposedBy === 'Estelle' ? (
+                                  <span className="text-pink-600 font-medium">💕 Estelle</span>
+                                ) : (
+                                  <span className="text-blue-600 font-medium">💙 Alexandre</span>
+                                )}
+                              </p>
+                            ) : song.suggestedBy && (
                               <p className="text-xs text-purple-600 mt-1">
                                 {t('songs.suggestedBy')} <span className="font-medium">{song.suggestedBy}</span>
                               </p>

@@ -13,6 +13,7 @@ type Song = {
   title: string;
   artist: string;
   suggestedBy?: string;
+  proposedBy?: string;
   approved: boolean;
   createdAt: string;
   spotifyId?: string;
@@ -52,6 +53,10 @@ export default function MusicaPage() {
     artist: '',
     suggestedBy: '',
     spotifyId: '',
+    album: '',
+    albumArt: '',
+    previewUrl: '',
+    spotifyUrl: '',
   });
 
   useEffect(() => {
@@ -114,10 +119,14 @@ export default function MusicaPage() {
   const selectTrack = (track: SpotifyTrack) => {
     setSelectedTrack(track);
     setFormData({
-      ...formData,
       title: track.name,
       artist: track.artist,
+      suggestedBy: formData.suggestedBy,
       spotifyId: track.id,
+      album: track.album,
+      albumArt: track.image,
+      previewUrl: track.previewUrl || '',
+      spotifyUrl: track.spotifyUrl,
     });
     setSearchQuery('');
     setSearchResults([]);
@@ -185,7 +194,16 @@ export default function MusicaPage() {
 
       if (response.ok) {
         setSuccess(true);
-        setFormData({ title: '', artist: '', suggestedBy: '', spotifyId: '' });
+        setFormData({ 
+          title: '', 
+          artist: '', 
+          suggestedBy: '', 
+          spotifyId: '',
+          album: '',
+          albumArt: '',
+          previewUrl: '',
+          spotifyUrl: '',
+        });
         setSelectedTrack(null);
         setTimeout(() => setSuccess(false), 5000);
       }
@@ -517,7 +535,15 @@ export default function MusicaPage() {
                           {song.album && (
                             <p className="text-xs text-gray-400 mt-1 truncate">{song.album}</p>
                           )}
-                          {song.suggestedBy && (
+                          {song.proposedBy ? (
+                            <p className="text-xs mt-1">
+                              {song.proposedBy === 'Estelle' ? (
+                                <span className="text-pink-600 font-medium">💕 {t('proposedBy')} Estelle</span>
+                              ) : (
+                                <span className="text-blue-600 font-medium">💙 {t('proposedBy')} Alexandre</span>
+                              )}
+                            </p>
+                          ) : song.suggestedBy && (
                             <p className="text-xs text-[var(--color-rose)] mt-1">
                               {t('suggestedBy')} {song.suggestedBy}
                             </p>

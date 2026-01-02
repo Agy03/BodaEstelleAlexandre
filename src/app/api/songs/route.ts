@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { title, artist, suggestedBy, spotifyId, album, albumArt, previewUrl, spotifyUrl, approved } = body;
+    const { title, artist, suggestedBy, spotifyId, album, albumArt, previewUrl, spotifyUrl, approved, proposedBy } = body;
 
     if (!title || !artist) {
       return NextResponse.json(
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
         title,
         artist,
         suggestedBy: suggestedBy || null,
+        proposedBy: proposedBy || null,
         approved: approved || false,
         spotifyId: spotifyId || null,
         album: album || null,

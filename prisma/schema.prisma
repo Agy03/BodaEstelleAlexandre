@@ -159,6 +159,7 @@ model Song {
   userId      String?
   user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   suggestedBy String?
+  proposedBy  String?  // "Estelle" o "Alexandre" when added by admin
   spotifyId   String?
   album       String?
   albumArt    String?
