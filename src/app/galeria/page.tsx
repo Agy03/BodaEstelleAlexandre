@@ -48,22 +48,25 @@ export default function GaleriaPage() {
     });
   };
 
-  // Función para clasificar el tamaño de la foto
-  const classifyPhotoSize = (width: number, height: number): PhotoSize => {
-    const area = width * height;
+  // Función para clasificar el tamaño de la foto de forma más variada
+  const classifyPhotoSize = (width: number, height: number, index: number): PhotoSize => {
     const aspectRatio = width / height;
     
-    // Clasificar basándose en área y aspecto
-    if (area < 500000) return 'small'; // < 500k pixels (ej: 700x700)
-    if (area > 2000000) return 'large'; // > 2M pixels (ej: 1600x1200)
+    // Usar el índice para variar los tamaños de forma semi-aleatoria pero consistente
+    const pattern = index % 7;
     
-    // Para tamaños medios, considerar el aspect ratio
-    if (aspectRatio > 1.5 || aspectRatio < 0.67) {
-      // Fotos muy horizontales o verticales son más interesantes como grandes
-      return 'large';
+    // Fotos verticales (retratos)
+    if (aspectRatio < 0.75) {
+      return pattern < 2 ? 'large' : pattern < 5 ? 'medium' : 'small';
     }
     
-    return 'medium';
+    // Fotos horizontales (paisajes)
+    if (aspectRatio > 1.3) {
+      return pattern < 3 ? 'large' : pattern < 6 ? 'medium' : 'small';
+    }
+    
+    // Fotos cuadradas
+    return pattern < 2 ? 'large' : pattern < 4 ? 'medium' : 'small';
   };
 
   useEffect(() => {
@@ -78,9 +81,9 @@ export default function GaleriaPage() {
       
       // Obtener dimensiones y clasificar cada foto
       const photosWithSizeData = await Promise.all(
-        approvedPhotos.map(async (photo: Photo) => {
+        approvedPhotos.map(async (photo: Photo, index: number) => {
           const dimensions = await getImageDimensions(photo.url);
-          const size = classifyPhotoSize(dimensions.width, dimensions.height);
+          const size = classifyPhotoSize(dimensions.width, dimensions.height, index);
           return { ...photo, ...dimensions, size };
         })
       );
@@ -291,22 +294,26 @@ export default function GaleriaPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
             {photosWithSizes.map((photo, index) => {
-              // Determinar clases de tamaño basadas en la clasificación real
-              const sizeClasses = {
-                small: 'col-span-1 row-span-1',
-                medium: 'col-span-1 md:col-span-2 row-span-2',
-                large: 'col-span-2 row-span-2 md:col-span-2 md:row-span-3'
-              };
-              
-              const sizeClass = sizeClasses[photo.size];
               const aspectRatio = photo.width && photo.height ? photo.width / photo.height : 1;
+              
+              // Calcular altura basada en el tamaño y aspect ratio real
+              let minHeight = '200px';
+              if (photo.size === 'large') {
+                minHeight = aspectRatio > 1.3 ? '400px' : aspectRatio < 0.75 ? '500px' : '450px';
+              } else if (photo.size === 'medium') {
+                minHeight = aspectRatio > 1.3 ? '300px' : aspectRatio < 0.75 ? '380px' : '320px';
+              } else {
+                minHeight = aspectRatio > 1.3 ? '220px' : aspectRatio < 0.75 ? '280px' : '240px';
+              }
+              
+              const hasInfo = photo.caption || photo.uploaderName;
               
               return (
                 <motion.div
                   key={photo.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ 
                     delay: index * 0.05,
@@ -314,40 +321,41 @@ export default function GaleriaPage() {
                     type: "spring",
                     stiffness: 100
                   }}
-                  whileHover={{ scale: 1.02, zIndex: 10 }}
-                  className={`${sizeClass} group relative`}
+                  className="break-inside-avoid mb-4 group"
+                  style={{ minHeight }}
                 >
-                  <Card hover className="overflow-hidden relative h-full w-full">
-                    {/* Imagen con object-cover para llenar el espacio */}
-                    <div className="relative w-full h-full bg-gradient-to-br from-gray-50 to-gray-100">
+                  <Card hover className="overflow-hidden relative h-full">
+                    {/* Imagen manteniendo aspect ratio natural */}
+                    <div className="relative w-full bg-gradient-to-br from-gray-50 to-gray-100">
                       <NextImage
                         src={photo.url}
                         alt={photo.caption || 'Gallery photo'}
-                        fill
-                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        width={photo.width || 800}
+                        height={photo.height || 600}
+                        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                         style={{
-                          objectPosition: 'center'
+                          aspectRatio: `${photo.width}/${photo.height}`,
+                          minHeight
                         }}
                       />
                       
-                      {/* Overlay romántico al hover */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {(photo.caption || photo.uploaderName) && (
+                      {/* Overlay romántico al hover - solo si hay info */}
+                      {hasInfo && (
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                             {photo.caption && (
-                              <p className="text-sm font-medium mb-1 line-clamp-2">{photo.caption}</p>
+                              <p className="text-sm font-medium mb-1">{photo.caption}</p>
                             )}
                             {photo.uploaderName && (
                               <p className="text-xs opacity-90">— {photo.uploaderName}</p>
                             )}
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                       
-                      {/* Efecto de brillo romántico */}
+                      {/* Efecto de brillo romántico sutil */}
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[var(--color-rose)]/20 via-transparent to-[var(--color-secondary)]/20" />
+                        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[var(--color-rose)]/10 via-transparent to-[var(--color-secondary)]/10" />
                       </div>
                     </div>
                   </Card>
