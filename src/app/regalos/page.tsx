@@ -42,7 +42,6 @@ export default function RegalosPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const [showReserveModal, setShowReserveModal] = useState(false);
   const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [uploadingReceipt, setUploadingReceipt] = useState(false);
@@ -295,24 +294,71 @@ export default function RegalosPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto mb-12"
           >
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
-              <div className="text-3xl font-bold text-[var(--color-primary)] mb-1">{stats.total}</div>
-              <div className="text-sm text-gray-600">{t('title')}</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
-              <div className="text-3xl font-bold text-[var(--color-accent)] mb-1">{stats.available}</div>
-              <div className="text-sm text-gray-600">{t('stats.available')}</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
-              <div className="text-3xl font-bold text-[var(--color-secondary)] mb-1">{stats.reserved}</div>
-              <div className="text-sm text-gray-600">{t('stats.reserved')}</div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-lg">
-              <div className="text-3xl font-bold text-gray-600 mb-1">{stats.purchased}</div>
-              <div className="text-sm text-gray-600">{t('stats.purchased')}</div>
-            </div>
+            <motion.div 
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-[var(--color-rose)]/10 to-[var(--color-rose)]/5 rounded-xl flex-shrink-0">
+                  <ShoppingBag className="w-6 h-6 text-[var(--color-rose)]" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-3xl font-bold text-[var(--color-rose)] leading-none mb-1">{stats.total}</div>
+                  <div className="text-xs text-gray-600 font-medium">{t('title')}</div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-[var(--color-accent)]/10 to-[var(--color-accent)]/5 rounded-xl flex-shrink-0">
+                  <Sparkles className="w-6 h-6 text-[var(--color-accent)]" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-3xl font-bold text-[var(--color-accent)] leading-none mb-1">{stats.available}</div>
+                  <div className="text-xs text-gray-600 font-medium">{t('stats.available')}</div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-[var(--color-secondary)]/10 to-[var(--color-secondary)]/5 rounded-xl flex-shrink-0">
+                  <Heart className="w-6 h-6 text-[var(--color-secondary)]" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-3xl font-bold text-[var(--color-secondary)] leading-none mb-1">{stats.reserved}</div>
+                  <div className="text-xs text-gray-600 font-medium">{t('stats.reserved')}</div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-gray-100 to-gray-50 rounded-xl flex-shrink-0">
+                  <Gift className="w-6 h-6 text-gray-600" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-3xl font-bold text-gray-700 leading-none mb-1">{stats.purchased}</div>
+                  <div className="text-xs text-gray-600 font-medium">{t('stats.purchased')}</div>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
 

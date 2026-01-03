@@ -81,14 +81,25 @@ export default function RSVPPage() {
   if (submitted) {
     return (
       <div className="min-h-screen py-20 px-4 flex items-center justify-center relative overflow-hidden">
-        {/* Decorative background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/10 via-[var(--color-background)] to-[var(--color-secondary)]/10" />
-        <div className="absolute top-10 left-10 opacity-10">
-          <Flower2 className="w-32 h-32 text-[var(--color-rose)]" />
-        </div>
-        <div className="absolute bottom-10 right-10 opacity-10">
-          <Flower2 className="w-32 h-32 text-[var(--color-secondary)]" />
-        </div>
+        {/* Decorative background - Elegant lace pattern */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/5 via-[var(--color-background)] to-[var(--color-secondary)]/5" />
+        
+        {/* Lace pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `
+            radial-gradient(circle at 20% 30%, var(--color-rose) 1px, transparent 1px),
+            radial-gradient(circle at 80% 70%, var(--color-secondary) 1px, transparent 1px),
+            radial-gradient(circle at 40% 80%, var(--color-accent) 0.5px, transparent 0.5px),
+            radial-gradient(circle at 60% 20%, var(--color-rose) 0.5px, transparent 0.5px)
+          `,
+          backgroundSize: '80px 80px, 80px 80px, 40px 40px, 40px 40px',
+          backgroundPosition: '0 0, 40px 40px, 20px 20px, 60px 60px'
+        }} />
+        
+        {/* Soft gradient orbs */}
+        <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-[var(--color-rose)]/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-64 h-64 bg-gradient-to-tl from-[var(--color-secondary)]/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-[var(--color-accent)]/10 to-transparent rounded-full blur-3xl" />
 
         <div className="max-w-2xl mx-auto relative z-10">
           <motion.div
@@ -139,18 +150,28 @@ export default function RSVPPage() {
 
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
-      {/* Decorative background */}
+      {/* Decorative background - Elegant lace pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/5 via-[var(--color-background)] to-[var(--color-secondary)]/5" />
+      
+      {/* Lace pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: `
+          radial-gradient(circle at 20% 30%, var(--color-rose) 1px, transparent 1px),
+          radial-gradient(circle at 80% 70%, var(--color-secondary) 1px, transparent 1px),
+          radial-gradient(circle at 40% 80%, var(--color-accent) 0.5px, transparent 0.5px),
+          radial-gradient(circle at 60% 20%, var(--color-rose) 0.5px, transparent 0.5px)
+        `,
+        backgroundSize: '80px 80px, 80px 80px, 40px 40px, 40px 40px',
+        backgroundPosition: '0 0, 40px 40px, 20px 20px, 60px 60px'
+      }} />
+      
+      {/* Soft gradient orbs */}
       <div className="absolute top-20 left-0 w-96 h-96 bg-gradient-to-br from-[var(--color-rose)]/10 to-transparent rounded-full blur-3xl" />
       <div className="absolute bottom-20 right-0 w-96 h-96 bg-gradient-to-tl from-[var(--color-secondary)]/10 to-transparent rounded-full blur-3xl" />
-
-      {/* Flores decorativas solo arriba */}
-      <div className="fixed top-10 left-10 opacity-10 pointer-events-none">
-        <Flower2 className="w-24 h-24 text-[var(--color-rose)]" />
-      </div>
-      <div className="fixed top-20 right-20 opacity-10 pointer-events-none">
-        <Flower2 className="w-28 h-28 text-[var(--color-secondary)]" />
-      </div>
+      
+      {/* Corner accents */}
+      <div className="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-[var(--color-accent)]/10 rounded-tl-3xl" />
+      <div className="absolute bottom-0 right-0 w-32 h-32 border-b-2 border-r-2 border-[var(--color-accent)]/10 rounded-br-3xl" />
 
       <div className="max-w-2xl mx-auto relative z-10">
         <motion.div

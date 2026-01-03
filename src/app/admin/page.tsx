@@ -203,10 +203,17 @@ export default function AdminPage() {
 
   const approvePhoto = async (photoId: string) => {
     try {
+      // Actualización optimista
+      setPhotos(prevPhotos => 
+        prevPhotos.map(photo => 
+          photo.id === photoId ? { ...photo, approved: true } : photo
+        )
+      );
       await fetch(`/api/photos/${photoId}/approve`, { method: 'POST' });
-      fetchData();
     } catch (error) {
       console.error('Error approving photo:', error);
+      // Revertir en caso de error
+      fetchData();
     }
   };
 
@@ -214,19 +221,29 @@ export default function AdminPage() {
     if (!confirm(t('photos.deleteConfirm'))) return;
     
     try {
+      // Actualización optimista
+      setPhotos(prevPhotos => prevPhotos.filter(photo => photo.id !== photoId));
       await fetch(`/api/photos/${photoId}`, { method: 'DELETE' });
-      fetchData();
     } catch (error) {
       console.error('Error deleting photo:', error);
+      // Revertir en caso de error
+      fetchData();
     }
   };
 
   const approveSong = async (songId: string) => {
     try {
+      // Actualización optimista
+      setSongs(prevSongs => 
+        prevSongs.map(song => 
+          song.id === songId ? { ...song, approved: true } : song
+        )
+      );
       await fetch(`/api/songs/${songId}/approve`, { method: 'POST' });
-      fetchData();
     } catch (error) {
       console.error('Error approving song:', error);
+      // Revertir en caso de error
+      fetchData();
     }
   };
 
@@ -234,6 +251,26 @@ export default function AdminPage() {
     if (!selectedSpotifyTrack) return;
 
     try {
+      const newSong: Song = {
+        id: `temp-${Date.now()}`,
+        title: selectedSpotifyTrack.name,
+        artist: selectedSpotifyTrack.artist,
+        spotifyId: selectedSpotifyTrack.id,
+        album: selectedSpotifyTrack.album,
+        albumArt: selectedSpotifyTrack.image,
+        previewUrl: selectedSpotifyTrack.previewUrl,
+        spotifyUrl: selectedSpotifyTrack.spotifyUrl,
+        proposedBy: proposedBy,
+        approved: true,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Actualización optimista
+      setSongs(prevSongs => [...prevSongs, newSong]);
+      setSelectedSpotifyTrack(null);
+      setSpotifySearchQuery('');
+      setSpotifyResults([]);
+
       const response = await fetch('/api/songs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -251,13 +288,16 @@ export default function AdminPage() {
       });
 
       if (response.ok) {
-        setSelectedSpotifyTrack(null);
-        setSpotifySearchQuery('');
-        setSpotifyResults([]);
-        fetchData();
+        const actualSong = await response.json();
+        setSongs(prevSongs => 
+          prevSongs.map(song => 
+            song.id === newSong.id ? actualSong : song
+          )
+        );
       }
     } catch (error) {
       console.error('Error adding song from Spotify:', error);
+      fetchData();
     }
   };
 
@@ -296,10 +336,13 @@ export default function AdminPage() {
     if (!confirm(t('songs.deleteConfirm'))) return;
     
     try {
+      // Actualización optimista
+      setSongs(prevSongs => prevSongs.filter(song => song.id !== songId));
       await fetch(`/api/songs/${songId}`, { method: 'DELETE' });
-      fetchData();
     } catch (error) {
       console.error('Error deleting song:', error);
+      // Revertir en caso de error
+      fetchData();
     }
   };
 
@@ -307,24 +350,48 @@ export default function AdminPage() {
   const handleSaveGift = async (giftData: Partial<Gift>) => {
     try {
       if (editingGift) {
-        // Update existing gift
+        // Actualización optimista - editar
+        setGifts(prevGifts => 
+          prevGifts.map(gift => 
+            gift.id === editingGift.id ? { ...gift, ...giftData } : gift
+          )
+        );
+        setEditingGift(undefined);
         await fetch(`/api/gifts/${editingGift.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(giftData),
         });
       } else {
-        // Create new gift
-        await fetch('/api/gifts', {
+        // Actualización optimista - crear
+        const tempGift: Gift = {
+          id: `temp-${Date.now()}`,
+          name: giftData.name || '',
+          reserved: false,
+          purchased: false,
+          ...giftData,
+        } as Gift;
+        setGifts(prevGifts => [...prevGifts, tempGift]);
+        setEditingGift(undefined);
+        
+        const response = await fetch('/api/gifts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(giftData),
         });
+        
+        if (response.ok) {
+          const actualGift = await response.json();
+          setGifts(prevGifts => 
+            prevGifts.map(gift => 
+              gift.id === tempGift.id ? actualGift : gift
+            )
+          );
+        }
       }
-      fetchData();
-      setEditingGift(undefined);
     } catch (error) {
       console.error('Error saving gift:', error);
+      fetchData();
     }
   };
 
@@ -337,30 +404,43 @@ export default function AdminPage() {
     if (!confirm(t('gifts.deleteConfirm'))) return;
     
     try {
+      // Actualización optimista
+      setGifts(prevGifts => prevGifts.filter(gift => gift.id !== giftId));
       await fetch(`/api/gifts/${giftId}`, { method: 'DELETE' });
-      fetchData();
     } catch (error) {
       console.error('Error deleting gift:', error);
+      // Revertir en caso de error
+      fetchData();
     }
   };
 
   const handleApproveReceipt = async (giftId: string, approved: boolean) => {
     try {
+      // Actualización optimista
+      setGifts(prevGifts => 
+        prevGifts.map(gift => 
+          gift.id === giftId 
+            ? { ...gift, receiptStatus: approved ? 'approved' : 'rejected', purchased: approved } 
+            : gift
+        )
+      );
+
       const response = await fetch(`/api/gifts/${giftId}/receipt/approve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ approved }),
       });
 
-      if (response.ok) {
-        fetchData();
-      } else {
+      if (!response.ok) {
         const error = await response.json();
         alert(error.error || 'Error al procesar el recibo');
+        // Revertir en caso de error
+        fetchData();
       }
     } catch (error) {
       console.error('Error processing receipt:', error);
       alert('Error al procesar el recibo');
+      fetchData();
     }
   };
 
@@ -368,24 +448,47 @@ export default function AdminPage() {
   const handleSavePlace = async (placeData: Partial<TourismPlace>) => {
     try {
       if (editingPlace) {
-        // Update existing place
+        // Actualización optimista - editar
+        setPlaces(prevPlaces => 
+          prevPlaces.map(place => 
+            place.id === editingPlace.id ? { ...place, ...placeData } : place
+          )
+        );
+        setEditingPlace(undefined);
         await fetch(`/api/tourism/${editingPlace.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(placeData),
         });
       } else {
-        // Create new place
-        await fetch('/api/tourism', {
+        // Actualización optimista - crear
+        const tempPlace: TourismPlace = {
+          id: `temp-${Date.now()}`,
+          name: placeData.name || '',
+          category: placeData.category || '',
+          ...placeData,
+        } as TourismPlace;
+        setPlaces(prevPlaces => [...prevPlaces, tempPlace]);
+        setEditingPlace(undefined);
+        
+        const response = await fetch('/api/tourism', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(placeData),
         });
+        
+        if (response.ok) {
+          const actualPlace = await response.json();
+          setPlaces(prevPlaces => 
+            prevPlaces.map(place => 
+              place.id === tempPlace.id ? actualPlace : place
+            )
+          );
+        }
       }
-      fetchData();
-      setEditingPlace(undefined);
     } catch (error) {
       console.error('Error saving place:', error);
+      fetchData();
     }
   };
 
@@ -398,10 +501,13 @@ export default function AdminPage() {
     if (!confirm(t('places.deleteConfirm'))) return;
     
     try {
+      // Actualización optimista
+      setPlaces(prevPlaces => prevPlaces.filter(place => place.id !== placeId));
       await fetch(`/api/tourism/${placeId}`, { method: 'DELETE' });
-      fetchData();
     } catch (error) {
       console.error('Error deleting place:', error);
+      // Revertir en caso de error
+      fetchData();
     }
   };
 
@@ -596,9 +702,9 @@ export default function AdminPage() {
         </div>
 
         {/* Navigation Tabs - Completamente responsive con scroll horizontal */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-2xl md:rounded-3xl p-2 md:p-3 shadow-lg border border-[var(--color-rose)]/20 mb-6 md:mb-8 relative z-10">
-          <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-[var(--color-rose)]/30 scrollbar-track-transparent hover:scrollbar-thumb-[var(--color-rose)]/50 -mx-2 md:mx-0 px-2 md:px-0">
-            <div className="flex gap-2 min-w-max lg:min-w-0 lg:flex-wrap lg:justify-center pb-1">
+        <div className="bg-white/80 backdrop-blur-xl rounded-2xl md:rounded-3xl p-2 md:p-3 shadow-lg border border-[var(--color-rose)]/20 mb-6 md:mb-8 relative z-10 overflow-visible">
+          <div className="overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-[var(--color-rose)]/30 scrollbar-track-transparent hover:scrollbar-thumb-[var(--color-rose)]/50 -mx-2 md:mx-0 px-2 md:px-0">
+            <div className="flex gap-2 min-w-max lg:min-w-0 lg:flex-wrap lg:justify-center pb-1 pt-2">
               <TabButton
                 active={activeTab === 'overview'}
                 onClick={() => setActiveTab('overview')}
@@ -660,31 +766,7 @@ export default function AdminPage() {
           transition={{ delay: 0.3 }}
         >
           {activeTab === 'overview' && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-              {/* Quick Stats */}
-              <Card className="bg-white/70 backdrop-blur-xl border-0 shadow-lg">
-                <CardHeader className="border-b border-gray-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 md:gap-3 text-lg md:text-2xl font-playfair">
-                    <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-2 md:p-3 rounded-xl">
-                      <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-                    </div>
-                    {t('stats.generalStats')}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4 md:pt-6">
-                  <div className="space-y-3 md:space-y-4">
-                    <StatRow label={t('stats.confirmationsReceived')} value={`${attendingCount} ${t('stats.of')} ${rsvps.length}`} progress={(attendingCount / Math.max(rsvps.length, 1)) * 100} />
-                    <StatRow label={t('stats.totalGuests')} value={totalGuests} />
-                    <StatRow label={t('stats.reservedGifts')} value={`${reservedGifts} ${t('stats.of')} ${gifts.length}`} progress={(reservedGifts / Math.max(gifts.length, 1)) * 100} />
-                    <StatRow label={t('stats.uploadedPhotos')} value={photos.length} />
-                    <StatRow label={t('stats.approvedPhotos')} value={photos.filter(p => p.approved).length} progress={(photos.filter(p => p.approved).length / Math.max(photos.length, 1)) * 100} />
-                    <StatRow label={t('stats.suggestedSongs')} value={songs.length} />
-                    <StatRow label={t('stats.approvedSongs')} value={songs.filter(s => s.approved).length} progress={(songs.filter(s => s.approved).length / Math.max(songs.length, 1)) * 100} />
-                    <StatRow label={t('stats.touristPlaces')} value={places.length} />
-                  </div>
-                </CardContent>
-              </Card>
-
+            <div className="grid grid-cols-1 gap-4 md:gap-6">
               {/* Recent Activity */}
               <Card className="bg-white/70 backdrop-blur-xl border-0 shadow-lg">
                 <CardHeader className="border-b border-gray-100 pb-4">
@@ -1561,7 +1643,7 @@ function TabButton({
       onClick={onClick}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
-      className={`relative px-3 sm:px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all flex items-center gap-1.5 md:gap-2 text-xs sm:text-sm md:text-base whitespace-nowrap flex-shrink-0 ${
+      className={`relative px-3 sm:px-4 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-medium transition-all flex items-center gap-1.5 md:gap-2 text-xs sm:text-sm md:text-base whitespace-nowrap flex-shrink-0 overflow-visible ${
         active
           ? 'bg-gradient-to-r from-[var(--color-rose)] via-[var(--color-secondary)] to-[var(--color-accent)] text-white shadow-lg'
           : 'bg-gray-50 text-gray-700 hover:bg-[var(--color-rose)]/10 hover:shadow-md'
@@ -1570,32 +1652,11 @@ function TabButton({
       {icon}
       {children}
       {badge !== undefined && badge > 0 && (
-        <span className={`absolute -top-1 -right-1 md:-top-2 md:-right-2 ${badgeColors[badgeColor]} text-white text-[10px] md:text-xs font-bold rounded-full w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center shadow-lg animate-pulse`}>
+        <span className={`absolute -top-1 -right-1 md:-top-2 md:-right-2 ${badgeColors[badgeColor]} text-white text-[10px] md:text-xs font-bold rounded-full w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center shadow-lg animate-pulse z-10`}>
           {badge > 99 ? '99+' : badge}
         </span>
       )}
     </motion.button>
-  );
-}
-
-function StatRow({ label, value, progress }: { label: string; value: string | number; progress?: number }) {
-  return (
-    <div className="py-2 md:py-3">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-gray-700 font-medium text-sm md:text-base">{label}</span>
-        <span className="font-bold text-lg md:text-xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{value}</span>
-      </div>
-      {progress !== undefined && (
-        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-          <motion.div 
-            className="h-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 1, delay: 0.2 }}
-          />
-        </div>
-      )}
-    </div>
   );
 }
 
