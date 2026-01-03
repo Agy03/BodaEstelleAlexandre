@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
-import { Camera, Upload, CheckCircle, Loader } from 'lucide-react';
+import { Camera, Upload, CheckCircle, Loader, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -33,6 +33,7 @@ export default function GaleriaPage() {
   const [uploaderName, setUploaderName] = useState('');
   const [caption, setCaption] = useState('');
   const [photosWithSizes, setPhotosWithSizes] = useState<(Photo & { size: PhotoSize })[]>([]);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
   // Función para obtener dimensiones de una imagen
   const getImageDimensions = (url: string): Promise<{ width: number; height: number }> => {
@@ -72,6 +73,28 @@ export default function GaleriaPage() {
   useEffect(() => {
     fetchPhotos();
   }, []);
+
+  // Manejar teclas para navegación en lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedPhotoIndex === null) return;
+      
+      if (e.key === 'Escape') {
+        setSelectedPhotoIndex(null);
+      } else if (e.key === 'ArrowLeft') {
+        setSelectedPhotoIndex((prev) => 
+          prev === null || prev === 0 ? photosWithSizes.length - 1 : prev - 1
+        );
+      } else if (e.key === 'ArrowRight') {
+        setSelectedPhotoIndex((prev) => 
+          prev === null || prev === photosWithSizes.length - 1 ? 0 : prev + 1
+        );
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedPhotoIndex, photosWithSizes.length]);
 
   const fetchPhotos = async () => {
     try {
@@ -321,8 +344,9 @@ export default function GaleriaPage() {
                     type: "spring",
                     stiffness: 100
                   }}
-                  className="break-inside-avoid mb-4 group"
+                  className="break-inside-avoid mb-4 group cursor-pointer"
                   style={{ minHeight }}
+                  onClick={() => setSelectedPhotoIndex(index)}
                 >
                   <Card hover className="overflow-hidden relative h-full">
                     {/* Imagen manteniendo aspect ratio natural */}
@@ -364,6 +388,102 @@ export default function GaleriaPage() {
             })}
           </div>
         )}
+
+        {/* Lightbox para ver foto en grande */}
+        <AnimatePresence>
+          {selectedPhotoIndex !== null && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+              onClick={() => setSelectedPhotoIndex(null)}
+            >
+              {/* Botón cerrar */}
+              <button
+                onClick={() => setSelectedPhotoIndex(null)}
+                className="absolute top-4 right-4 z-50 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+
+              {/* Botón anterior */}
+              {photosWithSizes.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedPhotoIndex((prev) => 
+                      prev === null || prev === 0 ? photosWithSizes.length - 1 : prev - 1
+                    );
+                  }}
+                  className="absolute left-4 z-50 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                >
+                  <ChevronLeft className="w-8 h-8 text-white" />
+                </button>
+              )}
+
+              {/* Botón siguiente */}
+              {photosWithSizes.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedPhotoIndex((prev) => 
+                      prev === null || prev === photosWithSizes.length - 1 ? 0 : prev + 1
+                    );
+                  }}
+                  className="absolute right-4 z-50 p-3 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                >
+                  <ChevronRight className="w-8 h-8 text-white" />
+                </button>
+              )}
+
+              {/* Imagen en grande */}
+              <motion.div
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.9 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative max-w-7xl max-h-[90vh] w-full"
+              >
+                <NextImage
+                  src={photosWithSizes[selectedPhotoIndex].url}
+                  alt={photosWithSizes[selectedPhotoIndex].caption || 'Gallery photo'}
+                  width={photosWithSizes[selectedPhotoIndex].width || 1920}
+                  height={photosWithSizes[selectedPhotoIndex].height || 1080}
+                  className="w-full h-full object-contain"
+                  style={{ maxHeight: '90vh' }}
+                  priority
+                />
+
+                {/* Info de la foto */}
+                {(photosWithSizes[selectedPhotoIndex].caption || photosWithSizes[selectedPhotoIndex].uploaderName) && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent text-white"
+                  >
+                    {photosWithSizes[selectedPhotoIndex].caption && (
+                      <p className="text-lg font-medium mb-2">
+                        {photosWithSizes[selectedPhotoIndex].caption}
+                      </p>
+                    )}
+                    {photosWithSizes[selectedPhotoIndex].uploaderName && (
+                      <p className="text-sm opacity-90">
+                        — {photosWithSizes[selectedPhotoIndex].uploaderName}
+                      </p>
+                    )}
+                  </motion.div>
+                )}
+              </motion.div>
+
+              {/* Contador de fotos */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/80 text-sm">
+                {selectedPhotoIndex + 1} / {photosWithSizes.length}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
