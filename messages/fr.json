@@ -239,11 +239,15 @@
     "uploading": "Téléchargement...",
     "caption": "Description (optionnel)",
     "yourName": "Votre nom (optionnel)",
-    "pending": "Photo téléchargée! Elle sera visible après approbation.",
+    "pending": "Elle sera visible après approbation.",
     "selectPhoto": "Sélectionnez une photo",
-    "dragAndDrop": "ou glissez-déposez une image",
-    "fileFormat": "PNG, JPG, WEBP jusqu'à 10 Mo",
-    "clickToChange": "Cliquez pour modifier"
+    "dragAndDrop": "ou glissez une image",
+    "fileFormat": "PNG, JPG, WEBP jusqu'à 10MB",
+    "clickToChange": "Cliquez pour changer",
+    "photoSelected": "photo sélectionnée",
+    "photosSelected": "photos sélectionnées",
+    "multiplePhotos": "Vous pouvez sélectionner plusieurs photos",
+    "uploadSuccess": "Photos téléchargées avec succès."
   },
   "music": {
     "title": "Suggestions Musicales",

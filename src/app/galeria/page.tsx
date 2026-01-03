@@ -124,43 +124,56 @@ export default function GaleriaPage() {
   // Función para comprimir imagen antes de subir
   const compressImage = (file: File, maxWidth = 3000, quality = 0.92): Promise<Blob> => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
+      try {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target?.result as string;
+          img.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              let width = img.width;
+              let height = img.height;
 
-          // Redimensionar si es necesario
-          if (width > maxWidth) {
-            height = (height * maxWidth) / width;
-            width = maxWidth;
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, width, height);
-
-          canvas.toBlob(
-            (blob) => {
-              if (blob) {
-                resolve(blob);
-              } else {
-                reject(new Error('Error al comprimir imagen'));
+              // Redimensionar si es necesario
+              if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
               }
-            },
-            'image/jpeg',
-            quality
-          );
+
+              canvas.width = width;
+              canvas.height = height;
+
+              const ctx = canvas.getContext('2d');
+              if (!ctx) {
+                reject(new Error('No se pudo obtener el contexto del canvas'));
+                return;
+              }
+              ctx.drawImage(img, 0, 0, width, height);
+
+              canvas.toBlob(
+                (blob) => {
+                  if (blob) {
+                    console.log(`Imagen comprimida: ${file.name}, tamaño original: ${(file.size / 1024 / 1024).toFixed(2)}MB, comprimido: ${(blob.size / 1024 / 1024).toFixed(2)}MB`);
+                    resolve(blob);
+                  } else {
+                    reject(new Error('Error al comprimir imagen: blob null'));
+                  }
+                },
+                'image/jpeg',
+                quality
+              );
+            } catch (err) {
+              reject(new Error(`Error en canvas: ${err instanceof Error ? err.message : 'unknown'}`));
+            }
+          };
+          img.onerror = (err) => reject(new Error(`Error al cargar imagen: ${err}`));
         };
-        img.onerror = reject;
-      };
-      reader.onerror = reject;
+        reader.onerror = (err) => reject(new Error(`Error al leer archivo: ${err}`));
+      } catch (err) {
+        reject(new Error(`Error general: ${err instanceof Error ? err.message : 'unknown'}`));
+      }
     });
   };
 
@@ -183,6 +196,7 @@ export default function GaleriaPage() {
       // Subir cada archivo individualmente con compresión
       const uploadPromises = selectedFiles.map(async (file, index) => {
         try {
+          console.log(`Iniciando carga de ${file.name}...`);
           setUploadProgress(prev => ({ ...prev, [index]: 10 }));
           
           // Comprimir la imagen
@@ -208,19 +222,32 @@ export default function GaleriaPage() {
             body: formData,
           });
 
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+            console.error(`Error en respuesta del servidor para ${file.name}:`, errorData);
+            throw new Error(errorData.error || `Error HTTP ${response.status}`);
+          }
+
           setUploadProgress(prev => ({ ...prev, [index]: 100 }));
-          return response;
+          console.log(`${file.name} subido exitosamente`);
+          return { success: true, file: file.name };
         } catch (error) {
-          console.error(`Error uploading file ${index}:`, error);
+          const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+          console.error(`Error uploading file ${file.name}:`, errorMessage, error);
           setUploadProgress(prev => ({ ...prev, [index]: -1 }));
-          throw error;
+          return { success: false, file: file.name, error: errorMessage };
         }
       });
 
-      const responses = await Promise.all(uploadPromises);
-      const allSuccessful = responses.every(r => r.ok);
+      // Usar allSettled para que no se cancelen las demás si una falla
+      const results = await Promise.allSettled(uploadPromises);
+      
+      const successful = results.filter(r => r.status === 'fulfilled' && r.value.success).length;
+      const failed = results.filter(r => r.status === 'rejected' || (r.status === 'fulfilled' && !r.value.success));
 
-      if (allSuccessful) {
+      console.log(`Subidas: ${successful} exitosas, ${failed.length} fallidas`);
+
+      if (successful > 0) {
         setUploadSuccess(true);
         setSelectedFiles([]);
         setUploaderName('');
@@ -229,16 +256,33 @@ export default function GaleriaPage() {
         // Reset file input
         const fileInput = document.getElementById('file-upload') as HTMLInputElement;
         if (fileInput) fileInput.value = '';
+        
+        if (failed.length > 0) {
+          setTimeout(() => {
+            alert(`Se subieron ${successful} de ${selectedFiles.length} fotos. ${failed.length} fallaron. Revisa la consola para más detalles.`);
+          }, 500);
+        }
+        
         setTimeout(() => setUploadSuccess(false), 3000);
       } else {
-        alert('Algunas fotos no se pudieron subir. Por favor, inténtalo de nuevo.');
+        // Todas fallaron
+        const failedDetails = failed.map((r, i) => {
+          if (r.status === 'fulfilled') {
+            return `${r.value.file}: ${r.value.error}`;
+          }
+          return `Archivo ${i + 1}: Error general`;
+        }).join('\n');
+        
+        console.error('Todas las fotos fallaron:', failedDetails);
+        alert(`No se pudo subir ninguna foto. Errores:\n${failedDetails}`);
       }
     } catch (error) {
-      console.error('Error uploading photos:', error);
-      alert('Error al subir las fotos. Por favor, inténtalo de nuevo.');
+      console.error('Error general al subir fotos:', error);
+      alert(`Error al subir las fotos: ${error instanceof Error ? error.message : 'Error desconocido'}`);
     } finally {
       setUploading(false);
-      setUploadProgress({});
+      // No limpiar uploadProgress aquí para ver el estado final
+      setTimeout(() => setUploadProgress({}), 3000);
     }
   };
 
@@ -313,7 +357,7 @@ export default function GaleriaPage() {
                             <CheckCircle className="w-8 h-8 text-green-600" />
                           </div>
                           <p className="text-sm font-medium text-gray-700 mb-3">
-                            {selectedFiles.length} {selectedFiles.length === 1 ? 'foto seleccionada' : 'fotos seleccionadas'}
+                            {selectedFiles.length} {selectedFiles.length === 1 ? t('photoSelected') : t('photosSelected')}
                           </p>
                           <div className="w-full max-h-32 overflow-y-auto space-y-2 mb-2">
                             {selectedFiles.map((file, idx) => (
@@ -355,10 +399,7 @@ export default function GaleriaPage() {
                             {t('fileFormat')}
                           </p>
                           <p className="text-xs text-[var(--color-rose)] mt-2 font-medium">
-                            Puedes seleccionar múltiples fotos
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            📱 Las fotos se optimizan sin perder calidad para carga más rápida
+                            {t('multiplePhotos')}
                           </p>
                         </div>
                       )}
@@ -407,7 +448,7 @@ export default function GaleriaPage() {
                     className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 justify-center"
                   >
                     <CheckCircle className="w-5 h-5" />
-                    <span className="font-medium">Fotos subidas correctamente. {t('pending')}</span>
+                    <span className="font-medium">{t('uploadSuccess')} {t('pending')}</span>
                   </motion.div>
                 )}
               </form>

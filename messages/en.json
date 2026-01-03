@@ -237,11 +237,15 @@
     "uploading": "Uploading...",
     "caption": "Caption (optional)",
     "yourName": "Your name (optional)",
-    "pending": "Photo uploaded! It will be visible after approval.",
+    "pending": "It will be visible after approval.",
     "selectPhoto": "Select a photo",
-    "dragAndDrop": "or drag and drop an image",
+    "dragAndDrop": "or drag and drop",
     "fileFormat": "PNG, JPG, WEBP up to 10MB",
-    "clickToChange": "Click to change"
+    "clickToChange": "Click to change",
+    "photoSelected": "photo selected",
+    "photosSelected": "photos selected",
+    "multiplePhotos": "You can select multiple photos",
+    "uploadSuccess": "Photos uploaded successfully."
   },
   "music": {
     "title": "Music Suggestions",
