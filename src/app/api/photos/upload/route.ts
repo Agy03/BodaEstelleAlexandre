@@ -6,13 +6,13 @@ import { supabase } from '@/lib/supabase';
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '10mb',
+      sizeLimit: '8mb', // Optimizado para alta calidad
     },
   },
 };
 
 // Configuración de tiempo máximo de ejecución en Vercel
-export const maxDuration = 60; // 60 segundos
+export const maxDuration = 30; // Reducido de 60 a 30 segundos
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,11 +33,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validar tamaño de archivo (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    // Validar tamaño de archivo (max 8MB para mantener alta calidad)
+    if (file.size > 8 * 1024 * 1024) {
       console.error('File too large:', file.size);
       return NextResponse.json(
-        { error: 'File size must be less than 10MB' },
+        { error: 'File size must be less than 8MB' },
         { status: 400 }
       );
     }
