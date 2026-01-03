@@ -29,7 +29,7 @@ export default function GaleriaPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploaderName, setUploaderName] = useState('');
   const [caption, setCaption] = useState('');
   const [photosWithSizes, setPhotosWithSizes] = useState<(Photo & { size: PhotoSize })[]>([]);
@@ -121,39 +121,50 @@ export default function GaleriaPage() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedFiles(Array.from(e.target.files));
     }
   };
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedFile) return;
+    if (selectedFiles.length === 0) return;
 
     setUploading(true);
     setUploadSuccess(false);
 
     try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-      formData.append('uploaderName', uploaderName);
-      formData.append('caption', caption);
+      // Subir cada archivo individualmente
+      const uploadPromises = selectedFiles.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('uploaderName', uploaderName);
+        formData.append('caption', caption);
 
-      const response = await fetch('/api/photos/upload', {
-        method: 'POST',
-        body: formData,
+        return fetch('/api/photos/upload', {
+          method: 'POST',
+          body: formData,
+        });
       });
 
-      if (response.ok) {
+      const responses = await Promise.all(uploadPromises);
+      const allSuccessful = responses.every(r => r.ok);
+
+      if (allSuccessful) {
         setUploadSuccess(true);
-        setSelectedFile(null);
+        setSelectedFiles([]);
         setUploaderName('');
         setCaption('');
+        // Reset file input
+        const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
         setTimeout(() => setUploadSuccess(false), 3000);
+      } else {
+        alert('Algunas fotos no se pudieron subir. Por favor, inténtalo de nuevo.');
       }
     } catch (error) {
-      console.error('Error uploading photo:', error);
-      alert('Error al subir la foto. Por favor, inténtalo de nuevo.');
+      console.error('Error uploading photos:', error);
+      alert('Error al subir las fotos. Por favor, inténtalo de nuevo.');
     } finally {
       setUploading(false);
     }
@@ -215,25 +226,31 @@ export default function GaleriaPage() {
                       id="file-upload"
                       type="file"
                       accept="image/*"
+                      multiple
                       onChange={handleFileChange}
                       className="sr-only"
                       required
                     />
                     <label
                       htmlFor="file-upload"
-                      className="flex flex-col items-center justify-center w-full h-48 px-4 transition-all duration-300 bg-white border-2 border-[var(--color-rose)]/30 border-dashed rounded-2xl cursor-pointer hover:bg-[var(--color-rose)]/5 hover:border-[var(--color-rose)]/60 group"
+                      className="flex flex-col items-center justify-center w-full min-h-48 px-4 py-4 transition-all duration-300 bg-white border-2 border-[var(--color-rose)]/30 border-dashed rounded-2xl cursor-pointer hover:bg-[var(--color-rose)]/5 hover:border-[var(--color-rose)]/60 group"
                     >
-                      {selectedFile ? (
-                        <div className="flex flex-col items-center">
+                      {selectedFiles.length > 0 ? (
+                        <div className="flex flex-col items-center w-full">
                           <div className="mb-3 p-3 bg-green-100 rounded-full">
                             <CheckCircle className="w-8 h-8 text-green-600" />
                           </div>
-                          <p className="text-sm font-medium text-gray-700 mb-1">
-                            {selectedFile.name}
+                          <p className="text-sm font-medium text-gray-700 mb-3">
+                            {selectedFiles.length} {selectedFiles.length === 1 ? 'foto seleccionada' : 'fotos seleccionadas'}
                           </p>
-                          <p className="text-xs text-gray-500">
-                            {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-                          </p>
+                          <div className="w-full max-h-32 overflow-y-auto space-y-2 mb-2">
+                            {selectedFiles.map((file, idx) => (
+                              <div key={idx} className="flex items-center justify-between bg-gray-50 p-2 rounded text-xs">
+                                <span className="truncate flex-1">{file.name}</span>
+                                <span className="text-gray-500 ml-2">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
+                              </div>
+                            ))}
+                          </div>
                           <p className="text-xs text-[var(--color-rose)] mt-2">
                             {t('clickToChange')}
                           </p>
@@ -248,6 +265,9 @@ export default function GaleriaPage() {
                           </p>
                           <p className="text-xs text-gray-500">
                             {t('fileFormat')}
+                          </p>
+                          <p className="text-xs text-[var(--color-rose)] mt-2 font-medium">
+                            Puedes seleccionar múltiples fotos
                           </p>
                         </div>
                       )}
@@ -274,7 +294,7 @@ export default function GaleriaPage() {
                 <Button
                   type="submit"
                   className="w-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] hover:shadow-2xl hover:shadow-[var(--color-rose)]/30 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={uploading || !selectedFile}
+                  disabled={uploading || selectedFiles.length === 0}
                 >
                   {uploading ? (
                     <>
@@ -296,7 +316,7 @@ export default function GaleriaPage() {
                     className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 justify-center"
                   >
                     <CheckCircle className="w-5 h-5" />
-                    <span className="font-medium">{t('pending')}</span>
+                    <span className="font-medium">Fotos subidas correctamente. {t('pending')}</span>
                   </motion.div>
                 )}
               </form>
