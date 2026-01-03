@@ -46,6 +46,12 @@ export default function RegalosPage() {
   const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [uploadingReceipt, setUploadingReceipt] = useState(false);
+  const [showNameModal, setShowNameModal] = useState(false);
+  const [reserveName, setReserveName] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -125,35 +131,40 @@ export default function RegalosPage() {
 
   const handleReserve = async (gift: GiftItem) => {
     setSelectedGift(gift);
-    setShowReserveModal(true);
+    setReserveName('');
+    setShowNameModal(true);
   };
 
   const confirmReserve = async () => {
-    if (!selectedGift) return;
-    
-    const name = prompt('Por favor, introduce tu nombre para reservar este regalo:');
-    if (!name) return;
+    if (!selectedGift || !reserveName.trim()) return;
+
+    setShowNameModal(false);
 
     try {
       const response = await fetch(`/api/gifts/${selectedGift.id}/reserve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reservedBy: name }),
+        body: JSON.stringify({ reservedBy: reserveName }),
       });
 
       if (response.ok) {
         // Guardar el nombre en localStorage para usarlo luego
-        localStorage.setItem(`gift_${selectedGift.id}_reservedBy`, name);
+        localStorage.setItem(`gift_${selectedGift.id}_reservedBy`, reserveName);
         
         fetchGifts();
-        setShowReserveModal(false);
         setSelectedGift(null);
-        // Show success animation
-        alert('¡Regalo reservado! Recuerda subir el recibo de compra en los próximos 7 días. 💝');
+        setReserveName('');
+        // Show success modal
+        setSuccessMessage(t('successReserve'));
+        setShowSuccessModal(true);
+      } else {
+        setErrorMessage(t('errorReserve'));
+        setShowErrorModal(true);
       }
     } catch (error) {
       console.error('Error reserving gift:', error);
-      alert('Error al reservar el regalo. Por favor, inténtalo de nuevo.');
+      setErrorMessage(t('errorReserve'));
+      setShowErrorModal(true);
     }
   };
 
@@ -167,7 +178,8 @@ export default function RegalosPage() {
 
     const reservedBy = localStorage.getItem(`gift_${selectedGift.id}_reservedBy`);
     if (!reservedBy) {
-      alert('No se encontró información de reserva. Por favor, contacta con los novios.');
+      setErrorMessage(t('noInfoReservation'));
+      setShowErrorModal(true);
       return;
     }
 
@@ -187,14 +199,17 @@ export default function RegalosPage() {
         fetchGifts();
         setShowReceiptModal(false);
         setSelectedGift(null);
-        alert('¡Recibo subido con éxito! Los novios lo revisarán pronto. 💝');
+        setSuccessMessage(t('receiptSuccess'));
+        setShowSuccessModal(true);
       } else {
         const error = await response.json();
-        alert(error.error || 'Error al subir el recibo');
+        setErrorMessage(error.error || t('receiptError'));
+        setShowErrorModal(true);
       }
     } catch (error) {
       console.error('Error uploading receipt:', error);
-      alert('Error al subir el recibo. Por favor, inténtalo de nuevo.');
+      setErrorMessage(t('receiptError'));
+      setShowErrorModal(true);
     } finally {
       setUploadingReceipt(false);
     }
@@ -448,12 +463,12 @@ export default function RegalosPage() {
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 max-w-md mx-auto shadow-xl border border-gray-100">
               <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-gray-700 mb-2">
-                {searchQuery ? 'No se encontraron regalos' : 'No hay regalos disponibles'}
+                {searchQuery ? t('noGiftsFound') : t('noGiftsAvailable')}
               </h3>
               <p className="text-gray-600 mb-6">
                 {searchQuery 
-                  ? 'Intenta con otros términos de búsqueda'
-                  : 'Pronto añadiremos más regalos'
+                  ? t('tryOtherTerms')
+                  : t('addingSoon')
                 }
               </p>
               {searchQuery && (
@@ -461,7 +476,7 @@ export default function RegalosPage() {
                   onClick={() => setSearchQuery('')}
                   className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white"
                 >
-                  Limpiar búsqueda
+                  {t('clearSearch')}
                 </Button>
               )}
             </div>
@@ -499,15 +514,15 @@ export default function RegalosPage() {
         )}
       </div>
 
-      {/* Reserve Modal */}
+      {/* Name Input Modal */}
       <AnimatePresence>
-        {showReserveModal && selectedGift && (
+        {showNameModal && selectedGift && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowReserveModal(false)}
+            onClick={() => setShowNameModal(false)}
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
@@ -520,22 +535,40 @@ export default function RegalosPage() {
                 <div className="bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Gift className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">Reservar regalo</h3>
-                <p className="text-gray-600">{selectedGift.name}</p>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('reserveGift')}</h3>
+                <p className="text-gray-600 mb-4">{selectedGift.name}</p>
+                <p className="text-sm text-gray-500">{t('enterYourName')}</p>
               </div>
               
               <div className="space-y-4">
+                <input
+                  type="text"
+                  value={reserveName}
+                  onChange={(e) => setReserveName(e.target.value)}
+                  placeholder={t('yourName')}
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10 transition-all outline-none"
+                  autoFocus
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && reserveName.trim()) {
+                      confirmReserve();
+                    }
+                  }}
+                />
                 <Button
                   onClick={confirmReserve}
-                  className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white text-lg py-4"
+                  disabled={!reserveName.trim()}
+                  className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Confirmar reserva
+                  {t('confirmReservation')}
                 </Button>
                 <Button
-                  onClick={() => setShowReserveModal(false)}
+                  onClick={() => {
+                    setShowNameModal(false);
+                    setReserveName('');
+                  }}
                   className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 py-4"
                 >
-                  Cancelar
+                  {t('cancel')}
                 </Button>
               </div>
             </motion.div>
@@ -564,10 +597,10 @@ export default function RegalosPage() {
                 <div className="bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-3xl">📄</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">Subir Recibo</h3>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('uploadReceipt')}</h3>
                 <p className="text-gray-600">{selectedGift.name}</p>
                 <p className="text-sm text-gray-500 mt-2">
-                  Sube el recibo de compra para confirmar tu regalo
+                  {t('uploadReceiptDescription')}
                 </p>
               </div>
               
@@ -594,10 +627,10 @@ export default function RegalosPage() {
                   {uploadingReceipt ? (
                     <span className="flex items-center justify-center gap-2">
                       <Loader className="w-5 h-5 animate-spin" />
-                      Subiendo...
+                      {t('uploading')}
                     </span>
                   ) : (
-                    'Seleccionar archivo'
+                    t('selectFile')
                   )}
                 </label>
                 <Button
@@ -605,7 +638,87 @@ export default function RegalosPage() {
                   className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 py-4"
                   disabled={uploadingReceipt}
                 >
-                  Cancelar
+                  {t('cancel')}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Success Modal */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowSuccessModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
+            >
+              <div className="text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+                  className="bg-gradient-to-br from-green-400 to-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <span className="text-4xl">✓</span>
+                </motion.div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-3">{t('success')}</h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">{successMessage}</p>
+                <Button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white text-lg py-4"
+                >
+                  {t('close')}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Error Modal */}
+      <AnimatePresence>
+        {showErrorModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowErrorModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
+            >
+              <div className="text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+                  className="bg-gradient-to-br from-red-400 to-red-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <span className="text-4xl text-white">✕</span>
+                </motion.div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-3">{t('error')}</h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">{errorMessage}</p>
+                <Button
+                  onClick={() => setShowErrorModal(false)}
+                  className="w-full bg-gradient-to-r from-red-400 to-red-600 text-white text-lg py-4"
+                >
+                  {t('close')}
                 </Button>
               </div>
             </motion.div>
@@ -632,6 +745,7 @@ function GiftCard({
   onUploadReceipt: (gift: GiftItem) => void;
   isPriority?: boolean;
 }) {
+  const t = useTranslations('gifts');
   const isAvailable = !gift.reserved && !gift.purchased;
   const canUploadReceipt = gift.reserved && !gift.receiptUrl && !gift.purchased;
   const hasReceipt = !!gift.receiptUrl;
@@ -644,7 +758,7 @@ function GiftCard({
       {isPriority && (
         <div className="absolute top-4 left-4 z-20 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
           <Sparkles className="w-4 h-4" />
-          Más deseado
+          {t('mostWantedBadge')}
         </div>
       )}
 
@@ -692,7 +806,7 @@ function GiftCard({
                   ? 'bg-gradient-to-r from-gray-500 to-gray-700' 
                   : 'bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-accent)]'
               }`}>
-                {gift.purchased ? '✓ Comprado' : '⏳ Reservado'}
+                {gift.purchased ? `✓ ${t('purchased')}` : `⏳ ${t('reserved')}`}
               </div>
             </div>
           )}
@@ -723,7 +837,7 @@ function GiftCard({
                 gift.category === 'experience' ? 'from-[var(--color-primary)] to-[var(--color-accent)]' :
                 'from-[var(--color-accent)] to-[var(--color-primary)]'
               } text-white`}>
-                {gift.category === 'home' ? 'Hogar' : gift.category === 'experience' ? 'Experiencia' : 'Otro'}
+                {t(`categories.${gift.category}`)}
               </span>
             )}
           </div>
@@ -737,7 +851,7 @@ function GiftCard({
                   className="flex-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white hover:shadow-xl transition-all"
                 >
                   <Gift className="w-4 h-4 mr-2" />
-                  Reservar
+                  {t('reserve')}
                 </Button>
                 {gift.link && (
                   <Button
@@ -756,7 +870,7 @@ function GiftCard({
                     className="flex-1 bg-gray-100 text-gray-700 hover:bg-gray-200"
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
-                    Ver en tienda
+                    {t('viewInStore')}
                   </Button>
                 )}
               </div>
@@ -768,16 +882,16 @@ function GiftCard({
                 onClick={() => onUploadReceipt(gift)}
                 className="w-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] text-white hover:shadow-xl transition-all"
               >
-                📄 Subir Recibo
+                📄 {t('uploadReceiptButton')}
               </Button>
             )}
 
             {/* Receipt status */}
             {hasReceipt && (
               <div className="bg-[var(--color-rose)]/10 text-[var(--color-rose)] text-xs px-3 py-2 rounded text-center font-medium">
-                {gift.receiptStatus === 'pending' && '⏳ Recibo en revisión'}
-                {gift.receiptStatus === 'approved' && '✓ Recibo aprobado'}
-                {gift.receiptStatus === 'rejected' && '✗ Recibo rechazado'}
+                {gift.receiptStatus === 'pending' && `⏳ ${t('receiptPending')}`}
+                {gift.receiptStatus === 'approved' && `✓ ${t('receiptApproved')}`}
+                {gift.receiptStatus === 'rejected' && `✗ ${t('receiptRejected')}`}
               </div>
             )}
           </div>
@@ -786,7 +900,7 @@ function GiftCard({
           {gift.reserved && gift.reservedBy && (
             <div className="mt-4 pt-4 border-t border-gray-100">
               <p className="text-xs text-gray-500 text-center">
-                Reservado por <span className="font-semibold text-gray-700">{gift.reservedBy}</span>
+                {t('reservedBy')} <span className="font-semibold text-gray-700">{gift.reservedBy}</span>
               </p>
             </div>
           )}

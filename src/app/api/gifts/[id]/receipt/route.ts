@@ -2,19 +2,47 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { supabase } from '@/lib/supabase';
 
+// Configuración para Vercel - aumentar límite de body size
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',
+    },
+  },
+};
+
+// Configuración de tiempo máximo de ejecución en Vercel
+export const maxDuration = 60; // 60 segundos
+
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+    
+    console.log('Starting receipt upload for gift:', id);
+    
     const formData = await req.formData();
     const file = formData.get('receipt') as File;
     const reservedBy = formData.get('reservedBy') as string;
 
+    console.log('File received:', file?.name, 'Size:', file?.size);
+    console.log('Reserved by:', reservedBy);
+
     if (!file) {
+      console.error('No file provided');
       return NextResponse.json(
         { error: 'Receipt file is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validar tamaño de archivo (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      console.error('File too large:', file.size);
+      return NextResponse.json(
+        { error: 'File size must be less than 10MB' },
         { status: 400 }
       );
     }

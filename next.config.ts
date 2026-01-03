@@ -22,9 +22,12 @@ const nextConfig: NextConfig = {
     ],
   },
   
-  // Configuraciones adicionales
+  // Configuración de body size para APIs
   experimental: {
     // Optimizaciones
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
   },
 };
 
