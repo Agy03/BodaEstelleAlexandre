@@ -250,54 +250,41 @@ export default function AdminPage() {
   const addSpotifySong = async () => {
     if (!selectedSpotifyTrack) return;
 
+    const trackToAdd = selectedSpotifyTrack;
+    const proposer = proposedBy;
+
     try {
-      const newSong: Song = {
-        id: `temp-${Date.now()}`,
-        title: selectedSpotifyTrack.name,
-        artist: selectedSpotifyTrack.artist,
-        spotifyId: selectedSpotifyTrack.id,
-        album: selectedSpotifyTrack.album,
-        albumArt: selectedSpotifyTrack.image,
-        previewUrl: selectedSpotifyTrack.previewUrl,
-        spotifyUrl: selectedSpotifyTrack.spotifyUrl,
-        proposedBy: proposedBy,
-        approved: true,
-        createdAt: new Date().toISOString(),
-      };
-
-      // Actualización optimista
-      setSongs(prevSongs => [...prevSongs, newSong]);
-      setSelectedSpotifyTrack(null);
-      setSpotifySearchQuery('');
-      setSpotifyResults([]);
-
       const response = await fetch('/api/songs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: selectedSpotifyTrack.name,
-          artist: selectedSpotifyTrack.artist,
-          spotifyId: selectedSpotifyTrack.id,
-          album: selectedSpotifyTrack.album,
-          albumArt: selectedSpotifyTrack.image,
-          previewUrl: selectedSpotifyTrack.previewUrl,
-          spotifyUrl: selectedSpotifyTrack.spotifyUrl,
-          proposedBy: proposedBy,
+          title: trackToAdd.name,
+          artist: trackToAdd.artist,
+          spotifyId: trackToAdd.id,
+          album: trackToAdd.album,
+          albumArt: trackToAdd.image,
+          previewUrl: trackToAdd.previewUrl,
+          spotifyUrl: trackToAdd.spotifyUrl,
+          proposedBy: proposer,
           approved: true,
         }),
       });
 
       if (response.ok) {
-        const actualSong = await response.json();
-        setSongs(prevSongs => 
-          prevSongs.map(song => 
-            song.id === newSong.id ? actualSong : song
-          )
-        );
+        const newSong = await response.json();
+        // Actualización optimista con la canción real del servidor
+        setSongs(prevSongs => [...prevSongs, newSong]);
+        // Solo limpiar después de éxito
+        setSelectedSpotifyTrack(null);
+        setSpotifySearchQuery('');
+        setSpotifyResults([]);
+      } else {
+        console.error('Error adding song:', await response.text());
+        alert('Error al añadir la canción. Inténtalo de nuevo.');
       }
     } catch (error) {
       console.error('Error adding song from Spotify:', error);
-      fetchData();
+      alert('Error al añadir la canción. Inténtalo de nuevo.');
     }
   };
 
@@ -351,29 +338,26 @@ export default function AdminPage() {
     try {
       if (editingGift) {
         // Actualización optimista - editar
+        const giftId = editingGift.id;
         setGifts(prevGifts => 
           prevGifts.map(gift => 
-            gift.id === editingGift.id ? { ...gift, ...giftData } : gift
+            gift.id === giftId ? { ...gift, ...giftData } : gift
           )
         );
         setEditingGift(undefined);
-        await fetch(`/api/gifts/${editingGift.id}`, {
+        
+        const response = await fetch(`/api/gifts/${giftId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(giftData),
         });
-      } else {
-        // Actualización optimista - crear
-        const tempGift: Gift = {
-          id: `temp-${Date.now()}`,
-          name: giftData.name || '',
-          reserved: false,
-          purchased: false,
-          ...giftData,
-        } as Gift;
-        setGifts(prevGifts => [...prevGifts, tempGift]);
-        setEditingGift(undefined);
         
+        if (!response.ok) {
+          console.error('Error updating gift');
+          fetchData();
+        }
+      } else {
+        // Esperar respuesta del servidor antes de actualizar
         const response = await fetch('/api/gifts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -381,16 +365,17 @@ export default function AdminPage() {
         });
         
         if (response.ok) {
-          const actualGift = await response.json();
-          setGifts(prevGifts => 
-            prevGifts.map(gift => 
-              gift.id === tempGift.id ? actualGift : gift
-            )
-          );
+          const newGift = await response.json();
+          setGifts(prevGifts => [...prevGifts, newGift]);
+          setEditingGift(undefined);
+        } else {
+          console.error('Error creating gift');
+          alert('Error al crear el regalo. Inténtalo de nuevo.');
         }
       }
     } catch (error) {
       console.error('Error saving gift:', error);
+      alert('Error al guardar el regalo. Inténtalo de nuevo.');
       fetchData();
     }
   };
@@ -449,28 +434,26 @@ export default function AdminPage() {
     try {
       if (editingPlace) {
         // Actualización optimista - editar
+        const placeId = editingPlace.id;
         setPlaces(prevPlaces => 
           prevPlaces.map(place => 
-            place.id === editingPlace.id ? { ...place, ...placeData } : place
+            place.id === placeId ? { ...place, ...placeData } : place
           )
         );
         setEditingPlace(undefined);
-        await fetch(`/api/tourism/${editingPlace.id}`, {
+        
+        const response = await fetch(`/api/tourism/${placeId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(placeData),
         });
-      } else {
-        // Actualización optimista - crear
-        const tempPlace: TourismPlace = {
-          id: `temp-${Date.now()}`,
-          name: placeData.name || '',
-          category: placeData.category || '',
-          ...placeData,
-        } as TourismPlace;
-        setPlaces(prevPlaces => [...prevPlaces, tempPlace]);
-        setEditingPlace(undefined);
         
+        if (!response.ok) {
+          console.error('Error updating place');
+          fetchData();
+        }
+      } else {
+        // Esperar respuesta del servidor antes de actualizar
         const response = await fetch('/api/tourism', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -478,16 +461,17 @@ export default function AdminPage() {
         });
         
         if (response.ok) {
-          const actualPlace = await response.json();
-          setPlaces(prevPlaces => 
-            prevPlaces.map(place => 
-              place.id === tempPlace.id ? actualPlace : place
-            )
-          );
+          const newPlace = await response.json();
+          setPlaces(prevPlaces => [...prevPlaces, newPlace]);
+          setEditingPlace(undefined);
+        } else {
+          console.error('Error creating place');
+          alert('Error al crear el lugar. Inténtalo de nuevo.');
         }
       }
     } catch (error) {
       console.error('Error saving place:', error);
+      alert('Error al guardar el lugar. Inténtalo de nuevo.');
       fetchData();
     }
   };
