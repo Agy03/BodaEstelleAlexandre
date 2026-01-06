@@ -19,7 +19,11 @@ import {
   Edit,
   Trash2,
   BarChart3,
-  Info
+  Info,
+  Calendar,
+  Sun,
+  Shirt,
+  Lightbulb
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -1593,7 +1597,7 @@ export default function AdminPage() {
                       <div className="bg-gradient-to-br from-blue-500 to-purple-500 p-3 rounded-xl">
                         <Info className="w-6 h-6 text-white" />
                       </div>
-                      <span className="text-2xl font-playfair">Información de la Boda</span>
+                      <span className="text-2xl font-playfair">{t('admin.weddingInfo.title')}</span>
                     </div>
                     <Button
                       onClick={() => setIsWeddingInfoModalOpen(true)}
@@ -1601,7 +1605,7 @@ export default function AdminPage() {
                       size="sm"
                     >
                       <Edit className="w-4 h-4 mr-2" />
-                      Editar
+                      {t('admin.weddingInfo.edit')}
                     </Button>
                   </CardTitle>
                 </CardHeader>
@@ -1609,53 +1613,53 @@ export default function AdminPage() {
                   <div className="space-y-6">
                     <div className="bg-gradient-to-r from-rose-50 to-purple-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        📅 Fecha y Hora
+                        <Calendar className="w-5 h-5 text-rose-600" /> {t('admin.weddingInfo.sections.dateTime')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Toda la información sobre fecha, hora de ceremonia, cocktail y cena/fiesta.
+                        {t('admin.weddingInfo.sections.dateTimeDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-blue-50 to-teal-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        📍 Ubicación
+                        <MapPin className="w-5 h-5 text-blue-600" /> {t('admin.weddingInfo.sections.location')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Nombre del lugar, dirección, mapa, parking y transporte.
+                        {t('admin.weddingInfo.sections.locationDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        👔 Dress Code
+                        <Shirt className="w-5 h-5 text-purple-600" /> {t('admin.weddingInfo.sections.dressCode')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Código de vestimenta para hombres y mujeres.
+                        {t('admin.weddingInfo.sections.dressCodeDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        ☀️ Clima Esperado
+                        <Sun className="w-5 h-5 text-orange-600" /> {t('admin.weddingInfo.sections.weather')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Información sobre el clima y recomendaciones.
+                        {t('admin.weddingInfo.sections.weatherDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        ℹ️ Información Adicional
+                        <Info className="w-5 h-5 text-green-600" /> {t('admin.weddingInfo.sections.additional')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Políticas de regalos, niños, fotografía, alojamiento y más.
+                        {t('admin.weddingInfo.sections.additionalDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-amber-100 to-orange-100 border-2 border-amber-300 p-6 rounded-xl">
                       <p className="text-sm font-medium text-amber-900 flex items-center gap-2">
-                        <span className="text-2xl">💡</span>
-                        Haz clic en &quot;Editar&quot; para modificar toda esta información que se muestra en la página de Información.
+                        <Lightbulb className="w-5 h-5 text-amber-600" />
+                        {t('admin.weddingInfo.helpText')}
                       </p>
                     </div>
                   </div>

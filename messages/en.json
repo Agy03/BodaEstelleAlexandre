@@ -343,7 +343,8 @@
       "photos": "Photos",
       "songs": "Music",
       "gifts": "Gifts",
-      "places": "Tourism"
+      "places": "Tourism",
+      "info": "Information"
     },
     "stats": {
       "confirmed": "Confirmed",
@@ -458,6 +459,23 @@
       "addPlace": "Add Place",
       "recommended": "Recommended",
       "deleteConfirm": "Are you sure you want to delete this place?"
+    },
+    "weddingInfo": {
+      "title": "Wedding Information",
+      "edit": "Edit",
+      "sections": {
+        "dateTime": "Date & Time",
+        "dateTimeDesc": "All information about date, ceremony, cocktail, and dinner/party times.",
+        "location": "Location",
+        "locationDesc": "Venue name, address, map, parking, and transportation.",
+        "dressCode": "Dress Code",
+        "dressCodeDesc": "Dress code for gentlemen and ladies.",
+        "weather": "Expected Weather",
+        "weatherDesc": "Weather information and recommendations.",
+        "additional": "Additional Information",
+        "additionalDesc": "Gift policy, children policy, photography, accommodation, and more."
+      },
+      "helpText": "Click &quot;Edit&quot; to modify all this information displayed on the Information page."
     },
     "actions": {
       "approve": "Approve",

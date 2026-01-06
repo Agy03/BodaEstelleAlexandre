@@ -345,7 +345,8 @@
       "photos": "Fotos",
       "songs": "Música",
       "gifts": "Regalos",
-      "places": "Turismo"
+      "places": "Turismo",
+      "info": "Información"
     },
     "stats": {
       "confirmed": "Confirmados",
@@ -460,6 +461,23 @@
       "addPlace": "Añadir Lugar",
       "recommended": "Recomendado",
       "deleteConfirm": "¿Estás seguro de que quieres eliminar este lugar?"
+    },
+    "weddingInfo": {
+      "title": "Información de la Boda",
+      "edit": "Editar",
+      "sections": {
+        "dateTime": "Fecha y Hora",
+        "dateTimeDesc": "Toda la información sobre fecha, hora de ceremonia, cocktail y cena/fiesta.",
+        "location": "Ubicación",
+        "locationDesc": "Nombre del lugar, dirección, mapa, parking y transporte.",
+        "dressCode": "Dress Code",
+        "dressCodeDesc": "Código de vestimenta para hombres y mujeres.",
+        "weather": "Clima Esperado",
+        "weatherDesc": "Información sobre el clima y recomendaciones.",
+        "additional": "Información Adicional",
+        "additionalDesc": "Políticas de regalos, niños, fotografía, alojamiento y más."
+      },
+      "helpText": "Haz clic en &quot;Editar&quot; para modificar toda esta información que se muestra en la página de Información."
     },
     "actions": {
       "approve": "Aprobar",

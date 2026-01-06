@@ -345,7 +345,8 @@
       "photos": "Photos",
       "songs": "Musique",
       "gifts": "Cadeaux",
-      "places": "Tourisme"
+      "places": "Tourisme",
+      "info": "Informations"
     },
     "stats": {
       "confirmed": "Confirmés",
@@ -460,6 +461,23 @@
       "addPlace": "Ajouter Lieu",
       "recommended": "Recommandé",
       "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce lieu?"
+    },
+    "weddingInfo": {
+      "title": "Informations du Mariage",
+      "edit": "Modifier",
+      "sections": {
+        "dateTime": "Date & Heure",
+        "dateTimeDesc": "Toutes les informations sur la date, l'heure de la cérémonie, du cocktail et du dîner/fête.",
+        "location": "Lieu",
+        "locationDesc": "Nom du lieu, adresse, carte, stationnement et transport.",
+        "dressCode": "Code Vestimentaire",
+        "dressCodeDesc": "Code vestimentaire pour messieurs et mesdames.",
+        "weather": "Météo Prévue",
+        "weatherDesc": "Informations météo et recommandations.",
+        "additional": "Informations Complémentaires",
+        "additionalDesc": "Politique de cadeaux, enfants, photographie, hébergement et plus."
+      },
+      "helpText": "Cliquez sur &quot;Modifier&quot; pour modifier toutes ces informations affichées sur la page Informations."
     },
     "actions": {
       "approve": "Approuver",
