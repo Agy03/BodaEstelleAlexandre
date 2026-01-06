@@ -2,10 +2,77 @@
 
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 import { Info, Calendar, MapPin, Cloud, Shirt, Car, Clock, Palette, Sparkles, Heart, Wine, Camera, Music, Users } from 'lucide-react';
+
+type WeddingInfo = {
+  id: string;
+  weddingDate: string;
+  ceremonyTime: string;
+  cocktailTime: string;
+  dinnerPartyTime: string;
+  venueName: string;
+  venueAddress: string;
+  venueLink?: string;
+  venueLatitude?: number;
+  venueLongitude?: number;
+  dressCodeTitle: string;
+  dressCodeDescription: string;
+  dressCodeMen: string;
+  dressCodeWomen: string;
+  weatherSeason: string;
+  weatherAvgTemp: string;
+  weatherDescription: string;
+  weatherRecommendations: string;
+  parkingAvailable: boolean;
+  parkingDescription?: string;
+  accommodationTitle?: string;
+  accommodationDescription?: string;
+  giftPolicy?: string;
+  childrenPolicy?: string;
+  photographyNote?: string;
+  scheduleNote?: string;
+  transportNote?: string;
+};
 
 export default function InformacionPage() {
   const t = useTranslations('info');
+  const [weddingInfo, setWeddingInfo] = useState<WeddingInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchWeddingInfo();
+  }, []);
+
+  const fetchWeddingInfo = async () => {
+    try {
+      const response = await fetch('/api/wedding-info');
+      if (response.ok) {
+        const data = await response.json();
+        setWeddingInfo(data);
+      }
+    } catch (error) {
+      console.error('Error fetching wedding info:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[var(--color-rose)] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!weddingInfo) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600">No se pudo cargar la información</p>
+      </div>
+    );
+  }
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -161,7 +228,7 @@ export default function InformacionPage() {
                     <p className="font-semibold text-[var(--color-rose)] text-xl mb-1">
                       {t('dateTime.dateLabel')}
                     </p>
-                    <p className="text-gray-700 text-lg">{t('dateTime.year')}</p>
+                    <p className="text-gray-700 text-lg">{weddingInfo.weddingDate}</p>
                   </div>
                   
                   <div className="bg-gradient-to-br from-[var(--color-rose)]/5 to-[var(--color-secondary)]/5 rounded-2xl p-6 space-y-4">
@@ -174,15 +241,15 @@ export default function InformacionPage() {
                     <div className="space-y-3 pl-4">
                       <div className="flex items-start gap-3">
                         <Sparkles className="w-4 h-4 text-[var(--color-rose)] mt-1 flex-shrink-0" />
-                        <span className="text-gray-700">{t('dateTime.ceremony')}</span>
+                        <span className="text-gray-700">{t('dateTime.ceremonyLabel')}: {weddingInfo.ceremonyTime}</span>
                       </div>
                       <div className="flex items-start gap-3">
                         <Wine className="w-4 h-4 text-[var(--color-rose)] mt-1 flex-shrink-0" />
-                        <span className="text-gray-700">{t('dateTime.cocktail')}</span>
+                        <span className="text-gray-700">{t('dateTime.cocktailLabel')}: {weddingInfo.cocktailTime}</span>
                       </div>
                       <div className="flex items-start gap-3">
                         <Music className="w-4 h-4 text-[var(--color-rose)] mt-1 flex-shrink-0" />
-                        <span className="text-gray-700">{t('dateTime.dinnerParty')}</span>
+                        <span className="text-gray-700">{t('dateTime.dinnerPartyLabel')}: {weddingInfo.dinnerPartyTime}</span>
                       </div>
                     </div>
                   </div>
@@ -220,22 +287,43 @@ export default function InformacionPage() {
                   <div className="relative pl-6 border-l-2 border-[var(--color-secondary)]/30">
                     <div className="absolute left-0 top-0 w-2 h-2 bg-[var(--color-secondary)] rounded-full -translate-x-[5px]" />
                     <p className="font-semibold text-[var(--color-secondary)] text-xl mb-1">
-                      {t('location.place')}
+                      {weddingInfo.venueName}
                     </p>
-                    <p className="text-gray-700 text-lg">{t('location.city')}</p>
+                    <p className="text-gray-700 text-lg">{weddingInfo.venueAddress}</p>
+                    {weddingInfo.venueLink && (
+                      <a 
+                        href={weddingInfo.venueLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-[var(--color-secondary)] hover:underline text-sm mt-2 inline-block"
+                      >
+                        📍 Ver en el mapa
+                      </a>
+                    )}
                   </div>
                   
-                  <div className="bg-gradient-to-br from-[var(--color-secondary)]/5 to-[var(--color-rose)]/5 rounded-2xl p-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="bg-white p-2 rounded-lg shadow-sm">
-                        <Car className="w-5 h-5 text-[var(--color-secondary)]" />
-                      </div>
-                      <span className="font-semibold text-gray-800 text-lg">{t('location.howToGet')}</span>
+                  {(weddingInfo.parkingAvailable || weddingInfo.transportNote) && (
+                    <div className="bg-gradient-to-br from-[var(--color-secondary)]/5 to-[var(--color-rose)]/5 rounded-2xl p-6">
+                      {weddingInfo.parkingAvailable && weddingInfo.parkingDescription && (
+                        <>
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="bg-white p-2 rounded-lg shadow-sm">
+                              <Car className="w-5 h-5 text-[var(--color-secondary)]" />
+                            </div>
+                            <span className="font-semibold text-gray-800 text-lg">{t('location.parking')}</span>
+                          </div>
+                          <p className="text-gray-700 leading-relaxed pl-4 mb-4">
+                            {weddingInfo.parkingDescription}
+                          </p>
+                        </>
+                      )}
+                      {weddingInfo.transportNote && (
+                        <p className="text-gray-700 leading-relaxed pl-4">
+                          {weddingInfo.transportNote}
+                        </p>
+                      )}
                     </div>
-                    <p className="text-gray-700 leading-relaxed pl-4">
-                      {t('location.transportInfo')}
-                    </p>
-                  </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -286,22 +374,24 @@ export default function InformacionPage() {
                 <div className="space-y-6">
                   <div className="bg-gradient-to-br from-[var(--color-rose)]/5 to-[var(--color-secondary)]/5 rounded-2xl p-6">
                     <p className="text-gray-800 text-lg font-semibold mb-3">
-                      {t('dressCode.etiquette')}
+                      {weddingInfo.dressCodeTitle}
                     </p>
                     <div className="h-px bg-gradient-to-r from-[var(--color-rose)]/30 via-[var(--color-secondary)]/30 to-transparent mb-4" />
-                    <p className="text-gray-700 mb-4">{t('dressCode.recommendations')}</p>
+                    <p className="text-gray-700 mb-4">{weddingInfo.dressCodeDescription}</p>
                     <div className="space-y-3">
                       <div className="flex items-start gap-3">
                         <div className="w-2 h-2 rounded-full bg-[var(--color-rose)] mt-2 flex-shrink-0" />
-                        <span className="text-gray-700">{t('dressCode.suit')}</span>
+                        <div>
+                          <p className="font-semibold text-gray-800 mb-1">👔 {t('dressCode.menLabel')}</p>
+                          <p className="text-gray-700 text-sm">{weddingInfo.dressCodeMen}</p>
+                        </div>
                       </div>
                       <div className="flex items-start gap-3">
                         <div className="w-2 h-2 rounded-full bg-[var(--color-rose)] mt-2 flex-shrink-0" />
-                        <span className="text-gray-700">{t('dressCode.shoes')}</span>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-[var(--color-rose)] mt-2 flex-shrink-0" />
-                        <span className="text-gray-700">{t('dressCode.weather')}</span>
+                        <div>
+                          <p className="font-semibold text-gray-800 mb-1">👗 {t('dressCode.womenLabel')}</p>
+                          <p className="text-gray-700 text-sm">{weddingInfo.dressCodeWomen}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -438,12 +528,22 @@ export default function InformacionPage() {
                   </h3>
                   <div className="h-1 w-20 bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-secondary)] rounded-full mb-6" />
                   
-                  <p className="text-gray-700 text-lg leading-relaxed mb-4">
-                    {t('weather.description')}
-                  </p>
-                  <p className="text-gray-500 text-sm italic">
-                    {t('weather.update')}
-                  </p>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="font-semibold text-gray-800 mb-1">
+                        {weddingInfo.weatherSeason} - {weddingInfo.weatherAvgTemp}
+                      </p>
+                      <p className="text-gray-700 leading-relaxed">
+                        {weddingInfo.weatherDescription}
+                      </p>
+                    </div>
+                    <div className="bg-gradient-to-r from-[var(--color-accent)]/10 to-[var(--color-secondary)]/10 rounded-xl p-4">
+                      <p className="font-semibold text-gray-800 mb-2">💡 {t('weather.recommendations')}</p>
+                      <p className="text-gray-700 text-sm">
+                        {weddingInfo.weatherRecommendations}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -475,30 +575,46 @@ export default function InformacionPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InfoItem 
-                  icon={<MapPin className="w-5 h-5" />}
-                  title={t('additional.accommodation.title')}
-                  description={t('additional.accommodation.description')}
-                  color="rose"
-                />
-                <InfoItem 
-                  icon={<Users className="w-5 h-5" />}
-                  title={t('additional.children.title')}
-                  description={t('additional.children.description')}
-                  color="secondary"
-                />
-                <InfoItem 
-                  icon={<Wine className="w-5 h-5" />}
-                  title={t('additional.dietary.title')}
-                  description={t('additional.dietary.description')}
-                  color="rose"
-                />
-                <InfoItem 
-                  icon={<Camera className="w-5 h-5" />}
-                  title={t('additional.photos.title')}
-                  description={t('additional.photos.description')}
-                  color="secondary"
-                />
+                {weddingInfo.accommodationTitle && weddingInfo.accommodationDescription && (
+                  <InfoItem 
+                    icon={<MapPin className="w-5 h-5" />}
+                    title={weddingInfo.accommodationTitle}
+                    description={weddingInfo.accommodationDescription}
+                    color="rose"
+                  />
+                )}
+                {weddingInfo.childrenPolicy && (
+                  <InfoItem 
+                    icon={<Users className="w-5 h-5" />}
+                    title={t('additional.children.title')}
+                    description={weddingInfo.childrenPolicy}
+                    color="secondary"
+                  />
+                )}
+                {weddingInfo.giftPolicy && (
+                  <InfoItem 
+                    icon={<Wine className="w-5 h-5" />}
+                    title={t('additional.gifts.title')}
+                    description={weddingInfo.giftPolicy}
+                    color="rose"
+                  />
+                )}
+                {weddingInfo.photographyNote && (
+                  <InfoItem 
+                    icon={<Camera className="w-5 h-5" />}
+                    title={t('additional.photos.title')}
+                    description={weddingInfo.photographyNote}
+                    color="secondary"
+                  />
+                )}
+                {weddingInfo.scheduleNote && (
+                  <InfoItem 
+                    icon={<Clock className="w-5 h-5" />}
+                    title={t('additional.schedule.title')}
+                    description={weddingInfo.scheduleNote}
+                    color="rose"
+                  />
+                )}
               </div>
             </div>
           </motion.div>

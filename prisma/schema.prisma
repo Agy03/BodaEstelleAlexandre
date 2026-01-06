@@ -170,3 +170,46 @@ model Song {
 
   @@map("songs")
 }
+
+// Wedding Information Model - Configurable from admin
+model WeddingInfo {
+  id                     String   @id @default(cuid())
+  // Date and Time
+  weddingDate            String
+  ceremonyTime           String
+  cocktailTime           String
+  dinnerPartyTime        String
+  // Location
+  venueName              String
+  venueAddress           String
+  venueLink              String?
+  venueLatitude          Float?
+  venueLongitude         Float?
+  // Dress Code
+  dressCodeTitle         String
+  dressCodeDescription   String   @db.Text
+  dressCodeMen           String   @db.Text
+  dressCodeWomen         String   @db.Text
+  // Weather
+  weatherSeason          String
+  weatherAvgTemp         String
+  weatherDescription     String   @db.Text
+  weatherRecommendations String   @db.Text
+  // Parking
+  parkingAvailable       Boolean  @default(true)
+  parkingDescription     String?  @db.Text
+  // Accommodation
+  accommodationTitle     String?
+  accommodationDescription String? @db.Text
+  // Additional Information
+  giftPolicy             String?  @db.Text
+  childrenPolicy         String?  @db.Text
+  photographyNote        String?  @db.Text
+  scheduleNote           String?  @db.Text
+  transportNote          String?  @db.Text
+  
+  updatedAt              DateTime @updatedAt
+  updatedBy              String?
+
+  @@map("wedding_info")
+}

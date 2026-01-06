@@ -75,9 +75,12 @@
     "styleAndAmbience": "Style & Ambiance",
     "dateTime": {
       "title": "Date & Heure",
-      "dateLabel": "Date à confirmer",
+      "dateLabel": "Date",
       "year": "Année 2025",
       "schedule": "Horaires:",
+      "ceremonyLabel": "Cérémonie",
+      "cocktailLabel": "Cocktail",
+      "dinnerPartyLabel": "Dîner et Fête",
       "ceremony": "Cérémonie: À confirmer",
       "cocktail": "Cocktail: Après la cérémonie",
       "dinnerParty": "Dîner et fête: À confirmer"
@@ -86,11 +89,14 @@
       "title": "Lieu",
       "place": "Lieu à confirmer",
       "city": "Ville, Pays",
+      "parking": "Stationnement",
       "howToGet": "Comment s'y rendre:",
       "transportInfo": "Informations sur le transport et le stationnement disponibles prochainement."
     },
     "dressCode": {
       "title": "Code Vestimentaire",
+      "menLabel": "Pour Messieurs",
+      "womenLabel": "Pour Mesdames",
       "etiquette": "Tenue: Formelle / Élégante",
       "recommendations": "Recommandations:",
       "suit": "Costume ou robe longue pour la cérémonie",
@@ -105,6 +111,7 @@
     },
     "weather": {
       "title": "Météo Prévue",
+      "recommendations": "Recommandations",
       "description": "La météo à la date de l'événement est généralement [description météo]. Nous vous recommandons d'apporter [vêtements légers/manteau/etc.] et d'être préparé pour [soleil/pluie/etc.].",
       "update": "Nous mettrons à jour ces informations plus près de la date de l'événement."
     },
@@ -131,6 +138,10 @@
         "title": "Enfants",
         "description": "Les enfants sont les bienvenus à notre célébration."
       },
+      "gifts": {
+        "title": "Cadeaux",
+        "description": "Votre présence est le plus beau cadeau."
+      },
       "dietary": {
         "title": "Restrictions Alimentaires",
         "description": "Veuillez nous informer de toute allergie ou restriction dans le formulaire de confirmation."
@@ -138,6 +149,10 @@
       "photos": {
         "title": "Photos",
         "description": "Il y aura un photographe professionnel, mais nous aimerions aussi que vous partagiez vos photos dans notre galerie."
+      },
+      "schedule": {
+        "title": "Horaire",
+        "description": "Veuillez arriver à l'heure."
       }
     }
   },

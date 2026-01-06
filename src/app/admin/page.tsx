@@ -18,12 +18,14 @@ import {
   Plus,
   Edit,
   Trash2,
-  BarChart3
+  BarChart3,
+  Info
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { PlaceModal } from '@/components/admin/PlaceModal';
 import { GiftModal } from '@/components/admin/GiftModal';
+import { WeddingInfoModal } from '@/components/admin/WeddingInfoModal';
 
 type RSVP = {
   id: string;
@@ -112,12 +114,13 @@ export default function AdminPage() {
   const [songs, setSongs] = useState<Song[]>([]);
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [places, setPlaces] = useState<TourismPlace[]>([]);
-  const [activeTab, setActiveTab] = useState<'overview' | 'rsvps' | 'photos' | 'songs' | 'gifts' | 'places'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'rsvps' | 'photos' | 'songs' | 'gifts' | 'places' | 'info'>('overview');
   const [loading, setLoading] = useState(true);
   
   // Modal states
   const [isPlaceModalOpen, setIsPlaceModalOpen] = useState(false);
   const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
+  const [isWeddingInfoModalOpen, setIsWeddingInfoModalOpen] = useState(false);
   const [editingPlace, setEditingPlace] = useState<TourismPlace | undefined>(undefined);
   const [editingGift, setEditingGift] = useState<Gift | undefined>(undefined);
 
@@ -737,6 +740,13 @@ export default function AdminPage() {
                 badge={places.length}
               >
                 {t('tabs.places')}
+              </TabButton>
+              <TabButton
+                active={activeTab === 'info'}
+                onClick={() => setActiveTab('info')}
+                icon={<Info className="w-4 h-4" />}
+              >
+                Información
               </TabButton>
             </div>
           </div>
@@ -1573,6 +1583,86 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+
+          {activeTab === 'info' && (
+            <div>
+              <Card className="bg-white/70 backdrop-blur-xl border-0 shadow-lg">
+                <CardHeader className="border-b border-gray-100">
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-gradient-to-br from-blue-500 to-purple-500 p-3 rounded-xl">
+                        <Info className="w-6 h-6 text-white" />
+                      </div>
+                      <span className="text-2xl font-playfair">Información de la Boda</span>
+                    </div>
+                    <Button
+                      onClick={() => setIsWeddingInfoModalOpen(true)}
+                      variant="primary"
+                      size="sm"
+                    >
+                      <Edit className="w-4 h-4 mr-2" />
+                      Editar
+                    </Button>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="space-y-6">
+                    <div className="bg-gradient-to-r from-rose-50 to-purple-50 p-6 rounded-xl">
+                      <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                        📅 Fecha y Hora
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Toda la información sobre fecha, hora de ceremonia, cocktail y cena/fiesta.
+                      </p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-blue-50 to-teal-50 p-6 rounded-xl">
+                      <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                        📍 Ubicación
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Nombre del lugar, dirección, mapa, parking y transporte.
+                      </p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
+                      <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                        👔 Dress Code
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Código de vestimenta para hombres y mujeres.
+                      </p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl">
+                      <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                        ☀️ Clima Esperado
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Información sobre el clima y recomendaciones.
+                      </p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl">
+                      <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                        ℹ️ Información Adicional
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Políticas de regalos, niños, fotografía, alojamiento y más.
+                      </p>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-amber-100 to-orange-100 border-2 border-amber-300 p-6 rounded-xl">
+                      <p className="text-sm font-medium text-amber-900 flex items-center gap-2">
+                        <span className="text-2xl">💡</span>
+                        Haz clic en "Editar" para modificar toda esta información que se muestra en la página de Información.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </motion.div>
       </div>
 
@@ -1595,6 +1685,14 @@ export default function AdminPage() {
         }}
         onSave={handleSaveGift}
         gift={editingGift}
+      />
+
+      <WeddingInfoModal
+        isOpen={isWeddingInfoModalOpen}
+        onClose={() => setIsWeddingInfoModalOpen(false)}
+        onSave={() => {
+          // Refrescar si es necesario
+        }}
       />
     </div>
   );

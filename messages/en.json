@@ -75,9 +75,12 @@
     "styleAndAmbience": "Style & Ambience",
     "dateTime": {
       "title": "Date & Time",
-      "dateLabel": "Date to be confirmed",
+      "dateLabel": "Date",
       "year": "Year 2025",
       "schedule": "Schedule:",
+      "ceremonyLabel": "Ceremony",
+      "cocktailLabel": "Cocktail",
+      "dinnerPartyLabel": "Dinner and Party",
       "ceremony": "Ceremony: To be confirmed",
       "cocktail": "Cocktail: After the ceremony",
       "dinnerParty": "Dinner and party: To be confirmed"
@@ -86,11 +89,14 @@
       "title": "Location",
       "place": "Venue to be confirmed",
       "city": "City, Country",
+      "parking": "Parking",
       "howToGet": "How to get there:",
       "transportInfo": "Transportation and parking information available soon."
     },
     "dressCode": {
       "title": "Dress Code",
+      "menLabel": "For Gentlemen",
+      "womenLabel": "For Ladies",
       "etiquette": "Dress code: Formal / Elegant",
       "recommendations": "Recommendations:",
       "suit": "Suit or long dress for the ceremony",
@@ -105,6 +111,7 @@
     },
     "weather": {
       "title": "Expected Weather",
+      "recommendations": "Recommendations",
       "description": "The weather on the event date is usually [weather description]. We recommend bringing [light clothing/coat/etc.] and being prepared for [sun/rain/etc.].",
       "update": "We will update this information closer to the event date."
     },
@@ -131,6 +138,10 @@
         "title": "Children",
         "description": "Children are welcome at our celebration."
       },
+      "gifts": {
+        "title": "Gifts",
+        "description": "Your presence is the greatest gift."
+      },
       "dietary": {
         "title": "Dietary Restrictions",
         "description": "Please let us know about any allergies or restrictions in the confirmation form."
@@ -138,6 +149,10 @@
       "photos": {
         "title": "Photos",
         "description": "There will be a professional photographer, but we would also love for you to share your photos in our gallery."
+      },
+      "schedule": {
+        "title": "Schedule",
+        "description": "Please arrive on time."
       }
     }
   },

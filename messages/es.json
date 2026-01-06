@@ -75,9 +75,12 @@
     "styleAndAmbience": "Estilo & Ambiente",
     "dateTime": {
       "title": "Fecha y Hora",
-      "dateLabel": "Fecha por confirmar",
+      "dateLabel": "Fecha",
       "year": "Año 2025",
       "schedule": "Horario:",
+      "ceremonyLabel": "Ceremonia",
+      "cocktailLabel": "Cóctel",
+      "dinnerPartyLabel": "Cena y fiesta",
       "ceremony": "Ceremonia: Por confirmar",
       "cocktail": "Cóctel: Después de la ceremonia",
       "dinnerParty": "Cena y fiesta: Por confirmar"
@@ -86,11 +89,14 @@
       "title": "Ubicación",
       "place": "Lugar por confirmar",
       "city": "Ciudad, País",
+      "parking": "Aparcamiento",
       "howToGet": "Cómo llegar:",
       "transportInfo": "Información de transporte y aparcamiento disponible próximamente."
     },
     "dressCode": {
       "title": "Código de Vestimenta",
+      "menLabel": "Para Ellos",
+      "womenLabel": "Para Ellas",
       "etiquette": "Etiqueta: Formal / Elegante",
       "recommendations": "Recomendaciones:",
       "suit": "Traje o vestido largo para la ceremonia",
@@ -105,6 +111,7 @@
     },
     "weather": {
       "title": "Clima Esperado",
+      "recommendations": "Recomendaciones",
       "description": "El clima en la fecha del evento suele ser [descripción del clima]. Te recomendamos traer [ropa ligera/abrigo/etc.] y estar preparado para [sol/lluvia/etc.].",
       "update": "Actualizaremos esta información más cerca de la fecha del evento."
     },
@@ -131,6 +138,10 @@
         "title": "Niños",
         "description": "Los niños son bienvenidos a nuestra celebración."
       },
+      "gifts": {
+        "title": "Regalos",
+        "description": "Tu presencia es el mayor regalo."
+      },
       "dietary": {
         "title": "Restricciones alimentarias",
         "description": "Por favor, indícanos cualquier alergia o restricción en el formulario de confirmación."
@@ -138,6 +149,10 @@
       "photos": {
         "title": "Fotos",
         "description": "Habrá fotógrafo profesional, pero también nos encantaría que compartas tus fotos en nuestra galería."
+      },
+      "schedule": {
+        "title": "Horario",
+        "description": "Por favor llegue a tiempo."
       }
     }
   },
