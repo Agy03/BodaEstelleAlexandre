@@ -6,7 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ThemeSwitcherByDate } from "@/components/layout/ThemeSwitcherByDate";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getLocale } from 'next-intl/server';
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -32,9 +32,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const messages = await getMessages();
+  const locale = await getLocale();
   
   return (
-    <html lang="es" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang={locale} className={`${playfair.variable} ${inter.variable}`}>
       <body className="font-inter antialiased bg-[var(--color-background)] text-[var(--color-text)]">
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>

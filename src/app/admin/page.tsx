@@ -1597,7 +1597,7 @@ export default function AdminPage() {
                       <div className="bg-gradient-to-br from-blue-500 to-purple-500 p-3 rounded-xl">
                         <Info className="w-6 h-6 text-white" />
                       </div>
-                      <span className="text-2xl font-playfair">{t('admin.weddingInfo.title')}</span>
+                      <span className="text-2xl font-playfair">{t('weddingInfo.title')}</span>
                     </div>
                     <Button
                       onClick={() => setIsWeddingInfoModalOpen(true)}
@@ -1605,7 +1605,7 @@ export default function AdminPage() {
                       size="sm"
                     >
                       <Edit className="w-4 h-4 mr-2" />
-                      {t('admin.weddingInfo.edit')}
+                      {t('weddingInfo.edit')}
                     </Button>
                   </CardTitle>
                 </CardHeader>
@@ -1613,53 +1613,53 @@ export default function AdminPage() {
                   <div className="space-y-6">
                     <div className="bg-gradient-to-r from-rose-50 to-purple-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        <Calendar className="w-5 h-5 text-rose-600" /> {t('admin.weddingInfo.sections.dateTime')}
+                        <Calendar className="w-5 h-5 text-rose-600" /> {t('weddingInfo.sections.dateTime')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {t('admin.weddingInfo.sections.dateTimeDesc')}
+                        {t('weddingInfo.sections.dateTimeDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-blue-50 to-teal-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        <MapPin className="w-5 h-5 text-blue-600" /> {t('admin.weddingInfo.sections.location')}
+                        <MapPin className="w-5 h-5 text-blue-600" /> {t('weddingInfo.sections.location')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {t('admin.weddingInfo.sections.locationDesc')}
+                        {t('weddingInfo.sections.locationDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        <Shirt className="w-5 h-5 text-purple-600" /> {t('admin.weddingInfo.sections.dressCode')}
+                        <Shirt className="w-5 h-5 text-purple-600" /> {t('weddingInfo.sections.dressCode')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {t('admin.weddingInfo.sections.dressCodeDesc')}
+                        {t('weddingInfo.sections.dressCodeDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        <Sun className="w-5 h-5 text-orange-600" /> {t('admin.weddingInfo.sections.weather')}
+                        <Sun className="w-5 h-5 text-orange-600" /> {t('weddingInfo.sections.weather')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {t('admin.weddingInfo.sections.weatherDesc')}
+                        {t('weddingInfo.sections.weatherDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl">
                       <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        <Info className="w-5 h-5 text-green-600" /> {t('admin.weddingInfo.sections.additional')}
+                        <Info className="w-5 h-5 text-green-600" /> {t('weddingInfo.sections.additional')}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {t('admin.weddingInfo.sections.additionalDesc')}
+                        {t('weddingInfo.sections.additionalDesc')}
                       </p>
                     </div>
 
                     <div className="bg-gradient-to-r from-amber-100 to-orange-100 border-2 border-amber-300 p-6 rounded-xl">
                       <p className="text-sm font-medium text-amber-900 flex items-center gap-2">
                         <Lightbulb className="w-5 h-5 text-amber-600" />
-                        {t('admin.weddingInfo.helpText')}
+                        {t('weddingInfo.helpText')}
                       </p>
                     </div>
                   </div>
