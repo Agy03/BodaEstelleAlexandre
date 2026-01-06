@@ -1655,7 +1655,7 @@ export default function AdminPage() {
                     <div className="bg-gradient-to-r from-amber-100 to-orange-100 border-2 border-amber-300 p-6 rounded-xl">
                       <p className="text-sm font-medium text-amber-900 flex items-center gap-2">
                         <span className="text-2xl">💡</span>
-                        Haz clic en "Editar" para modificar toda esta información que se muestra en la página de Información.
+                        Haz clic en &quot;Editar&quot; para modificar toda esta información que se muestra en la página de Información.
                       </p>
                     </div>
                   </div>

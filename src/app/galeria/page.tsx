@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
@@ -71,9 +71,33 @@ export default function GaleriaPage() {
     return pattern < 2 ? 'large' : pattern < 4 ? 'medium' : 'small';
   };
 
+  const fetchPhotos = useCallback(async () => {
+    try {
+      const response = await fetch('/api/photos');
+      const data = await response.json();
+      const approvedPhotos = data.filter((photo: Photo) => photo.approved);
+      
+      // Obtener dimensiones y clasificar cada foto
+      const photosWithSizeData = await Promise.all(
+        approvedPhotos.map(async (photo: Photo, index: number) => {
+          const dimensions = await getImageDimensions(photo.url);
+          const size = classifyPhotoSize(dimensions.width, dimensions.height, index);
+          return { ...photo, ...dimensions, size };
+        })
+      );
+      
+      setPhotosWithSizes(photosWithSizeData);
+      setPhotos(approvedPhotos);
+    } catch (error) {
+      console.error('Error fetching photos:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchPhotos();
-  }, []);
+  }, [fetchPhotos]);
 
   // Manejar teclas para navegación en lightbox
   useEffect(() => {
@@ -96,30 +120,6 @@ export default function GaleriaPage() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedPhotoIndex, photosWithSizes.length]);
-
-  const fetchPhotos = async () => {
-    try {
-      const response = await fetch('/api/photos');
-      const data = await response.json();
-      const approvedPhotos = data.filter((photo: Photo) => photo.approved);
-      
-      // Obtener dimensiones y clasificar cada foto
-      const photosWithSizeData = await Promise.all(
-        approvedPhotos.map(async (photo: Photo, index: number) => {
-          const dimensions = await getImageDimensions(photo.url);
-          const size = classifyPhotoSize(dimensions.width, dimensions.height, index);
-          return { ...photo, ...dimensions, size };
-        })
-      );
-      
-      setPhotosWithSizes(photosWithSizeData);
-      setPhotos(approvedPhotos);
-    } catch (error) {
-      console.error('Error fetching photos:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Función para comprimir imagen antes de subir
   const compressImage = (file: File, maxWidth = 3000, quality = 0.92): Promise<Blob> => {

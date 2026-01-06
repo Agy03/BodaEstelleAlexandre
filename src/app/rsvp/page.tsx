@@ -8,7 +8,7 @@ import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { CheckCircle, Users, Mail, User, Heart, Sparkles, Flower2, Plus, X } from 'lucide-react';
+import { CheckCircle, Users, Mail, User, Heart, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface GuestInfo {

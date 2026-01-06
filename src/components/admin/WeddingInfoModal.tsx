@@ -5,7 +5,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
-import { Info, Save, X } from 'lucide-react';
+import { Save, X } from 'lucide-react';
 
 type WeddingInfo = {
   id?: string;
@@ -134,7 +134,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
             <button
               key={section.id}
               type="button"
-              onClick={() => setActiveSection(section.id as any)}
+              onClick={() => setActiveSection(section.id as 'date' | 'location' | 'dress' | 'weather' | 'additional')}
               className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
                 activeSection === section.id
                   ? 'bg-rose-500 text-white'
