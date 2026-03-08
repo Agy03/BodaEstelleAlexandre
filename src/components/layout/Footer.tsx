@@ -102,12 +102,12 @@ export function Footer() {
             <h4 className="text-sm font-light tracking-[0.3em] uppercase text-[var(--color-accent)] mb-6">{t('footer.contact')}</h4>
             <div className="space-y-4 text-gray-600 text-sm">
               <motion.a
-                href="mailto:contacto@bodaestelle.com"
+                href="mailto:estelle-alexandre@bodasaliugo.com"
                 className="flex items-center gap-2.5 hover:text-[var(--color-rose)] transition-colors justify-center md:justify-end group font-light"
                 whileHover={{ x: -3 }}
               >
                 <Mail className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                <span>contacto@bodaestelle.com</span>
+                <span>estelle-alexandre@bodasaliugo.com</span>
               </motion.a>
               <motion.div 
                 className="flex items-center gap-2.5 justify-center md:justify-end font-light"

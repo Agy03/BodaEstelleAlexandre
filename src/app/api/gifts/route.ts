@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { autoTranslateEntity, getTranslatedEntities, getLocaleFromRequest } from '@/lib/translate';
 
 const sampleGifts = [
   {
@@ -37,8 +38,10 @@ const sampleGifts = [
   },
 ];
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const locale = getLocaleFromRequest(request);
+
     // Primero, desbloquear los regalos cuya reserva ha expirado
     const now = new Date();
     await prisma.gift.updateMany({
@@ -62,7 +65,14 @@ export async function GET() {
       orderBy: { createdAt: 'asc' },
     });
 
-    return NextResponse.json(gifts);
+    // Apply translations
+    const translated = await getTranslatedEntities(
+      'Gift',
+      gifts as unknown as (Record<string, unknown> & { id: string })[],
+      locale
+    );
+
+    return NextResponse.json(translated);
   } catch (error) {
     console.error('Error fetching gifts:', error);
     console.log('Returning sample gifts instead');
@@ -86,6 +96,10 @@ export async function POST(request: Request) {
         purchased: false,
       },
     });
+
+    // Auto-translate to other locales
+    const sourceLocale = getLocaleFromRequest(request);
+    autoTranslateEntity('Gift', gift.id, data, sourceLocale);
 
     return NextResponse.json(gift, { status: 201 });
   } catch (error) {

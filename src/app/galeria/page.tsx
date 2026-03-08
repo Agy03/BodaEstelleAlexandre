@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
-import { Camera, Upload, CheckCircle, Loader, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Camera, Upload, CheckCircle, Loader, X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import JSZip from 'jszip';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -35,6 +36,8 @@ export default function GaleriaPage() {
   const [photosWithSizes, setPhotosWithSizes] = useState<(Photo & { size: PhotoSize })[]>([]);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const [uploadProgress, setUploadProgress] = useState<{[key: number]: number}>({});
+  const [downloading, setDownloading] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
 
   // Función para obtener dimensiones de una imagen
   const getImageDimensions = (url: string): Promise<{ width: number; height: number }> => {
@@ -286,6 +289,48 @@ export default function GaleriaPage() {
     }
   };
 
+  const handleDownloadAlbum = async () => {
+    if (photosWithSizes.length === 0) return;
+    setDownloading(true);
+    setDownloadProgress(0);
+
+    try {
+      const zip = new JSZip();
+      const folder = zip.folder('Boda-Estelle-Alexandre');
+
+      for (let i = 0; i < photosWithSizes.length; i++) {
+        const photo = photosWithSizes[i];
+        try {
+          const response = await fetch(photo.url);
+          const blob = await response.blob();
+          const ext = photo.url.match(/\.(jpe?g|png|webp|gif)/i)?.[1] || 'jpg';
+          const name = photo.caption
+            ? `${String(i + 1).padStart(3, '0')}_${photo.caption.replace(/[^a-zA-Z0-9áéíóúñÁÉÍÓÚÑ ]/g, '').slice(0, 40)}.${ext}`
+            : `${String(i + 1).padStart(3, '0')}_photo.${ext}`;
+          folder!.file(name, blob);
+        } catch {
+          // Skip failed photos
+        }
+        setDownloadProgress(Math.round(((i + 1) / photosWithSizes.length) * 100));
+      }
+
+      const content = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Boda-Estelle-Alexandre-Album.zip';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error creating album:', error);
+    } finally {
+      setDownloading(false);
+      setDownloadProgress(0);
+    }
+  };
+
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
       {/* Decorative background */}
@@ -455,6 +500,34 @@ export default function GaleriaPage() {
             </CardContent>
           </Card>
         </motion.div>
+
+        {/* Download Album Button */}
+        {!loading && photos.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex justify-center mb-10"
+          >
+            <Button
+              onClick={handleDownloadAlbum}
+              disabled={downloading}
+              className="bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-accent)] hover:shadow-2xl hover:shadow-[var(--color-secondary)]/30 px-8 py-3 text-base"
+            >
+              {downloading ? (
+                <>
+                  <Loader className="w-5 h-5 mr-2 animate-spin" />
+                  {t('downloadingAlbum')} ({downloadProgress}%)
+                </>
+              ) : (
+                <>
+                  <Download className="w-5 h-5 mr-2" />
+                  {t('downloadAlbum')} ({photos.length} {photos.length === 1 ? t('photoSelected') : t('photosSelected')})
+                </>
+              )}
+            </Button>
+          </motion.div>
+        )}
 
         {/* Photos Gallery - Masonry Layout Asimétrico */}
         {loading ? (

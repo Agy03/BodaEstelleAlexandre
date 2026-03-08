@@ -23,7 +23,8 @@ import {
   Calendar,
   Sun,
   Shirt,
-  Lightbulb
+  Lightbulb,
+  Download
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -39,6 +40,7 @@ type RSVP = {
   guests: number;
   comments?: string;
   createdAt: string;
+  guestList?: { id: string; name: string; email: string }[];
 };
 
 type Photo = {
@@ -502,6 +504,41 @@ export default function AdminPage() {
     }
   };
 
+  const handleDeleteRsvp = async (rsvpId: string) => {
+    if (!confirm('Are you sure you want to delete this RSVP?')) return;
+    
+    try {
+      setRsvps(prev => prev.filter(r => r.id !== rsvpId));
+      await fetch(`/api/rsvp/${rsvpId}`, { method: 'DELETE' });
+    } catch (error) {
+      console.error('Error deleting RSVP:', error);
+      fetchData();
+    }
+  };
+
+  const exportRsvpsCsv = () => {
+    const headers = ['Name', 'Email', 'Attending', 'Guests', 'Companions', 'Comments', 'Date'];
+    const rows = rsvps.map(r => [
+      r.name,
+      r.email,
+      r.attending ? 'Yes' : 'No',
+      String(r.guests),
+      (r.guestList || []).map(g => g.name).join('; '),
+      (r.comments || '').replace(/"/g, '""'),
+      new Date(r.createdAt).toLocaleDateString('es-ES'),
+    ]);
+    const csv = [headers, ...rows].map(row => row.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rsvps.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const attendingCount = rsvps.filter((r) => r.attending).length;
   const totalGuests = rsvps.reduce((sum, r) => sum + (r.attending ? r.guests + 1 : 0), 0);
   const pendingPhotos = photos.filter((p) => !p.approved).length;
@@ -826,14 +863,20 @@ export default function AdminPage() {
               <CardHeader className="border-b border-gray-100 pb-4">
                 <CardTitle className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3 text-lg md:text-2xl font-playfair">
                   <div className="flex items-center gap-3">
-                    <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-2 md:p-3 rounded-xl">
+                    <div className="bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] p-2 md:p-3 rounded-xl">
                       <Users className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </div>
                     {t('rsvp.title')}
                   </div>
-                  <span className="text-xs md:text-sm font-normal text-gray-500 md:ml-auto">
-                    {attendingCount} {t('rsvp.confirmedOf')} {rsvps.length} {t('stats.responses')}
-                  </span>
+                  <div className="flex items-center gap-2 md:ml-auto">
+                    <span className="text-xs md:text-sm font-normal text-gray-500">
+                      {attendingCount} {t('rsvp.confirmedOf')} {rsvps.length} {t('stats.responses')}
+                    </span>
+                    <Button size="sm" variant="primary" onClick={exportRsvpsCsv} className="ml-2">
+                      <Download className="w-4 h-4 mr-1" />
+                      CSV
+                    </Button>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4 md:pt-6">
@@ -847,6 +890,8 @@ export default function AdminPage() {
                           <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">{t('rsvp.attends')}</th>
                           <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">{t('rsvp.guests')}</th>
                           <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base min-w-[200px]">{t('rsvp.comments')}</th>
+                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base">{t('rsvp.date')}</th>
+                          <th className="text-left py-3 md:py-4 px-2 md:px-4 font-bold text-gray-700 text-xs md:text-base"></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -864,7 +909,7 @@ export default function AdminPage() {
                             <td className="py-3 md:py-4 px-2 md:px-4 text-gray-600 text-xs md:text-sm min-w-[200px]">{rsvp.email}</td>
                             <td className="py-3 md:py-4 px-2 md:px-4">
                               {rsvp.attending ? (
-                                <span className="inline-flex px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-md whitespace-nowrap">
+                                <span className="inline-flex px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] text-white shadow-md whitespace-nowrap">
                                   ✓ {t('rsvp.yes')}
                                 </span>
                               ) : (
@@ -875,6 +920,15 @@ export default function AdminPage() {
                             </td>
                             <td className="py-3 md:py-4 px-2 md:px-4">
                               <span className="text-base md:text-xl font-bold text-purple-600">{rsvp.guests}</span>
+                              {rsvp.guestList && rsvp.guestList.length > 0 && (
+                                <div className="mt-1 space-y-0.5">
+                                  {rsvp.guestList.map(g => (
+                                    <div key={g.id} className="text-xs text-gray-500 truncate max-w-[140px]" title={`${g.name} (${g.email})`}>
+                                      • {g.name}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </td>
                             <td className="py-3 md:py-4 px-2 md:px-4 text-xs md:text-sm text-gray-600">
                               {rsvp.comments ? (
@@ -884,6 +938,18 @@ export default function AdminPage() {
                               ) : (
                                 <span className="text-gray-400">-</span>
                               )}
+                            </td>
+                            <td className="py-3 md:py-4 px-2 md:px-4 text-xs text-gray-500 whitespace-nowrap">
+                              {new Date(rsvp.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
+                            </td>
+                            <td className="py-3 md:py-4 px-2 md:px-4">
+                              <button
+                                onClick={() => handleDeleteRsvp(rsvp.id)}
+                                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
                             </td>
                           </motion.tr>
                         ))}

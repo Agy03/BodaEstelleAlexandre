@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
+import { autoTranslateEntity, getTranslatedEntity, getLocaleFromRequest } from '@/lib/translate';
 
 // GET - Obtener información de la boda
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const locale = getLocaleFromRequest(request);
+
     // Obtener el primer registro (solo debe haber uno)
     let weddingInfo = await prisma.weddingInfo.findFirst();
 
@@ -42,7 +45,15 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json(weddingInfo);
+    // Apply translations for the requested locale
+    const translated = await getTranslatedEntity(
+      'WeddingInfo',
+      weddingInfo.id,
+      weddingInfo as unknown as Record<string, unknown> & { id: string },
+      locale
+    );
+
+    return NextResponse.json(translated);
   } catch (error) {
     console.error('Error fetching wedding info:', error);
     return NextResponse.json(
@@ -85,6 +96,10 @@ export async function PUT(request: Request) {
         },
       });
     }
+
+    // Auto-translate to other locales
+    const sourceLocale = getLocaleFromRequest(request);
+    autoTranslateEntity('WeddingInfo', weddingInfo.id, data, sourceLocale);
 
     return NextResponse.json(weddingInfo);
   } catch (error) {

@@ -260,7 +260,9 @@
     "photoSelected": "photo selected",
     "photosSelected": "photos selected",
     "multiplePhotos": "You can select multiple photos",
-    "uploadSuccess": "Photos uploaded successfully."
+    "uploadSuccess": "Photos uploaded successfully.",
+    "downloadAlbum": "Download Album",
+    "downloadingAlbum": "Preparing album..."
   },
   "music": {
     "title": "Music Suggestions",
@@ -397,7 +399,8 @@
       "yes": "Yes",
       "no": "No",
       "guests": "Guests",
-      "comments": "Comments"
+      "comments": "Comments",
+      "date": "Date"
     },
     "photos": {
       "title": "Photo Gallery",

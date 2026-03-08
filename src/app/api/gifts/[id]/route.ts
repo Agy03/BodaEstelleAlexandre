@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { autoTranslateEntity, getLocaleFromRequest } from '@/lib/translate';
 
 export async function PUT(
   request: Request,
@@ -20,6 +21,10 @@ export async function PUT(
       },
     });
 
+    // Auto-translate to other locales
+    const sourceLocale = getLocaleFromRequest(request);
+    autoTranslateEntity('Gift', gift.id, data, sourceLocale);
+
     return NextResponse.json(gift);
   } catch (error) {
     console.error('Error updating gift:', error);
@@ -36,6 +41,12 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+
+    // Delete translations first
+    await prisma.translation.deleteMany({
+      where: { entityType: 'Gift', entityId: id },
+    });
+
     await prisma.gift.delete({
       where: { id },
     });

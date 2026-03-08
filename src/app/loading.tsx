@@ -59,19 +59,7 @@ export default function Loading() {
             }}
             className="relative z-10"
           >
-            <Heart className="w-24 h-24 text-[var(--color-rose)] fill-current" />
-            <motion.div
-              className="absolute inset-0 bg-[var(--color-rose)] blur-2xl opacity-40"
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [0.4, 0.2, 0.4],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            <Heart className="w-24 h-24" style={{ color: '#E8B4B8', fill: '#E8B4B8' }} />
           </motion.div>
         </div>
 

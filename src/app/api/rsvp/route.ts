@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendRSVPConfirmation } from '@/lib/email';
 
 interface GuestInfo {
   name: string;
@@ -9,7 +10,7 @@ interface GuestInfo {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, attending, guests, comments, guestList } = body;
+    const { name, email, attending, guests, comments, guestList, locale } = body;
 
     // Validate required fields
     if (!name || !email) {
@@ -40,8 +41,20 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // TODO: Send confirmation email
-      // await sendConfirmationEmail(email, name, attending);
+      // Send confirmation email
+      try {
+        await sendRSVPConfirmation({
+          to: email,
+          guestName: name,
+          attending: attending ?? true,
+          guests: guests ?? 0,
+          guestList: rsvp.guestList,
+          comments: comments || undefined,
+          locale: locale || 'es',
+        });
+      } catch (err) {
+        console.error('Error sending RSVP email:', err);
+      }
 
       return NextResponse.json({ success: true, rsvp }, { status: 201 });
     } catch (dbError) {

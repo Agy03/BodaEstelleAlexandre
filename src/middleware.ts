@@ -1,12 +1,5 @@
 import { auth } from '@/auth';
-import createMiddleware from 'next-intl/middleware';
-
-const intlMiddleware = createMiddleware({
-  locales: ['es', 'en', 'fr'],
-  defaultLocale: 'es',
-  localePrefix: 'never',
-  localeDetection: true
-});
+import { NextResponse } from 'next/server';
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
@@ -16,7 +9,7 @@ export default auth((req) => {
 
   // Permitir siempre acceso a /admin/login
   if (isOnLogin) {
-    return intlMiddleware(req);
+    return NextResponse.next();
   }
 
   // Proteger solo el dashboard /admin y sus sub-rutas (excepto login)
@@ -24,7 +17,7 @@ export default auth((req) => {
     return Response.redirect(new URL('/admin/login', req.nextUrl));
   }
 
-  return intlMiddleware(req);
+  return NextResponse.next();
 });
 
 export const config = {

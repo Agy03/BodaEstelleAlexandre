@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, MapPin, Calendar, Users, Gift, Camera, Music, Info, Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ScrollVine } from '@/components/ui/ScrollVine';
@@ -89,6 +90,20 @@ const floatingAnimation = {
 export default function Home() {
   const t = useTranslations();
   const features = getFeatures(t);
+  const [weddingDate, setWeddingDate] = useState<string | null>(null);
+  const [venueName, setVenueName] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/wedding-info')
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data) {
+          setWeddingDate(data.weddingDate);
+          setVenueName(data.venueName);
+        }
+      })
+      .catch(() => {});
+  }, []);
   
   return (
     <div className="min-h-screen overflow-hidden relative">

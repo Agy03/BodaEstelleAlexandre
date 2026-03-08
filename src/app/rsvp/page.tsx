@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
@@ -18,6 +18,7 @@ interface GuestInfo {
 
 export default function RSVPPage() {
   const t = useTranslations('rsvp');
+  const locale = useLocale();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,6 +41,7 @@ export default function RSVPPage() {
         body: JSON.stringify({
           ...formData,
           guestList,
+          locale,
         }),
       });
 

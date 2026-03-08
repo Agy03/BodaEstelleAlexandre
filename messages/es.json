@@ -262,7 +262,9 @@
     "photoSelected": "foto seleccionada",
     "photosSelected": "fotos seleccionadas",
     "multiplePhotos": "Puedes seleccionar múltiples fotos",
-    "uploadSuccess": "Fotos subidas correctamente."
+    "uploadSuccess": "Fotos subidas correctamente.",
+    "downloadAlbum": "Descargar Álbum",
+    "downloadingAlbum": "Preparando álbum..."
   },
   "music": {
     "title": "Sugerencias Musicales",
@@ -399,7 +401,8 @@
       "yes": "Sí",
       "no": "No",
       "guests": "Acomp.",
-      "comments": "Comentarios"
+      "comments": "Comentarios",
+      "date": "Fecha"
     },
     "photos": {
       "title": "Galería de Fotos",

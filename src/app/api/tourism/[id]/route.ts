@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { autoTranslateEntity, getLocaleFromRequest } from '@/lib/translate';
 
 export async function PUT(
   request: Request,
@@ -20,6 +21,10 @@ export async function PUT(
       },
     });
 
+    // Auto-translate to other locales
+    const sourceLocale = getLocaleFromRequest(request);
+    autoTranslateEntity('TourismPlace', place.id, data, sourceLocale);
+
     return NextResponse.json(place);
   } catch (error) {
     console.error('Error updating tourism place:', error);
@@ -36,6 +41,12 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+
+    // Delete translations first
+    await prisma.translation.deleteMany({
+      where: { entityType: 'TourismPlace', entityId: id },
+    });
+
     await prisma.tourismPlace.delete({
       where: { id },
     });

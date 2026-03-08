@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { autoTranslateEntity, getTranslatedEntities, getLocaleFromRequest } from '@/lib/translate';
 
 // Datos de ejemplo para cuando no hay conexión a la base de datos
 const samplePlaces = [
@@ -65,14 +66,23 @@ const samplePlaces = [
   },
 ];
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const locale = getLocaleFromRequest(request);
+
     // Intentar obtener de la base de datos
     const places = await prisma.tourismPlace.findMany({
       orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json(places);
+    // Apply translations
+    const translated = await getTranslatedEntities(
+      'TourismPlace',
+      places as unknown as (Record<string, unknown> & { id: string })[],
+      locale
+    );
+
+    return NextResponse.json(translated);
   } catch (error) {
     console.error('Error fetching tourism places:', error);
     console.log('Returning sample data instead');
@@ -95,6 +105,10 @@ export async function POST(request: Request) {
         link: data.link || null,
       },
     });
+
+    // Auto-translate to other locales
+    const sourceLocale = getLocaleFromRequest(request);
+    autoTranslateEntity('TourismPlace', place.id, data, sourceLocale);
 
     return NextResponse.json(place, { status: 201 });
   } catch (error) {

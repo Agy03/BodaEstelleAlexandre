@@ -2,17 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { supabase } from '@/lib/supabase';
 
-// Configuración para Vercel - aumentar límite de body size
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
-};
-
 // Configuración de tiempo máximo de ejecución en Vercel
-export const maxDuration = 60; // 60 segundos
+export const maxDuration = 60;
 
 export async function POST(
   req: NextRequest,
