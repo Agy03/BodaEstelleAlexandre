@@ -4,8 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
-import { Camera, Upload, CheckCircle, Loader, X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { Camera, Upload, CheckCircle, Loader, X, ChevronLeft, ChevronRight, Download, BookOpen } from 'lucide-react';
 import JSZip from 'jszip';
+import { jsPDF } from 'jspdf';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -38,6 +39,8 @@ export default function GaleriaPage() {
   const [uploadProgress, setUploadProgress] = useState<{[key: number]: number}>({});
   const [downloading, setDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
+  const [generatingPdf, setGeneratingPdf] = useState(false);
+  const [pdfProgress, setPdfProgress] = useState(0);
 
   // Función para obtener dimensiones de una imagen
   const getImageDimensions = (url: string): Promise<{ width: number; height: number }> => {
@@ -331,6 +334,258 @@ export default function GaleriaPage() {
     }
   };
 
+  const loadImageAsDataUrl = (url: string): Promise<{ dataUrl: string; width: number; height: number }> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) { reject(new Error('No canvas context')); return; }
+        ctx.drawImage(img, 0, 0);
+        resolve({ dataUrl: canvas.toDataURL('image/jpeg', 0.85), width: img.naturalWidth, height: img.naturalHeight });
+      };
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = url;
+    });
+  };
+
+  const handleGeneratePdfAlbum = async () => {
+    if (photosWithSizes.length === 0) return;
+    setGeneratingPdf(true);
+    setPdfProgress(0);
+
+    try {
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageW = 210;
+      const pageH = 297;
+      const margin = 15;
+      const contentW = pageW - margin * 2;
+
+      // Wedding colors
+      const rose = { r: 232, g: 180, b: 184 };      // #E8B4B8
+      const lavender = { r: 201, g: 167, b: 199 };   // #C9A7C7
+      const champagne = { r: 212, g: 175, b: 151 };   // #D4AF97
+
+      // Helper: draw decorative corner ornaments
+      const drawCornerOrnaments = (pdf: jsPDF) => {
+        pdf.setDrawColor(rose.r, rose.g, rose.b);
+        pdf.setLineWidth(0.3);
+        const s = 20;
+        const o = 10;
+        // Top-left
+        pdf.line(o, o, o + s, o);
+        pdf.line(o, o, o, o + s);
+        // Top-right
+        pdf.line(pageW - o, o, pageW - o - s, o);
+        pdf.line(pageW - o, o, pageW - o, o + s);
+        // Bottom-left
+        pdf.line(o, pageH - o, o + s, pageH - o);
+        pdf.line(o, pageH - o, o, pageH - o - s);
+        // Bottom-right
+        pdf.line(pageW - o, pageH - o, pageW - o - s, pageH - o);
+        pdf.line(pageW - o, pageH - o, pageW - o, pageH - o - s);
+      };
+
+      // Helper: draw decorative line separator
+      const drawSeparator = (pdf: jsPDF, y: number) => {
+        const sepW = 60;
+        const cx = pageW / 2;
+        pdf.setDrawColor(champagne.r, champagne.g, champagne.b);
+        pdf.setLineWidth(0.4);
+        pdf.line(cx - sepW / 2, y, cx - 6, y);
+        pdf.line(cx + 6, y, cx + sepW / 2, y);
+        // Small diamond in center
+        pdf.setFillColor(champagne.r, champagne.g, champagne.b);
+        pdf.circle(cx, y, 1.5, 'F');
+      };
+
+      // Helper: draw page footer
+      const drawFooter = (pdf: jsPDF, pageNum: number, totalPages: number) => {
+        pdf.setFontSize(8);
+        pdf.setTextColor(180, 180, 180);
+        pdf.text(`${pageNum} / ${totalPages}`, pageW / 2, pageH - 8, { align: 'center' });
+        pdf.setDrawColor(rose.r, rose.g, rose.b);
+        pdf.setLineWidth(0.2);
+        pdf.line(margin, pageH - 12, pageW - margin, pageH - 12);
+      };
+
+      // ===== COVER PAGE =====
+      // Soft background gradient effect (simulated with rectangles)
+      for (let i = 0; i < 30; i++) {
+        const alpha = 0.02;
+        pdf.setFillColor(
+          Math.round(255 - (255 - rose.r) * alpha * i),
+          Math.round(255 - (255 - rose.g) * alpha * i),
+          Math.round(255 - (255 - rose.b) * alpha * i)
+        );
+        pdf.rect(0, i * (pageH / 30), pageW, pageH / 30, 'F');
+      }
+
+      drawCornerOrnaments(pdf);
+
+      // Decorative top border
+      pdf.setDrawColor(champagne.r, champagne.g, champagne.b);
+      pdf.setLineWidth(0.5);
+      pdf.line(40, 50, pageW - 40, 50);
+
+      // Title
+      pdf.setFontSize(14);
+      pdf.setTextColor(champagne.r, champagne.g, champagne.b);
+      pdf.text(t('pdfAlbum.coverSubtitle'), pageW / 2, 65, { align: 'center' });
+
+      pdf.setFontSize(42);
+      pdf.setTextColor(rose.r, rose.g, rose.b);
+      pdf.text('Estelle', pageW / 2, 100, { align: 'center' });
+
+      // Ampersand
+      pdf.setFontSize(24);
+      pdf.setTextColor(champagne.r, champagne.g, champagne.b);
+      pdf.text('&', pageW / 2, 115, { align: 'center' });
+
+      pdf.setFontSize(42);
+      pdf.setTextColor(lavender.r, lavender.g, lavender.b);
+      pdf.text('Alexandre', pageW / 2, 135, { align: 'center' });
+
+      drawSeparator(pdf, 150);
+
+      // Heart symbol
+      pdf.setFontSize(20);
+      pdf.setTextColor(rose.r, rose.g, rose.b);
+      pdf.text('\u2665', pageW / 2, 165, { align: 'center' });
+
+      // Album label
+      pdf.setFontSize(16);
+      pdf.setTextColor(120, 120, 120);
+      pdf.text(t('pdfAlbum.albumTitle'), pageW / 2, 185, { align: 'center' });
+
+      // Photo count
+      pdf.setFontSize(11);
+      pdf.setTextColor(160, 160, 160);
+      pdf.text(
+        `${photosWithSizes.length} ${photosWithSizes.length === 1 ? t('photoSelected') : t('photosSelected')}`,
+        pageW / 2, 200,
+        { align: 'center' }
+      );
+
+      // Date
+      pdf.setFontSize(10);
+      pdf.setTextColor(champagne.r, champagne.g, champagne.b);
+      const dateStr = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+      pdf.text(dateStr, pageW / 2, 220, { align: 'center' });
+
+      // Bottom border
+      pdf.setDrawColor(champagne.r, champagne.g, champagne.b);
+      pdf.setLineWidth(0.5);
+      pdf.line(40, pageH - 50, pageW - 40, pageH - 50);
+
+      // ===== PHOTO PAGES =====
+      // Layout: 2 photos per page, each centered with caption
+      const photosPerPage = 2;
+      const totalPhotoPages = Math.ceil(photosWithSizes.length / photosPerPage);
+      const totalPages = 1 + totalPhotoPages; // cover + photo pages
+
+      for (let i = 0; i < photosWithSizes.length; i++) {
+        const photo = photosWithSizes[i];
+        const positionOnPage = i % photosPerPage; // 0 or 1
+
+        if (positionOnPage === 0) {
+          pdf.addPage();
+          // Page background
+          pdf.setFillColor(255, 252, 249);
+          pdf.rect(0, 0, pageW, pageH, 'F');
+          drawCornerOrnaments(pdf);
+          const pageNum = Math.floor(i / photosPerPage) + 2;
+          drawFooter(pdf, pageNum, totalPages);
+        }
+
+        try {
+          const { dataUrl, width, height } = await loadImageAsDataUrl(photo.url);
+
+          // Calculate position: top half or bottom half
+          const slotY = positionOnPage === 0 ? margin + 5 : pageH / 2 + 5;
+          const slotH = (pageH / 2) - margin - 10;
+          const captionSpace = (photo.caption || photo.uploaderName) ? 14 : 4;
+          const imgMaxH = slotH - captionSpace;
+          const imgMaxW = contentW - 10;
+
+          // Scale image to fit
+          const scale = Math.min(imgMaxW / width, imgMaxH / (height * (imgMaxW / width) > imgMaxH ? 1 : width / width));
+          let imgW = width * (imgMaxW / width);
+          let imgH = height * (imgMaxW / width);
+          if (imgH > imgMaxH) {
+            const ratio = imgMaxH / imgH;
+            imgW *= ratio;
+            imgH *= ratio;
+          }
+
+          const imgX = (pageW - imgW) / 2;
+          const imgY = slotY + (imgMaxH - imgH) / 2;
+
+          // Soft shadow effect behind image
+          pdf.setFillColor(240, 235, 230);
+          pdf.roundedRect(imgX - 1, imgY - 1, imgW + 2, imgH + 2, 1, 1, 'F');
+
+          // Thin rose border
+          pdf.setDrawColor(rose.r, rose.g, rose.b);
+          pdf.setLineWidth(0.3);
+          pdf.roundedRect(imgX - 0.5, imgY - 0.5, imgW + 1, imgH + 1, 0.5, 0.5, 'S');
+
+          pdf.addImage(dataUrl, 'JPEG', imgX, imgY, imgW, imgH);
+
+          // Caption text below photo
+          const captionY = imgY + imgH + 5;
+          if (photo.caption) {
+            pdf.setFontSize(9);
+            pdf.setTextColor(100, 100, 100);
+            const captionText = photo.caption.length > 80 ? photo.caption.slice(0, 80) + '...' : photo.caption;
+            pdf.text(captionText, pageW / 2, captionY, { align: 'center' });
+          }
+          if (photo.uploaderName) {
+            pdf.setFontSize(7);
+            pdf.setTextColor(160, 160, 160);
+            pdf.text(`— ${photo.uploaderName}`, pageW / 2, captionY + (photo.caption ? 4 : 0), { align: 'center' });
+          }
+        } catch {
+          // Skip failed photos
+        }
+
+        setPdfProgress(Math.round(((i + 1) / photosWithSizes.length) * 100));
+      }
+
+      // ===== BACK COVER =====
+      pdf.addPage();
+      pdf.setFillColor(255, 252, 249);
+      pdf.rect(0, 0, pageW, pageH, 'F');
+      drawCornerOrnaments(pdf);
+
+      drawSeparator(pdf, pageH / 2 - 30);
+
+      pdf.setFontSize(18);
+      pdf.setTextColor(rose.r, rose.g, rose.b);
+      pdf.text(t('pdfAlbum.thanksTitle'), pageW / 2, pageH / 2 - 10, { align: 'center' });
+
+      pdf.setFontSize(11);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(t('pdfAlbum.thanksSubtitle'), pageW / 2, pageH / 2 + 5, { align: 'center' });
+
+      pdf.setFontSize(16);
+      pdf.setTextColor(champagne.r, champagne.g, champagne.b);
+      pdf.text('\u2665', pageW / 2, pageH / 2 + 20, { align: 'center' });
+
+      drawSeparator(pdf, pageH / 2 + 30);
+
+      pdf.save('Album-Boda-Estelle-Alexandre.pdf');
+    } catch (error) {
+      console.error('Error generating PDF album:', error);
+    } finally {
+      setGeneratingPdf(false);
+      setPdfProgress(0);
+    }
+  };
+
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
       {/* Decorative background */}
@@ -501,17 +756,17 @@ export default function GaleriaPage() {
           </Card>
         </motion.div>
 
-        {/* Download Album Button */}
+        {/* Download Album Buttons */}
         {!loading && photos.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex justify-center mb-10"
+            className="flex flex-col sm:flex-row justify-center gap-4 mb-10"
           >
             <Button
               onClick={handleDownloadAlbum}
-              disabled={downloading}
+              disabled={downloading || generatingPdf}
               className="bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-accent)] hover:shadow-2xl hover:shadow-[var(--color-secondary)]/30 px-8 py-3 text-base"
             >
               {downloading ? (
@@ -523,6 +778,23 @@ export default function GaleriaPage() {
                 <>
                   <Download className="w-5 h-5 mr-2" />
                   {t('downloadAlbum')} ({photos.length} {photos.length === 1 ? t('photoSelected') : t('photosSelected')})
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={handleGeneratePdfAlbum}
+              disabled={generatingPdf || downloading}
+              className="bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-primary)] hover:shadow-2xl hover:shadow-[var(--color-rose)]/30 px-8 py-3 text-base"
+            >
+              {generatingPdf ? (
+                <>
+                  <Loader className="w-5 h-5 mr-2 animate-spin" />
+                  {t('pdfAlbum.generating')} ({pdfProgress}%)
+                </>
+              ) : (
+                <>
+                  <BookOpen className="w-5 h-5 mr-2" />
+                  {t('pdfAlbum.button')}
                 </>
               )}
             </Button>

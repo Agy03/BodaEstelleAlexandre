@@ -264,7 +264,15 @@
     "multiplePhotos": "Puedes seleccionar múltiples fotos",
     "uploadSuccess": "Fotos subidas correctamente.",
     "downloadAlbum": "Descargar Álbum",
-    "downloadingAlbum": "Preparando álbum..."
+    "downloadingAlbum": "Preparando álbum...",
+    "pdfAlbum": {
+      "button": "Álbum PDF",
+      "generating": "Generando álbum...",
+      "coverSubtitle": "La Boda de",
+      "albumTitle": "Álbum de Fotos",
+      "thanksTitle": "Gracias por compartir estos momentos",
+      "thanksSubtitle": "Con todo nuestro amor, Estelle & Alexandre"
+    }
   },
   "music": {
     "title": "Sugerencias Musicales",

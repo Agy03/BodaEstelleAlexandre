@@ -264,7 +264,15 @@
     "multiplePhotos": "Vous pouvez sélectionner plusieurs photos",
     "uploadSuccess": "Photos téléchargées avec succès.",
     "downloadAlbum": "Télécharger l'album",
-    "downloadingAlbum": "Préparation de l'album..."
+    "downloadingAlbum": "Préparation de l'album...",
+    "pdfAlbum": {
+      "button": "Album PDF",
+      "generating": "Génération de l'album...",
+      "coverSubtitle": "Le Mariage de",
+      "albumTitle": "Album Photos",
+      "thanksTitle": "Merci d'avoir partagé ces moments",
+      "thanksSubtitle": "Avec tout notre amour, Estelle & Alexandre"
+    }
   },
   "music": {
     "title": "Suggestions Musicales",

@@ -208,7 +208,7 @@ export default function Home() {
                       </div>
                       <div className="text-left">
                         <p className="text-sm text-gray-500 font-medium">{t('home.hero.dateLabel')}</p>
-                        <p className="font-semibold">{t('home.hero.dateValue')}</p>
+                        <p className="font-semibold">{weddingDate || t('home.hero.dateValue')}</p>
                       </div>
                     </div>
                     <div className="hidden sm:block w-px h-10 bg-gray-200" />
@@ -218,7 +218,7 @@ export default function Home() {
                       </div>
                       <div className="text-left">
                         <p className="text-sm text-gray-500 font-medium">{t('home.hero.locationLabel')}</p>
-                        <p className="font-semibold">{t('home.hero.locationValue')}</p>
+                        <p className="font-semibold">{venueName || t('home.hero.locationValue')}</p>
                       </div>
                     </div>
                   </div>

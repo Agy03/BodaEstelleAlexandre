@@ -262,7 +262,15 @@
     "multiplePhotos": "You can select multiple photos",
     "uploadSuccess": "Photos uploaded successfully.",
     "downloadAlbum": "Download Album",
-    "downloadingAlbum": "Preparing album..."
+    "downloadingAlbum": "Preparing album...",
+    "pdfAlbum": {
+      "button": "PDF Album",
+      "generating": "Generating album...",
+      "coverSubtitle": "The Wedding of",
+      "albumTitle": "Photo Album",
+      "thanksTitle": "Thank you for sharing these moments",
+      "thanksSubtitle": "With all our love, Estelle & Alexandre"
+    }
   },
   "music": {
     "title": "Music Suggestions",
