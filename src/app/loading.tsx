@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Heart, Sparkles } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export default function Loading() {
@@ -16,52 +16,19 @@ export default function Loading() {
       </div>
 
       <div className="relative flex flex-col items-center gap-8">
-        {/* Animated hearts */}
-        <div className="relative">
-          {/* Outer rotating ring */}
-          <motion.div
-            className="absolute inset-0 w-32 h-32"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          >
-            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
-              <motion.div
-                key={angle}
-                className="absolute top-1/2 left-1/2"
-                style={{
-                  transform: `rotate(${angle}deg) translateY(-60px)`,
-                }}
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.8, 0.3],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  delay: i * 0.2,
-                  ease: "easeInOut",
-                }}
-              >
-                <Sparkles className="w-3 h-3 text-[var(--color-accent)]" />
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Center heart */}
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="relative z-10"
-          >
-            <Heart className="w-24 h-24" style={{ color: '#E8B4B8', fill: '#E8B4B8' }} />
-          </motion.div>
-        </div>
+        {/* Pulsating heart */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <Heart className="w-24 h-24" style={{ color: '#E8B4B8', fill: '#E8B4B8' }} />
+        </motion.div>
 
         {/* Text */}
         <div className="text-center space-y-2">
