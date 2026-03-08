@@ -41,6 +41,7 @@ export default function GaleriaPage() {
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [generatingPdf, setGeneratingPdf] = useState(false);
   const [pdfProgress, setPdfProgress] = useState(0);
+  const [weddingDate, setWeddingDate] = useState<string>('');
 
   // Función para obtener dimensiones de una imagen
   const getImageDimensions = (url: string): Promise<{ width: number; height: number }> => {
@@ -103,6 +104,14 @@ export default function GaleriaPage() {
 
   useEffect(() => {
     fetchPhotos();
+    fetch('/api/wedding-info')
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data) {
+          setWeddingDate(data.weddingDate || '');
+        }
+      })
+      .catch(() => {});
   }, [fetchPhotos]);
 
   // Manejar teclas para navegación en lightbox
@@ -365,45 +374,32 @@ export default function GaleriaPage() {
       const contentW = pageW - margin * 2;
 
       // Wedding colors
-      const rose = { r: 232, g: 180, b: 184 };      // #E8B4B8
-      const lavender = { r: 201, g: 167, b: 199 };   // #C9A7C7
-      const champagne = { r: 212, g: 175, b: 151 };   // #D4AF97
+      const rose = { r: 232, g: 180, b: 184 };
+      const lavender = { r: 201, g: 167, b: 199 };
+      const champagne = { r: 212, g: 175, b: 151 };
 
-      // Helper: draw decorative corner ornaments
-      const drawCornerOrnaments = (pdf: jsPDF) => {
+      // --- Helpers ---
+      const drawCornerOrnaments = () => {
         pdf.setDrawColor(rose.r, rose.g, rose.b);
         pdf.setLineWidth(0.3);
-        const s = 20;
-        const o = 10;
-        // Top-left
-        pdf.line(o, o, o + s, o);
-        pdf.line(o, o, o, o + s);
-        // Top-right
-        pdf.line(pageW - o, o, pageW - o - s, o);
-        pdf.line(pageW - o, o, pageW - o, o + s);
-        // Bottom-left
-        pdf.line(o, pageH - o, o + s, pageH - o);
-        pdf.line(o, pageH - o, o, pageH - o - s);
-        // Bottom-right
-        pdf.line(pageW - o, pageH - o, pageW - o - s, pageH - o);
-        pdf.line(pageW - o, pageH - o, pageW - o, pageH - o - s);
+        const s = 20, o = 10;
+        pdf.line(o, o, o + s, o); pdf.line(o, o, o, o + s);
+        pdf.line(pageW - o, o, pageW - o - s, o); pdf.line(pageW - o, o, pageW - o, o + s);
+        pdf.line(o, pageH - o, o + s, pageH - o); pdf.line(o, pageH - o, o, pageH - o - s);
+        pdf.line(pageW - o, pageH - o, pageW - o - s, pageH - o); pdf.line(pageW - o, pageH - o, pageW - o, pageH - o - s);
       };
 
-      // Helper: draw decorative line separator
-      const drawSeparator = (pdf: jsPDF, y: number) => {
-        const sepW = 60;
-        const cx = pageW / 2;
+      const drawSeparator = (y: number) => {
+        const sepW = 60, cx = pageW / 2;
         pdf.setDrawColor(champagne.r, champagne.g, champagne.b);
         pdf.setLineWidth(0.4);
         pdf.line(cx - sepW / 2, y, cx - 6, y);
         pdf.line(cx + 6, y, cx + sepW / 2, y);
-        // Small diamond in center
         pdf.setFillColor(champagne.r, champagne.g, champagne.b);
         pdf.circle(cx, y, 1.5, 'F');
       };
 
-      // Helper: draw page footer
-      const drawFooter = (pdf: jsPDF, pageNum: number, totalPages: number) => {
+      const drawFooter = (pageNum: number, totalPages: number) => {
         pdf.setFontSize(8);
         pdf.setTextColor(180, 180, 180);
         pdf.text(`${pageNum} / ${totalPages}`, pageW / 2, pageH - 8, { align: 'center' });
@@ -412,8 +408,14 @@ export default function GaleriaPage() {
         pdf.line(margin, pageH - 12, pageW - margin, pageH - 12);
       };
 
+      const drawHeart = (cx: number, cy: number, size: number, r: number, g: number, b: number) => {
+        pdf.setFillColor(r, g, b);
+        pdf.circle(cx - size * 0.3, cy - size * 0.15, size * 0.35, 'F');
+        pdf.circle(cx + size * 0.3, cy - size * 0.15, size * 0.35, 'F');
+        pdf.triangle(cx - size * 0.6, cy, cx + size * 0.6, cy, cx, cy + size * 0.7, 'F');
+      };
+
       // ===== COVER PAGE =====
-      // Soft background gradient effect (simulated with rectangles)
       for (let i = 0; i < 30; i++) {
         const alpha = 0.02;
         pdf.setFillColor(
@@ -424,95 +426,109 @@ export default function GaleriaPage() {
         pdf.rect(0, i * (pageH / 30), pageW, pageH / 30, 'F');
       }
 
-      drawCornerOrnaments(pdf);
+      drawCornerOrnaments();
 
-      // Decorative top border
       pdf.setDrawColor(champagne.r, champagne.g, champagne.b);
       pdf.setLineWidth(0.5);
-      pdf.line(40, 50, pageW - 40, 50);
+      pdf.line(40, 40, pageW - 40, 40);
 
-      // Title
       pdf.setFontSize(14);
       pdf.setTextColor(champagne.r, champagne.g, champagne.b);
-      pdf.text(t('pdfAlbum.coverSubtitle'), pageW / 2, 65, { align: 'center' });
+      pdf.text(t('pdfAlbum.coverSubtitle'), pageW / 2, 52, { align: 'center' });
 
-      pdf.setFontSize(42);
+      pdf.setFontSize(38);
       pdf.setTextColor(rose.r, rose.g, rose.b);
-      pdf.text('Estelle', pageW / 2, 100, { align: 'center' });
+      pdf.text('Estelle', pageW / 2, 72, { align: 'center' });
 
-      // Ampersand
-      pdf.setFontSize(24);
-      pdf.setTextColor(champagne.r, champagne.g, champagne.b);
-      pdf.text('&', pageW / 2, 115, { align: 'center' });
-
-      pdf.setFontSize(42);
-      pdf.setTextColor(lavender.r, lavender.g, lavender.b);
-      pdf.text('Alexandre', pageW / 2, 135, { align: 'center' });
-
-      drawSeparator(pdf, 150);
-
-      // Heart symbol
       pdf.setFontSize(20);
-      pdf.setTextColor(rose.r, rose.g, rose.b);
-      pdf.text('\u2665', pageW / 2, 165, { align: 'center' });
+      pdf.setTextColor(champagne.r, champagne.g, champagne.b);
+      pdf.text('&', pageW / 2, 84, { align: 'center' });
 
-      // Album label
+      pdf.setFontSize(38);
+      pdf.setTextColor(lavender.r, lavender.g, lavender.b);
+      pdf.text('Alexandre', pageW / 2, 100, { align: 'center' });
+
+      drawSeparator(110);
+
+      // Cover photo — use first gallery photo
+      const photoAreaY = 118;
+      const photoAreaH = 110;
+      const photoAreaW = contentW - 20;
+      const photoAreaX = (pageW - photoAreaW) / 2;
+      const coverPhotoUrl = photosWithSizes.length > 0 ? photosWithSizes[0].url : null;
+      let coverPhotoLoaded = false;
+
+      if (coverPhotoUrl) {
+        try {
+          const { dataUrl, width, height } = await loadImageAsDataUrl(coverPhotoUrl);
+          let imgW = photoAreaW;
+          let imgH = height * (photoAreaW / width);
+          if (imgH > photoAreaH) {
+            imgH = photoAreaH;
+            imgW = width * (photoAreaH / height);
+          }
+          const imgX = (pageW - imgW) / 2;
+          const imgY = photoAreaY + (photoAreaH - imgH) / 2;
+          pdf.setFillColor(240, 235, 230);
+          pdf.roundedRect(imgX - 1.5, imgY - 1.5, imgW + 3, imgH + 3, 2, 2, 'F');
+          pdf.setDrawColor(rose.r, rose.g, rose.b);
+          pdf.setLineWidth(0.4);
+          pdf.roundedRect(imgX - 0.5, imgY - 0.5, imgW + 1, imgH + 1, 1, 1, 'S');
+          pdf.addImage(dataUrl, 'JPEG', imgX, imgY, imgW, imgH);
+          coverPhotoLoaded = true;
+        } catch {
+          // fallback to placeholder
+        }
+      }
+
+      if (!coverPhotoLoaded) {
+        pdf.setDrawColor(rose.r, rose.g, rose.b);
+        pdf.setLineWidth(0.3);
+        pdf.roundedRect(photoAreaX, photoAreaY, photoAreaW, photoAreaH, 3, 3, 'S');
+        drawHeart(pageW / 2, photoAreaY + photoAreaH / 2, 8, rose.r, rose.g, rose.b);
+      }
+
+      drawSeparator(photoAreaY + photoAreaH + 10);
+
       pdf.setFontSize(16);
       pdf.setTextColor(120, 120, 120);
-      pdf.text(t('pdfAlbum.albumTitle'), pageW / 2, 185, { align: 'center' });
+      pdf.text(t('pdfAlbum.albumTitle'), pageW / 2, photoAreaY + photoAreaH + 25, { align: 'center' });
 
-      // Photo count
-      pdf.setFontSize(11);
-      pdf.setTextColor(160, 160, 160);
-      pdf.text(
-        `${photosWithSizes.length} ${photosWithSizes.length === 1 ? t('photoSelected') : t('photosSelected')}`,
-        pageW / 2, 200,
-        { align: 'center' }
-      );
+      if (weddingDate) {
+        pdf.setFontSize(11);
+        pdf.setTextColor(champagne.r, champagne.g, champagne.b);
+        pdf.text(weddingDate, pageW / 2, photoAreaY + photoAreaH + 35, { align: 'center' });
+      }
 
-      // Date
-      pdf.setFontSize(10);
-      pdf.setTextColor(champagne.r, champagne.g, champagne.b);
-      const dateStr = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-      pdf.text(dateStr, pageW / 2, 220, { align: 'center' });
-
-      // Bottom border
       pdf.setDrawColor(champagne.r, champagne.g, champagne.b);
       pdf.setLineWidth(0.5);
       pdf.line(40, pageH - 50, pageW - 40, pageH - 50);
 
       // ===== PHOTO PAGES =====
-      // Layout: 2 photos per page, each centered with caption
       const photosPerPage = 2;
       const totalPhotoPages = Math.ceil(photosWithSizes.length / photosPerPage);
-      const totalPages = 1 + totalPhotoPages; // cover + photo pages
+      const totalPages = 1 + totalPhotoPages;
 
       for (let i = 0; i < photosWithSizes.length; i++) {
         const photo = photosWithSizes[i];
-        const positionOnPage = i % photosPerPage; // 0 or 1
+        const positionOnPage = i % photosPerPage;
 
         if (positionOnPage === 0) {
           pdf.addPage();
-          // Page background
           pdf.setFillColor(255, 252, 249);
           pdf.rect(0, 0, pageW, pageH, 'F');
-          drawCornerOrnaments(pdf);
-          const pageNum = Math.floor(i / photosPerPage) + 2;
-          drawFooter(pdf, pageNum, totalPages);
+          drawCornerOrnaments();
+          drawFooter(Math.floor(i / photosPerPage) + 2, totalPages);
         }
 
         try {
           const { dataUrl, width, height } = await loadImageAsDataUrl(photo.url);
-
-          // Calculate position: top half or bottom half
           const slotY = positionOnPage === 0 ? margin + 5 : pageH / 2 + 5;
           const slotH = (pageH / 2) - margin - 10;
           const captionSpace = (photo.caption || photo.uploaderName) ? 14 : 4;
           const imgMaxH = slotH - captionSpace;
           const imgMaxW = contentW - 10;
 
-          // Scale image to fit
-          const scale = Math.min(imgMaxW / width, imgMaxH / (height * (imgMaxW / width) > imgMaxH ? 1 : width / width));
           let imgW = width * (imgMaxW / width);
           let imgH = height * (imgMaxW / width);
           if (imgH > imgMaxH) {
@@ -524,29 +540,24 @@ export default function GaleriaPage() {
           const imgX = (pageW - imgW) / 2;
           const imgY = slotY + (imgMaxH - imgH) / 2;
 
-          // Soft shadow effect behind image
           pdf.setFillColor(240, 235, 230);
           pdf.roundedRect(imgX - 1, imgY - 1, imgW + 2, imgH + 2, 1, 1, 'F');
-
-          // Thin rose border
           pdf.setDrawColor(rose.r, rose.g, rose.b);
           pdf.setLineWidth(0.3);
           pdf.roundedRect(imgX - 0.5, imgY - 0.5, imgW + 1, imgH + 1, 0.5, 0.5, 'S');
-
           pdf.addImage(dataUrl, 'JPEG', imgX, imgY, imgW, imgH);
 
-          // Caption text below photo
           const captionY = imgY + imgH + 5;
           if (photo.caption) {
             pdf.setFontSize(9);
             pdf.setTextColor(100, 100, 100);
-            const captionText = photo.caption.length > 80 ? photo.caption.slice(0, 80) + '...' : photo.caption;
-            pdf.text(captionText, pageW / 2, captionY, { align: 'center' });
+            pdf.text(photo.caption.length > 80 ? photo.caption.slice(0, 80) + '...' : photo.caption, pageW / 2, captionY, { align: 'center' });
           }
           if (photo.uploaderName) {
             pdf.setFontSize(7);
             pdf.setTextColor(160, 160, 160);
-            pdf.text(`— ${photo.uploaderName}`, pageW / 2, captionY + (photo.caption ? 4 : 0), { align: 'center' });
+            const nameY = captionY + (photo.caption ? 4 : 0);
+            pdf.text('-- ' + photo.uploaderName, pageW / 2, nameY, { align: 'center' });
           }
         } catch {
           // Skip failed photos
@@ -559,9 +570,9 @@ export default function GaleriaPage() {
       pdf.addPage();
       pdf.setFillColor(255, 252, 249);
       pdf.rect(0, 0, pageW, pageH, 'F');
-      drawCornerOrnaments(pdf);
+      drawCornerOrnaments();
 
-      drawSeparator(pdf, pageH / 2 - 30);
+      drawSeparator(pageH / 2 - 30);
 
       pdf.setFontSize(18);
       pdf.setTextColor(rose.r, rose.g, rose.b);
@@ -571,11 +582,9 @@ export default function GaleriaPage() {
       pdf.setTextColor(150, 150, 150);
       pdf.text(t('pdfAlbum.thanksSubtitle'), pageW / 2, pageH / 2 + 5, { align: 'center' });
 
-      pdf.setFontSize(16);
-      pdf.setTextColor(champagne.r, champagne.g, champagne.b);
-      pdf.text('\u2665', pageW / 2, pageH / 2 + 20, { align: 'center' });
+      drawHeart(pageW / 2, pageH / 2 + 20, 5, champagne.r, champagne.g, champagne.b);
 
-      drawSeparator(pdf, pageH / 2 + 30);
+      drawSeparator(pageH / 2 + 30);
 
       pdf.save('Album-Boda-Estelle-Alexandre.pdf');
     } catch (error) {
