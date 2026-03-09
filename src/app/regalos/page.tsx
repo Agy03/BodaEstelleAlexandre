@@ -777,19 +777,20 @@ function GiftCard({
 
       <CardContent className="p-0">
         {/* Image */}
-        <div className={`relative overflow-hidden ${isPriority ? 'h-64' : 'h-52'} bg-gradient-to-br from-gray-100 to-gray-50`}>
+        <div className={`relative overflow-hidden ${isPriority ? 'h-64' : 'h-52'} bg-[#f5f0eb]`}>
           {gift.image ? (
             <motion.div
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.4 }}
-              className="w-full h-full"
+              className="w-full h-full flex items-center justify-center p-4"
             >
               <NextImage
                 src={gift.image}
                 alt={gift.name}
                 fill
                 unoptimized
-                className="object-contain p-2"
+                className="object-contain mix-blend-multiply"
+                style={{ padding: '12px' }}
               />
             </motion.div>
           ) : (
