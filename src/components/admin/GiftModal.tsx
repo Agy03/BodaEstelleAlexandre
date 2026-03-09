@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Select } from '@/components/ui/Select';
 import NextImage from 'next/image';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 type Gift = {
@@ -47,6 +47,36 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
     category: 'Hogar',
     priority: false,
   });
+  const [fetchingPreview, setFetchingPreview] = useState(false);
+
+  const fetchLinkPreview = async (url: string) => {
+    if (!url || fetchingPreview) return;
+    try {
+      new URL(url);
+    } catch {
+      return;
+    }
+    setFetchingPreview(true);
+    try {
+      const res = await fetch('/api/link-preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setFormData((prev) => ({
+        ...prev,
+        ...(data.image && !prev.image ? { image: data.image } : {}),
+        ...(data.title && !prev.name ? { name: data.title } : {}),
+        ...(data.price && !prev.price ? { price: data.price } : {}),
+      }));
+    } catch {
+      // ignore
+    } finally {
+      setFetchingPreview(false);
+    }
+  };
 
   useEffect(() => {
     if (gift) {
@@ -171,9 +201,19 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
             <Input
               value={formData.link}
               onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+              onPaste={(e) => {
+                const pasted = e.clipboardData.getData('text');
+                if (pasted) setTimeout(() => fetchLinkPreview(pasted), 100);
+              }}
+              onBlur={(e) => fetchLinkPreview(e.target.value)}
               placeholder="https://..."
             />
-            {formData.link && (
+            {fetchingPreview && (
+              <div className="p-2 md:p-3 flex-shrink-0 flex items-center">
+                <Loader2 className="w-4 h-4 md:w-5 md:h-5 text-gray-400 animate-spin" />
+              </div>
+            )}
+            {formData.link && !fetchingPreview && (
               <a
                 href={formData.link}
                 target="_blank"
