@@ -27,13 +27,12 @@ const TYPE_TO_CATEGORY: Record<string, string> = {
   // English keys from PlaceModal
   restaurant: 'restaurant', cafe: 'restaurant', bar: 'restaurant',
   hotel: 'hotel',
-  museum: 'culture', monument: 'culture',
+  museum: 'culture', monument: 'culture', other: 'culture',
   park: 'leisure', beach: 'leisure', shopping: 'leisure', activity: 'leisure',
-  other: 'leisure',
   // Legacy Spanish DB values (case-insensitive handled via toLowerCase)
   restaurante: 'restaurant', café: 'restaurant',
   museo: 'culture', monumento: 'culture', catedral: 'culture',
-  parque: 'leisure', playa: 'leisure', otro: 'leisure',
+  parque: 'leisure', playa: 'leisure', otro: 'culture',
 };
 
 function getCategory(type: string): string {

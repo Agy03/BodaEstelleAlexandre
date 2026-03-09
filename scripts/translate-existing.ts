@@ -3,13 +3,15 @@
  * Run with: npx tsx scripts/translate-existing.ts
  */
 
+import { config } from 'dotenv';
+config({ path: '.env.local' });
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 const MYMEMORY_API = 'https://api.mymemory.translated.net/get';
-const SOURCE_LOCALE = 'es'; // Assume existing content is in Spanish
-const TARGET_LOCALES = ['en', 'fr'];
+const SOURCE_LOCALE = 'fr'; // Content was entered in French
+const TARGET_LOCALES = ['en', 'es'];
 
 const TRANSLATABLE_FIELDS: Record<string, string[]> = {
   WeddingInfo: [

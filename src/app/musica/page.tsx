@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Music, Plus, CheckCircle, Loader, Search, Play, Pause, X, ExternalLink } from 'lucide-react';
+import { Music, Plus, CheckCircle, Loader, Search, Play, Pause, X, SkipBack, SkipForward } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import Image from 'next/image';
@@ -47,9 +47,7 @@ export default function MusicaPage() {
   const [selectedTrack, setSelectedTrack] = useState<SpotifyTrack | null>(null);
   const [playingPreview, setPlayingPreview] = useState<string | null>(null);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-  const [playingSongId, setPlayingSongId] = useState<string | null>(null);
-  const [songAudio, setSongAudio] = useState<HTMLAudioElement | null>(null);
-  const [activeEmbedId, setActiveEmbedId] = useState<string | null>(null);
+  const [activeTrackIndex, setActiveTrackIndex] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     artist: '',
@@ -71,12 +69,8 @@ export default function MusicaPage() {
         audio.pause();
         audio.src = '';
       }
-      if (songAudio) {
-        songAudio.pause();
-        songAudio.src = '';
-      }
     };
-  }, [audio, songAudio]);
+  }, [audio]);
 
   const fetchSongs = async () => {
     try {
@@ -152,36 +146,6 @@ export default function MusicaPage() {
     setPlayingPreview(trackId);
   };
 
-  const playSongPreview = (previewUrl: string, songId: string) => {
-    if (songAudio) {
-      songAudio.pause();
-    }
-
-    if (playingSongId === songId) {
-      setPlayingSongId(null);
-      setSongAudio(null);
-      return;
-    }
-
-    const newAudio = new Audio(previewUrl);
-    newAudio.volume = 0.5;
-    newAudio.play();
-    
-    // Limitar preview a 10 segundos
-    const timeout = setTimeout(() => {
-      newAudio.pause();
-      setPlayingSongId(null);
-    }, 10000);
-    
-    newAudio.onended = () => {
-      clearTimeout(timeout);
-      setPlayingSongId(null);
-    };
-    
-    setSongAudio(newAudio);
-    setPlayingSongId(songId);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -217,8 +181,29 @@ export default function MusicaPage() {
     }
   };
 
+  // Spotify-enabled songs for the bottom player
+  const playableSongs = songs.filter(s => s.spotifyId);
+  const activeSong = activeTrackIndex !== null ? playableSongs[activeTrackIndex] : null;
+
+  const playTrack = (songId: string) => {
+    const idx = playableSongs.findIndex(s => s.id === songId);
+    if (idx !== -1) {
+      setActiveTrackIndex(activeTrackIndex === idx ? null : idx);
+    }
+  };
+
+  const playNext = () => {
+    if (activeTrackIndex === null) return;
+    setActiveTrackIndex((activeTrackIndex + 1) % playableSongs.length);
+  };
+
+  const playPrev = () => {
+    if (activeTrackIndex === null) return;
+    setActiveTrackIndex((activeTrackIndex - 1 + playableSongs.length) % playableSongs.length);
+  };
+
   return (
-    <div className="min-h-screen py-20 px-4 relative overflow-hidden">
+    <div className={`min-h-screen py-20 px-4 relative overflow-hidden ${activeSong ? 'pb-52' : ''}`}>
       {/* Enhanced Decorative background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-rose)]/5 via-[var(--color-background)] to-[var(--color-secondary)]/5" />
       <div className="absolute top-20 left-0 w-96 h-96 bg-gradient-to-br from-[var(--color-rose)]/10 to-transparent rounded-full blur-3xl" />
@@ -480,13 +465,14 @@ export default function MusicaPage() {
                     >
                       <div 
                         className={`group p-4 rounded-2xl transition-all border cursor-pointer ${
-                          activeEmbedId === song.id
+                          activeSong?.id === song.id
                             ? 'bg-gradient-to-br from-[var(--color-rose)]/10 to-[var(--color-secondary)]/10 border-[var(--color-rose)]/30 shadow-lg'
                             : 'bg-gradient-to-br from-gray-50 to-white border-gray-100 hover:shadow-lg'
                         }`}
                         onClick={() => {
-                          if (songAudio) { songAudio.pause(); setPlayingSongId(null); }
-                          setActiveEmbedId(activeEmbedId === song.id ? null : song.id);
+                          if (song.spotifyId) {
+                            playTrack(song.id);
+                          }
                         }}
                       >
                         <div className="flex items-center gap-4">
@@ -502,9 +488,9 @@ export default function MusicaPage() {
                               />
                               {song.spotifyId && (
                                 <div className={`absolute inset-0 flex items-center justify-center rounded-xl transition-all ${
-                                  activeEmbedId === song.id ? 'bg-black/50' : 'bg-black/0 group-hover:bg-black/40'
+                                  activeSong?.id === song.id ? 'bg-black/50' : 'bg-black/0 group-hover:bg-black/40'
                                 }`}>
-                                  {activeEmbedId === song.id ? (
+                                  {activeSong?.id === song.id ? (
                                     <Pause className="w-6 h-6 text-white" />
                                   ) : (
                                     <Play className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -514,11 +500,11 @@ export default function MusicaPage() {
                             </div>
                           ) : (
                             <div className={`w-16 h-16 flex-shrink-0 rounded-xl flex items-center justify-center shadow-md transition-all ${
-                              activeEmbedId === song.id
+                              activeSong?.id === song.id
                                 ? 'bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] scale-110'
                                 : 'bg-gradient-to-br from-[var(--color-rose)]/70 to-[var(--color-secondary)]/70'
                             }`}>
-                              {activeEmbedId === song.id ? (
+                              {activeSong?.id === song.id ? (
                                 <Pause className="w-6 h-6 text-white" />
                               ) : (
                                 <Music className="w-6 h-6 text-white" />
@@ -567,9 +553,9 @@ export default function MusicaPage() {
                           )}
                         </div>
 
-                        {/* Spotify Embed Player */}
+                        {/* Inline Spotify Preview */}
                         <AnimatePresence>
-                          {activeEmbedId === song.id && song.spotifyId && (
+                          {activeSong?.id === song.id && song.spotifyId && (
                             <motion.div
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
@@ -589,47 +575,6 @@ export default function MusicaPage() {
                               />
                             </motion.div>
                           )}
-                          {activeEmbedId === song.id && !song.spotifyId && song.previewUrl && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="mt-4 overflow-hidden"
-                            >
-                              <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl p-4 flex items-center gap-4">
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    playSongPreview(song.previewUrl!, song.id);
-                                  }}
-                                  className="w-10 h-10 bg-white rounded-full flex items-center justify-center flex-shrink-0 hover:scale-105 transition-transform"
-                                >
-                                  {playingSongId === song.id ? (
-                                    <Pause className="w-5 h-5 text-gray-900" />
-                                  ) : (
-                                    <Play className="w-5 h-5 text-gray-900 ml-0.5" />
-                                  )}
-                                </button>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-white text-sm font-medium truncate">{song.title}</p>
-                                  <p className="text-gray-400 text-xs truncate">{song.artist}</p>
-                                </div>
-                                {playingSongId === song.id && (
-                                  <div className="flex items-end gap-0.5 h-4">
-                                    {[1, 2, 3, 4].map((i) => (
-                                      <motion.div
-                                        key={i}
-                                        className="w-1 bg-[var(--color-rose)] rounded-full"
-                                        animate={{ height: ['4px', '16px', '4px'] }}
-                                        transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15 }}
-                                      />
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </motion.div>
-                          )}
                         </AnimatePresence>
                       </div>
                     </motion.div>
@@ -640,6 +585,85 @@ export default function MusicaPage() {
           </motion.div>
         </div>
       </div>
+
+      {/* Fixed Bottom Spotify Player */}
+      <AnimatePresence>
+        {activeSong && (
+          <motion.div
+            initial={{ y: 200, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 200, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed bottom-0 left-0 right-0 z-50"
+          >
+            <div className="bg-white/95 backdrop-blur-xl border-t border-[var(--color-rose)]/20 shadow-[0_-4px_30px_rgba(0,0,0,0.1)]">
+              {/* Player Controls Bar */}
+              <div className="max-w-4xl mx-auto px-4 py-3 flex items-center gap-4">
+                {/* Album Art */}
+                {activeSong.albumArt ? (
+                  <Image
+                    src={activeSong.albumArt}
+                    alt={activeSong.title}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 rounded-lg object-cover shadow-md flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] flex items-center justify-center flex-shrink-0 shadow-md">
+                    <Music className="w-5 h-5 text-white" />
+                  </div>
+                )}
+
+                {/* Song Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-800 text-sm truncate">{activeSong.title}</p>
+                  <p className="text-xs text-gray-500 truncate">{activeSong.artist}</p>
+                </div>
+
+                {/* Navigation Controls */}
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <button
+                    onClick={playPrev}
+                    className="p-2 hover:bg-[var(--color-rose)]/10 rounded-full transition-colors"
+                    title="Previous"
+                  >
+                    <SkipBack className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button
+                    onClick={playNext}
+                    className="p-2 hover:bg-[var(--color-rose)]/10 rounded-full transition-colors"
+                    title="Next"
+                  >
+                    <SkipForward className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button
+                    onClick={() => setActiveTrackIndex(null)}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors ml-1"
+                    title="Close"
+                  >
+                    <X className="w-4 h-4 text-gray-400" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Spotify Embed */}
+              <div className="max-w-4xl mx-auto px-4 pb-3">
+                <iframe
+                  key={activeSong.spotifyId}
+                  src={`https://open.spotify.com/embed/track/${activeSong.spotifyId}?utm_source=generator&theme=0`}
+                  width="100%"
+                  height="80"
+                  frameBorder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  className="rounded-xl"
+                  title={`${activeSong.title} - ${activeSong.artist}`}
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
