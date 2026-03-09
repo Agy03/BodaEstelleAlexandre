@@ -36,7 +36,8 @@ type WeddingInfo = {
 };
 
 export default function InformacionPage() {
-  const t = useTranslations('info');\n  const tErrors = useTranslations('errors');
+  const t = useTranslations('info');
+  const tErrors = useTranslations('errors');
   const [weddingInfo, setWeddingInfo] = useState<WeddingInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
