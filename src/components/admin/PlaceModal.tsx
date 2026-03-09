@@ -61,7 +61,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    category: 'Restaurante',
+    category: 'restaurant',
     address: '',
     distance: '',
     rating: '',

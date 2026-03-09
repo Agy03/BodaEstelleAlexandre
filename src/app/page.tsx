@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Heart, MapPin, Calendar, Users, Gift, Camera, Music, Info, Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ScrollVine } from '@/components/ui/ScrollVine';
@@ -90,20 +89,6 @@ const floatingAnimation = {
 export default function Home() {
   const t = useTranslations();
   const features = getFeatures(t);
-  const [weddingDate, setWeddingDate] = useState<string | null>(null);
-  const [venueName, setVenueName] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch('/api/wedding-info')
-      .then((res) => res.ok ? res.json() : null)
-      .then((data) => {
-        if (data) {
-          setWeddingDate(data.weddingDate);
-          setVenueName(data.venueName);
-        }
-      })
-      .catch(() => {});
-  }, []);
   
   return (
     <div className="min-h-screen overflow-hidden relative">
@@ -208,7 +193,7 @@ export default function Home() {
                       </div>
                       <div className="text-left">
                         <p className="text-sm text-gray-500 font-medium">{t('home.hero.dateLabel')}</p>
-                        <p className="font-semibold">{weddingDate || t('home.hero.dateValue')}</p>
+                        <p className="font-semibold">{t('home.hero.dateValue')}</p>
                       </div>
                     </div>
                     <div className="hidden sm:block w-px h-10 bg-gray-200" />
@@ -218,7 +203,7 @@ export default function Home() {
                       </div>
                       <div className="text-left">
                         <p className="text-sm text-gray-500 font-medium">{t('home.hero.locationLabel')}</p>
-                        <p className="font-semibold">{venueName || t('home.hero.locationValue')}</p>
+                        <p className="font-semibold">{t('home.hero.locationValue')}</p>
                       </div>
                     </div>
                   </div>

@@ -22,6 +22,24 @@ type Place = {
   address?: string;
 };
 
+// Map specific place types (from PlaceModal and legacy Spanish DB values) to broad filter categories
+const TYPE_TO_CATEGORY: Record<string, string> = {
+  // English keys from PlaceModal
+  restaurant: 'restaurant', cafe: 'restaurant', bar: 'restaurant',
+  hotel: 'hotel',
+  museum: 'culture', monument: 'culture',
+  park: 'leisure', beach: 'leisure', shopping: 'leisure', activity: 'leisure',
+  other: 'leisure',
+  // Legacy Spanish DB values (case-insensitive handled via toLowerCase)
+  restaurante: 'restaurant', café: 'restaurant',
+  museo: 'culture', monumento: 'culture', catedral: 'culture',
+  parque: 'leisure', playa: 'leisure', otro: 'leisure',
+};
+
+function getCategory(type: string): string {
+  return TYPE_TO_CATEGORY[type.toLowerCase()] || 'leisure';
+}
+
 export default function TurismoPage() {
   const t = useTranslations('tourism');
   
@@ -62,7 +80,7 @@ export default function TurismoPage() {
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter((place) => place.type === selectedCategory);
+      filtered = filtered.filter((place) => getCategory(place.type) === selectedCategory);
     }
 
     // Filter by search query
@@ -237,7 +255,7 @@ export default function TurismoPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {featuredPlaces.map((place, index) => {
-                const categoryInfo = categories.find((c) => c.id === place.type);
+                const categoryInfo = categories.find((c) => c.id === getCategory(place.type));
                 const Icon = categoryInfo?.icon || MapPin;
                 const isFavorite = favorites.has(place.id);
                 
@@ -481,7 +499,7 @@ export default function TurismoPage() {
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
               >
                 {displayedPlaces.map((place, index) => {
-                  const categoryInfo = categories.find((c) => c.id === place.type);
+                  const categoryInfo = categories.find((c) => c.id === getCategory(place.type));
                   const Icon = categoryInfo?.icon || MapPin;
                   const isFavorite = favorites.has(place.id);
                   
