@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const languages = [
   { code: 'es', name: 'Español', flag: '🇪🇸' },
@@ -22,6 +23,7 @@ const getCurrentLocale = (): string => {
 };
 
 export function LanguageSwitcher() {
+  const t = useTranslations('accessibility');
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [currentLocale, setCurrentLocale] = useState('es');
@@ -50,7 +52,7 @@ export function LanguageSwitcher() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/20"
-        aria-label="Cambiar idioma"
+        aria-label={t('changeLanguage')}
       >
         <Globe className="w-4 h-4 sm:w-5 sm:h-5" />
         <span className="text-sm sm:text-base font-medium">{currentLang.flag}</span>

@@ -6,7 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ThemeSwitcherByDate } from "@/components/layout/ThemeSwitcherByDate";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages, getLocale } from 'next-intl/server';
+import { getMessages, getLocale, getTranslations } from 'next-intl/server';
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -20,11 +20,14 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Boda Estelle - Únete a nuestra celebración",
-  description: "Celebra con nosotros este día tan especial. Confirma tu asistencia, encuentra información sobre la ceremonia y descubre los lugares cercanos.",
-  keywords: ["boda", "wedding", "Estelle", "celebración", "RSVP"],
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('metadata');
+  return {
+    title: t('title'),
+    description: t('description'),
+    keywords: ["boda", "wedding", "Estelle", "celebración", "RSVP"],
+  };
+}
 
 export default async function RootLayout({
   children,

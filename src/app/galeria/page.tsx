@@ -27,6 +27,7 @@ type PhotoSize = 'small' | 'medium' | 'large';
 export default function GaleriaPage() {
   const t = useTranslations('gallery');
   const tCommon = useTranslations('common');
+  const tErrors = useTranslations('errors');
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -274,7 +275,7 @@ export default function GaleriaPage() {
         
         if (failed.length > 0) {
           setTimeout(() => {
-            alert(`Se subieron ${successful} de ${selectedFiles.length} fotos. ${failed.length} fallaron. Revisa la consola para más detalles.`);
+            alert(tErrors('photoUploadPartial', { successful, total: selectedFiles.length, failed: failed.length }));
           }, 500);
         }
         
@@ -285,15 +286,15 @@ export default function GaleriaPage() {
           if (r.status === 'fulfilled') {
             return `${r.value.file}: ${r.value.error}`;
           }
-          return `Archivo ${i + 1}: Error general`;
+          return tErrors('fileError', { index: i + 1 });
         }).join('\n');
         
         console.error('Todas las fotos fallaron:', failedDetails);
-        alert(`No se pudo subir ninguna foto. Errores:\n${failedDetails}`);
+        alert(tErrors('photoUploadFailed'));
       }
     } catch (error) {
       console.error('Error general al subir fotos:', error);
-      alert(`Error al subir las fotos: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+      alert(tErrors('photoUploadError', { error: error instanceof Error ? error.message : tCommon('errorUnknown') }));
     } finally {
       setUploading(false);
       // No limpiar uploadProgress aquí para ver el estado final

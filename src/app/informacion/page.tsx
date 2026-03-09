@@ -36,7 +36,7 @@ type WeddingInfo = {
 };
 
 export default function InformacionPage() {
-  const t = useTranslations('info');
+  const t = useTranslations('info');\n  const tErrors = useTranslations('errors');
   const [weddingInfo, setWeddingInfo] = useState<WeddingInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -69,7 +69,7 @@ export default function InformacionPage() {
   if (!weddingInfo) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">No se pudo cargar la información</p>
+        <p className="text-gray-600">{tErrors('couldNotLoadInfo')}</p>
       </div>
     );
   }
@@ -297,7 +297,7 @@ export default function InformacionPage() {
                         rel="noopener noreferrer"
                         className="text-[var(--color-secondary)] hover:underline text-sm mt-2 inline-block"
                       >
-                        📍 Ver en el mapa
+                        {t('additional.viewOnMap')}
                       </a>
                     )}
                   </div>

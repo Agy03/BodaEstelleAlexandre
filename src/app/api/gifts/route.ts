@@ -92,6 +92,8 @@ export async function POST(request: Request) {
         price: data.price ? parseFloat(data.price) : null,
         image: data.image || null,
         link: data.link || null,
+        category: data.category || null,
+        priority: data.priority || false,
         reserved: false,
         purchased: false,
       },

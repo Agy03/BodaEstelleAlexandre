@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Save, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type WeddingInfo = {
   id?: string;
@@ -44,6 +45,8 @@ type WeddingInfoModalProps = {
 };
 
 export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalProps) {
+  const t = useTranslations('admin.infoModal');
+  const tActions = useTranslations('admin.actions');
   const [loading, setLoading] = useState(false);
   const [activeSection, setActiveSection] = useState<'date' | 'location' | 'dress' | 'weather' | 'additional'>('date');
   const [formData, setFormData] = useState<WeddingInfo>({
@@ -118,15 +121,15 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
   };
 
   const sections = [
-    { id: 'date', label: 'Fecha y Hora', icon: '📅' },
-    { id: 'location', label: 'Ubicación', icon: '📍' },
+    { id: 'date', label: t('tabs.dateTime'), icon: '📅' },
+    { id: 'location', label: t('tabs.location'), icon: '📍' },
     { id: 'dress', label: 'Dress Code', icon: '👔' },
-    { id: 'weather', label: 'Clima', icon: '☀️' },
-    { id: 'additional', label: 'Información Adicional', icon: 'ℹ️' },
+    { id: 'weather', label: t('tabs.weather'), icon: '☀️' },
+    { id: 'additional', label: t('tabs.additional'), icon: 'ℹ️' },
   ];
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Editar Información de la Boda">
+    <Modal isOpen={isOpen} onClose={onClose} title={t('title')}>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-2 border-b">
@@ -150,35 +153,35 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
         {activeSection === 'date' && (
           <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
             <Input
-              label="Fecha de la Boda"
+              label={t('weddingDate')}
               value={formData.weddingDate}
               onChange={(e) => handleChange('weddingDate', e.target.value)}
               placeholder="Saturday, June 20th, 2026"
               required
             />
             <Input
-              label="Hora de Ceremonia"
+              label={t('ceremonyTime')}
               value={formData.ceremonyTime}
               onChange={(e) => handleChange('ceremonyTime', e.target.value)}
               placeholder="4:00 PM"
               required
             />
             <Input
-              label="Hora de Cocktail"
+              label={t('cocktailTime')}
               value={formData.cocktailTime}
               onChange={(e) => handleChange('cocktailTime', e.target.value)}
               placeholder="5:30 PM"
               required
             />
             <Input
-              label="Hora de Cena y Fiesta"
+              label={t('dinnerPartyTime')}
               value={formData.dinnerPartyTime}
               onChange={(e) => handleChange('dinnerPartyTime', e.target.value)}
               placeholder="7:00 PM"
               required
             />
             <Textarea
-              label="Nota de Horario"
+              label={t('scheduleNote')}
               value={formData.scheduleNote || ''}
               onChange={(e) => handleChange('scheduleNote', e.target.value)}
               placeholder="Please arrive 15 minutes before..."
@@ -191,14 +194,14 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
         {activeSection === 'location' && (
           <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
             <Input
-              label="Nombre del Lugar"
+              label={t('venueName')}
               value={formData.venueName}
               onChange={(e) => handleChange('venueName', e.target.value)}
               placeholder="Château de la Belle Vue"
               required
             />
             <Textarea
-              label="Dirección"
+              label={t('venueAddress')}
               value={formData.venueAddress}
               onChange={(e) => handleChange('venueAddress', e.target.value)}
               placeholder="123 Rue de la Paix, 75001 Paris, France"
@@ -206,14 +209,14 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
               required
             />
             <Input
-              label="Link de Google Maps"
+              label={t('venueLink')}
               value={formData.venueLink || ''}
               onChange={(e) => handleChange('venueLink', e.target.value)}
               placeholder="https://maps.google.com/..."
             />
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Latitud"
+                label={t('latitude')}
                 type="number"
                 step="any"
                 value={formData.venueLatitude?.toString() || ''}
@@ -221,7 +224,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
                 placeholder="48.8566"
               />
               <Input
-                label="Longitud"
+                label={t('longitude')}
                 type="number"
                 step="any"
                 value={formData.venueLongitude?.toString() || ''}
@@ -237,18 +240,18 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
                   onChange={(e) => handleChange('parkingAvailable', e.target.checked)}
                   className="w-4 h-4 text-rose-500 rounded"
                 />
-                <span className="text-sm font-medium text-gray-700">Parking Disponible</span>
+                <span className="text-sm font-medium text-gray-700">{t('parkingAvailable')}</span>
               </label>
             </div>
             <Textarea
-              label="Descripción de Parking"
+              label={t('parkingDescription')}
               value={formData.parkingDescription || ''}
               onChange={(e) => handleChange('parkingDescription', e.target.value)}
               placeholder="Free parking available at the venue..."
               rows={2}
             />
             <Textarea
-              label="Nota de Transporte"
+              label={t('transportNote')}
               value={formData.transportNote || ''}
               onChange={(e) => handleChange('transportNote', e.target.value)}
               placeholder="Shuttle service available from..."
@@ -261,14 +264,14 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
         {activeSection === 'dress' && (
           <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
             <Input
-              label="Título del Dress Code"
+              label={t('dressCodeTitle')}
               value={formData.dressCodeTitle}
               onChange={(e) => handleChange('dressCodeTitle', e.target.value)}
               placeholder="Elegant & Romantic"
               required
             />
             <Textarea
-              label="Descripción General"
+              label={t('dressCodeDescription')}
               value={formData.dressCodeDescription}
               onChange={(e) => handleChange('dressCodeDescription', e.target.value)}
               placeholder="We want you to feel comfortable and beautiful..."
@@ -276,7 +279,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
               required
             />
             <Textarea
-              label="Dress Code para Hombres"
+              label={t('dressCodeMen')}
               value={formData.dressCodeMen}
               onChange={(e) => handleChange('dressCodeMen', e.target.value)}
               placeholder="Suit or tuxedo in dark colors..."
@@ -284,7 +287,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
               required
             />
             <Textarea
-              label="Dress Code para Mujeres"
+              label={t('dressCodeWomen')}
               value={formData.dressCodeWomen}
               onChange={(e) => handleChange('dressCodeWomen', e.target.value)}
               placeholder="Cocktail dress or long gown..."
@@ -298,21 +301,21 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
         {activeSection === 'weather' && (
           <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
             <Input
-              label="Temporada"
+              label={t('weatherSeason')}
               value={formData.weatherSeason}
               onChange={(e) => handleChange('weatherSeason', e.target.value)}
               placeholder="Early Summer"
               required
             />
             <Input
-              label="Temperatura Promedio"
+              label={t('weatherAvgTemp')}
               value={formData.weatherAvgTemp}
               onChange={(e) => handleChange('weatherAvgTemp', e.target.value)}
               placeholder="20-25°C (68-77°F)"
               required
             />
             <Textarea
-              label="Descripción del Clima"
+              label={t('weatherDescription')}
               value={formData.weatherDescription}
               onChange={(e) => handleChange('weatherDescription', e.target.value)}
               placeholder="June in France offers mild and pleasant weather..."
@@ -320,7 +323,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
               required
             />
             <Textarea
-              label="Recomendaciones"
+              label={t('weatherRecommendations')}
               value={formData.weatherRecommendations}
               onChange={(e) => handleChange('weatherRecommendations', e.target.value)}
               placeholder="Bring a light jacket or shawl..."
@@ -334,34 +337,34 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
         {activeSection === 'additional' && (
           <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
             <Input
-              label="Título de Alojamiento"
+              label={t('accommodationTitle')}
               value={formData.accommodationTitle || ''}
               onChange={(e) => handleChange('accommodationTitle', e.target.value)}
               placeholder="Where to Stay"
             />
             <Textarea
-              label="Descripción de Alojamiento"
+              label={t('accommodationDescription')}
               value={formData.accommodationDescription || ''}
               onChange={(e) => handleChange('accommodationDescription', e.target.value)}
               placeholder="We have reserved room blocks at nearby hotels..."
               rows={3}
             />
             <Textarea
-              label="Política de Regalos"
+              label={t('giftPolicy')}
               value={formData.giftPolicy || ''}
               onChange={(e) => handleChange('giftPolicy', e.target.value)}
               placeholder="Your presence is the greatest gift..."
               rows={3}
             />
             <Textarea
-              label="Política de Niños"
+              label={t('childrenPolicy')}
               value={formData.childrenPolicy || ''}
               onChange={(e) => handleChange('childrenPolicy', e.target.value)}
               placeholder="We love your little ones, but..."
               rows={3}
             />
             <Textarea
-              label="Nota de Fotografía"
+              label={t('photographyNote')}
               value={formData.photographyNote || ''}
               onChange={(e) => handleChange('photographyNote', e.target.value)}
               placeholder="We have hired a professional photographer..."
@@ -380,18 +383,18 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
             disabled={loading}
           >
             <X className="w-4 h-4 mr-2" />
-            Cancelar
+            {tActions('cancel')}
           </Button>
           <Button type="submit" className="flex-1" disabled={loading}>
             {loading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Guardando...
+                {t('saving')}
               </>
             ) : (
               <>
                 <Save className="w-4 h-4 mr-2" />
-                Guardar Cambios
+                {t('saveChanges')}
               </>
             )}
           </Button>

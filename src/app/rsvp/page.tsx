@@ -18,6 +18,7 @@ interface GuestInfo {
 
 export default function RSVPPage() {
   const t = useTranslations('rsvp');
+  const tErrors = useTranslations('errors');
   const locale = useLocale();
   const [formData, setFormData] = useState({
     name: '',
@@ -50,7 +51,7 @@ export default function RSVPPage() {
       }
     } catch (error) {
       console.error('Error submitting RSVP:', error);
-      alert('Hubo un error al enviar tu confirmación. Por favor, inténtalo de nuevo.');
+      alert(tErrors('rsvpSubmit'));
     } finally {
       setLoading(false);
     }

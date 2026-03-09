@@ -130,6 +130,7 @@
     },
     "additional": {
       "title": "Información Adicional",
+      "viewOnMap": "📍 Ver en el mapa",
       "accommodation": {
         "title": "Alojamiento",
         "description": "Consulta nuestra sección de turismo para ver hoteles recomendados en la zona."
@@ -346,7 +347,9 @@
       "username": "Usuario",
       "password": "Contraseña",
       "submit": "Entrar",
-      "error": "Usuario o contraseña incorrectos"
+      "error": "Usuario o contraseña incorrectos",
+      "subtitle": "Solo para los novios",
+      "footer": "Credenciales de acceso solo para Estelle y Alexandre"
     },
     "logout": "Cerrar sesión",
     "tabs": {
@@ -398,7 +401,8 @@
       "confirmationsReceivedCount": "confirmaciones recibidas",
       "allUpToDate": "¡Todo al día!",
       "noPending": "No hay pendientes",
-      "see": "Ver"
+      "see": "Ver",
+      "placesLabel": "Lugares"
     },
     "rsvp": {
       "title": "Confirmaciones de Asistencia",
@@ -445,7 +449,7 @@
       "listeningFromAPI": "Escuchando desde nuestra API",
       "stop": "Detener",
       "deleteConfirm": "¿Estás seguro de que quieres eliminar esta canción?",
-      "pausar": "Pausar",
+      "pause": "Pausar",
       "preview": "Preview"
     },
     "gifts": {
@@ -497,7 +501,106 @@
       "add": "Añadir",
       "save": "Guardar",
       "cancel": "Cancelar"
-    }
+    },
+    "loginPage": {
+      "subtitle": "Solo para los novios",
+      "footer": "Credenciales de acceso solo para Estelle y Alexandre"
+    },
+    "giftModal": {
+      "editTitle": "Editar Regalo",
+      "addTitle": "Añadir Regalo",
+      "nameLabel": "Nombre del Regalo *",
+      "namePlaceholder": "Ej: Juego de sábanas de lujo",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "Describe el regalo...",
+      "priceLabel": "Precio (€)",
+      "categoryLabel": "Categoría",
+      "imageLabel": "URL de la Imagen",
+      "linkLabel": "Enlace (tienda online, Amazon, etc.)",
+      "priorityLabel": "⭐ Marcar como prioritario",
+      "saveChanges": "Guardar Cambios",
+      "addGift": "Añadir Regalo",
+      "categories": {
+        "home": "Hogar",
+        "experience": "Experiencias",
+        "other": "Otro"
+      }
+    },
+    "placeModal": {
+      "editTitle": "Editar Lugar",
+      "addTitle": "Añadir Lugar Turístico",
+      "searchGMaps": "Buscar en Google Maps",
+      "searchGMapsDesc": "Busca un lugar en Google Maps para rellenar automáticamente",
+      "searchPlaceholder": "Ej: Restaurante La Terraza, Madrid",
+      "placeSelected": "✓ Lugar seleccionado:",
+      "nameLabel": "Nombre del Lugar *",
+      "categoryLabel": "Categoría *",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "Describe el lugar y por qué lo recomiendas...",
+      "addressLabel": "Dirección",
+      "addressPlaceholder": "Calle Principal 123",
+      "distanceLabel": "Distancia",
+      "distancePlaceholder": "2 km del hotel",
+      "ratingLabel": "Valoración (0-5)",
+      "priceLabel": "Precio",
+      "hoursLabel": "Horario",
+      "imageLabel": "URL de la Imagen",
+      "linkLabel": "Enlace (Google Maps, web oficial, etc.)",
+      "recommendedLabel": "⭐ Marcar como recomendado",
+      "saveChanges": "Guardar Cambios",
+      "addPlace": "Añadir Lugar",
+      "categories": {
+        "restaurant": "Restaurante",
+        "cafe": "Café",
+        "bar": "Bar",
+        "hotel": "Hotel",
+        "museum": "Museo",
+        "park": "Parque",
+        "monument": "Monumento",
+        "beach": "Playa",
+        "shopping": "Compras",
+        "activity": "Actividad",
+        "other": "Otro"
+      }
+    },
+    "infoModal": {
+      "title": "Editar Información de la Boda",
+      "tabs": {
+        "dateTime": "Fecha y Hora",
+        "location": "Ubicación",
+        "weather": "Clima",
+        "additional": "Información Adicional"
+      },
+      "weddingDate": "Fecha de la Boda",
+      "ceremonyTime": "Hora de Ceremonia",
+      "cocktailTime": "Hora de Cocktail",
+      "dinnerPartyTime": "Hora de Cena y Fiesta",
+      "scheduleNote": "Nota de Horario",
+      "venueName": "Nombre del Lugar",
+      "venueAddress": "Dirección",
+      "venueLink": "Link de Google Maps",
+      "latitude": "Latitud",
+      "longitude": "Longitud",
+      "parkingAvailable": "Parking Disponible",
+      "parkingDescription": "Descripción de Parking",
+      "transportNote": "Nota de Transporte",
+      "dressCodeTitle": "Título del Dress Code",
+      "dressCodeDescription": "Descripción General",
+      "dressCodeMen": "Dress Code para Hombres",
+      "dressCodeWomen": "Dress Code para Mujeres",
+      "weatherSeason": "Temporada",
+      "weatherAvgTemp": "Temperatura Promedio",
+      "weatherDescription": "Descripción del Clima",
+      "weatherRecommendations": "Recomendaciones",
+      "accommodationTitle": "Título de Alojamiento",
+      "accommodationDescription": "Descripción de Alojamiento",
+      "giftPolicy": "Política de Regalos",
+      "childrenPolicy": "Política de Niños",
+      "photographyNote": "Nota de Fotografía",
+      "saving": "Guardando...",
+      "saveChanges": "Guardar Cambios"
+    },
+    "confirmDeleteRsvp": "¿Estás seguro de que quieres eliminar este RSVP?"
   },
   "common": {
     "loading": "Cargando...",
@@ -507,6 +610,29 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "edit": "Editar",
-    "search": "Buscar"
+    "search": "Buscar",
+    "errorUnknown": "Error desconocido"
+  },
+  "metadata": {
+    "title": "Boda Estelle & Alexandre - Únete a nuestra celebración",
+    "description": "Celebra con nosotros este día tan especial. Confirma tu asistencia, encuentra información sobre la ceremonia y descubre los lugares cercanos."
+  },
+  "errors": {
+    "rsvpSubmit": "Hubo un error al enviar tu confirmación. Por favor, inténtalo de nuevo.",
+    "musicSubmit": "Error al enviar la sugerencia. Por favor, inténtalo de nuevo.",
+    "photoUploadPartial": "Se subieron {successful} de {total} fotos. {failed} fallaron.",
+    "photoUploadFailed": "No se pudo subir ninguna foto.",
+    "photoUploadError": "Error al subir las fotos: {error}",
+    "fileError": "Archivo {index}: Error general",
+    "couldNotLoadInfo": "No se pudo cargar la información",
+    "addSongError": "Error al añadir la canción. Inténtalo de nuevo.",
+    "createGiftError": "Error al crear el regalo. Inténtalo de nuevo.",
+    "saveGiftError": "Error al guardar el regalo. Inténtalo de nuevo.",
+    "processReceiptError": "Error al procesar el recibo",
+    "createPlaceError": "Error al crear el lugar. Inténtalo de nuevo.",
+    "savePlaceError": "Error al guardar el lugar. Inténtalo de nuevo."
+  },
+  "accessibility": {
+    "changeLanguage": "Cambiar idioma"
   }
 }

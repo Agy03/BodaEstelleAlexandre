@@ -130,6 +130,7 @@
     },
     "additional": {
       "title": "Informations Complémentaires",
+      "viewOnMap": "📍 Voir sur la carte",
       "accommodation": {
         "title": "Hébergement",
         "description": "Consultez notre section tourisme pour les hôtels recommandés dans la région."
@@ -346,7 +347,9 @@
       "username": "Utilisateur",
       "password": "Mot de passe",
       "submit": "Se connecter",
-      "error": "Nom d'utilisateur ou mot de passe incorrect"
+      "error": "Nom d'utilisateur ou mot de passe incorrect",
+      "subtitle": "Réservé aux mariés",
+      "footer": "Identifiants d'accès réservés à Estelle et Alexandre"
     },
     "logout": "Déconnexion",
     "tabs": {
@@ -398,7 +401,8 @@
       "confirmationsReceivedCount": "confirmations reçues",
       "allUpToDate": "Tout est à jour!",
       "noPending": "Aucun en attente",
-      "see": "Voir"
+      "see": "Voir",
+      "placesLabel": "Lieux"
     },
     "rsvp": {
       "title": "Confirmations de Présence",
@@ -497,7 +501,106 @@
       "add": "Ajouter",
       "save": "Enregistrer",
       "cancel": "Annuler"
-    }
+    },
+    "loginPage": {
+      "subtitle": "Réservé aux mariés",
+      "footer": "Identifiants d'accès réservés à Estelle et Alexandre"
+    },
+    "giftModal": {
+      "editTitle": "Modifier le Cadeau",
+      "addTitle": "Ajouter un Cadeau",
+      "nameLabel": "Nom du Cadeau *",
+      "namePlaceholder": "Ex: Parure de draps de luxe",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Décrivez le cadeau...",
+      "priceLabel": "Prix (€)",
+      "categoryLabel": "Catégorie",
+      "imageLabel": "URL de l'Image",
+      "linkLabel": "Lien (boutique en ligne, Amazon, etc.)",
+      "priorityLabel": "⭐ Marquer comme prioritaire",
+      "saveChanges": "Enregistrer",
+      "addGift": "Ajouter le Cadeau",
+      "categories": {
+        "home": "Maison",
+        "experience": "Expériences",
+        "other": "Autre"
+      }
+    },
+    "placeModal": {
+      "editTitle": "Modifier le Lieu",
+      "addTitle": "Ajouter un Lieu Touristique",
+      "searchGMaps": "Rechercher sur Google Maps",
+      "searchGMapsDesc": "Recherchez un lieu sur Google Maps pour remplir automatiquement",
+      "searchPlaceholder": "Ex: Restaurant La Terraza, Madrid",
+      "placeSelected": "✓ Lieu sélectionné :",
+      "nameLabel": "Nom du Lieu *",
+      "categoryLabel": "Catégorie *",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Décrivez le lieu et pourquoi vous le recommandez...",
+      "addressLabel": "Adresse",
+      "addressPlaceholder": "123 Rue Principale",
+      "distanceLabel": "Distance",
+      "distancePlaceholder": "2 km de l'hôtel",
+      "ratingLabel": "Note (0-5)",
+      "priceLabel": "Prix",
+      "hoursLabel": "Horaires",
+      "imageLabel": "URL de l'Image",
+      "linkLabel": "Lien (Google Maps, site officiel, etc.)",
+      "recommendedLabel": "⭐ Marquer comme recommandé",
+      "saveChanges": "Enregistrer",
+      "addPlace": "Ajouter le Lieu",
+      "categories": {
+        "restaurant": "Restaurant",
+        "cafe": "Café",
+        "bar": "Bar",
+        "hotel": "Hôtel",
+        "museum": "Musée",
+        "park": "Parc",
+        "monument": "Monument",
+        "beach": "Plage",
+        "shopping": "Shopping",
+        "activity": "Activité",
+        "other": "Autre"
+      }
+    },
+    "infoModal": {
+      "title": "Modifier les Informations du Mariage",
+      "tabs": {
+        "dateTime": "Date et Heure",
+        "location": "Lieu",
+        "weather": "Météo",
+        "additional": "Informations Complémentaires"
+      },
+      "weddingDate": "Date du Mariage",
+      "ceremonyTime": "Heure de la Cérémonie",
+      "cocktailTime": "Heure du Cocktail",
+      "dinnerPartyTime": "Heure du Dîner et Fête",
+      "scheduleNote": "Note d'Horaire",
+      "venueName": "Nom du Lieu",
+      "venueAddress": "Adresse",
+      "venueLink": "Lien Google Maps",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "parkingAvailable": "Parking Disponible",
+      "parkingDescription": "Description du Parking",
+      "transportNote": "Note de Transport",
+      "dressCodeTitle": "Titre du Code Vestimentaire",
+      "dressCodeDescription": "Description Générale",
+      "dressCodeMen": "Code Vestimentaire Hommes",
+      "dressCodeWomen": "Code Vestimentaire Femmes",
+      "weatherSeason": "Saison",
+      "weatherAvgTemp": "Température Moyenne",
+      "weatherDescription": "Description de la Météo",
+      "weatherRecommendations": "Recommandations",
+      "accommodationTitle": "Titre Hébergement",
+      "accommodationDescription": "Description Hébergement",
+      "giftPolicy": "Politique de Cadeaux",
+      "childrenPolicy": "Politique Enfants",
+      "photographyNote": "Note Photographie",
+      "saving": "Enregistrement...",
+      "saveChanges": "Enregistrer"
+    },
+    "confirmDeleteRsvp": "Êtes-vous sûr de vouloir supprimer ce RSVP ?"
   },
   "common": {
     "loading": "Chargement...",
@@ -507,6 +610,29 @@
     "cancel": "Annuler",
     "delete": "Supprimer",
     "edit": "Modifier",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "errorUnknown": "Erreur inconnue"
+  },
+  "metadata": {
+    "title": "Mariage Estelle & Alexandre - Rejoignez notre célébration",
+    "description": "Célébrez avec nous ce jour si spécial. Confirmez votre présence, trouvez des informations sur la cérémonie et découvrez les lieux proches."
+  },
+  "errors": {
+    "rsvpSubmit": "Une erreur s'est produite lors de l'envoi de votre confirmation. Veuillez réessayer.",
+    "musicSubmit": "Erreur lors de l'envoi de la suggestion. Veuillez réessayer.",
+    "photoUploadPartial": "{successful} sur {total} photos téléchargées. {failed} ont échoué.",
+    "photoUploadFailed": "Impossible de télécharger les photos.",
+    "photoUploadError": "Erreur lors du téléchargement des photos: {error}",
+    "fileError": "Fichier {index}: Erreur générale",
+    "couldNotLoadInfo": "Impossible de charger les informations",
+    "addSongError": "Erreur lors de l'ajout de la chanson. Réessayez.",
+    "createGiftError": "Erreur lors de la création du cadeau. Réessayez.",
+    "saveGiftError": "Erreur lors de la sauvegarde du cadeau. Réessayez.",
+    "processReceiptError": "Erreur lors du traitement du reçu",
+    "createPlaceError": "Erreur lors de la création du lieu. Réessayez.",
+    "savePlaceError": "Erreur lors de la sauvegarde du lieu. Réessayez."
+  },
+  "accessibility": {
+    "changeLanguage": "Changer de langue"
   }
 }

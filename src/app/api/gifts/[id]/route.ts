@@ -18,6 +18,8 @@ export async function PUT(
         price: data.price ? parseFloat(data.price) : null,
         image: data.image || null,
         link: data.link || null,
+        category: data.category || null,
+        priority: data.priority ?? false,
       },
     });
 

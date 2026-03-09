@@ -788,6 +788,7 @@ function GiftCard({
                 src={gift.image}
                 alt={gift.name}
                 fill
+                unoptimized
                 className="object-contain p-2"
               />
             </motion.div>

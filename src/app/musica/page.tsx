@@ -36,6 +36,7 @@ type SpotifyTrack = {
 
 export default function MusicaPage() {
   const t = useTranslations('music');
+  const tErrors = useTranslations('errors');
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -210,7 +211,7 @@ export default function MusicaPage() {
       }
     } catch (error) {
       console.error('Error submitting song:', error);
-      alert('Error al enviar la sugerencia. Por favor, inténtalo de nuevo.');
+      alert(tErrors('musicSubmit'));
     } finally {
       setSubmitting(false);
     }

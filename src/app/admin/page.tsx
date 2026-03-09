@@ -289,11 +289,11 @@ export default function AdminPage() {
         setSpotifyResults([]);
       } else {
         console.error('Error adding song:', await response.text());
-        alert('Error al añadir la canción. Inténtalo de nuevo.');
+        alert(tErrors('addSongError'));
       }
     } catch (error) {
       console.error('Error adding song from Spotify:', error);
-      alert('Error al añadir la canción. Inténtalo de nuevo.');
+      alert(tErrors('addSongError'));
     }
   };
 
@@ -379,12 +379,12 @@ export default function AdminPage() {
           setEditingGift(undefined);
         } else {
           console.error('Error creating gift');
-          alert('Error al crear el regalo. Inténtalo de nuevo.');
+          alert(tErrors('createGiftError'));
         }
       }
     } catch (error) {
       console.error('Error saving gift:', error);
-      alert('Error al guardar el regalo. Inténtalo de nuevo.');
+      alert(tErrors('saveGiftError'));
       fetchData();
     }
   };
@@ -427,13 +427,13 @@ export default function AdminPage() {
 
       if (!response.ok) {
         const error = await response.json();
-        alert(error.error || 'Error al procesar el recibo');
+        alert(error.error || tErrors('processReceiptError'));
         // Revertir en caso de error
         fetchData();
       }
     } catch (error) {
       console.error('Error processing receipt:', error);
-      alert('Error al procesar el recibo');
+      alert(tErrors('processReceiptError'));
       fetchData();
     }
   };
@@ -475,12 +475,12 @@ export default function AdminPage() {
           setEditingPlace(undefined);
         } else {
           console.error('Error creating place');
-          alert('Error al crear el lugar. Inténtalo de nuevo.');
+          alert(tErrors('createPlaceError'));
         }
       }
     } catch (error) {
       console.error('Error saving place:', error);
-      alert('Error al guardar el lugar. Inténtalo de nuevo.');
+      alert(tErrors('savePlaceError'));
       fetchData();
     }
   };
@@ -505,7 +505,7 @@ export default function AdminPage() {
   };
 
   const handleDeleteRsvp = async (rsvpId: string) => {
-    if (!confirm('Are you sure you want to delete this RSVP?')) return;
+    if (!confirm(t('confirmDeleteRsvp'))) return;
     
     try {
       setRsvps(prev => prev.filter(r => r.id !== rsvpId));
@@ -718,7 +718,7 @@ export default function AdminPage() {
                 <div className="flex items-start justify-between mb-3">
                   <MapPin className="w-10 h-10 md:w-12 md:h-12 text-white/90" />
                   <div className="bg-white/20 backdrop-blur-sm px-2 py-1 rounded-full">
-                    <span className="text-xs font-bold text-white">Lugares</span>
+                    <span className="text-xs font-bold text-white">{t('stats.placesLabel')}</span>
                   </div>
                 </div>
                 <p className="text-4xl md:text-5xl font-black text-white mb-1">{places.length}</p>
@@ -787,7 +787,7 @@ export default function AdminPage() {
                 onClick={() => setActiveTab('info')}
                 icon={<Info className="w-4 h-4" />}
               >
-                Información
+                {t('tabs.info')}
               </TabButton>
             </div>
           </div>
@@ -946,7 +946,7 @@ export default function AdminPage() {
                               <button
                                 onClick={() => handleDeleteRsvp(rsvp.id)}
                                 className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Delete"
+                                title={t('actions.delete')}
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -1274,7 +1274,7 @@ export default function AdminPage() {
                                 <button
                                   onClick={() => window.open(song.spotifyUrl, '_blank')}
                                   className="text-green-600 hover:text-green-700 opacity-0 group-hover:opacity-100 transition-opacity"
-                                  title="Abrir en Spotify"
+                                  title={t('songs.openSpotify')}
                                 >
                                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
@@ -1330,14 +1330,14 @@ export default function AdminPage() {
                               <button
                                 onClick={() => approveSong(song.id)}
                                 className="w-8 h-8 rounded-lg bg-green-500 hover:bg-green-600 text-white flex items-center justify-center transition-all hover:scale-110 shadow-md"
-                                title="Aprobar"
+                                title={t('actions.approve')}
                               >
                                 <CheckCircle className="w-4 h-4" />
                               </button>
                               <button
                                 onClick={() => deleteSong(song.id)}
                                 className="w-8 h-8 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all hover:scale-110 shadow-md"
-                                title="Rechazar"
+                                title={t('actions.delete')}
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -1346,7 +1346,7 @@ export default function AdminPage() {
                             <button
                               onClick={() => deleteSong(song.id)}
                               className="w-8 h-8 rounded-lg bg-gray-400 hover:bg-red-500 text-white flex items-center justify-center transition-all hover:scale-110 shadow-md opacity-0 group-hover:opacity-100"
-                              title="Eliminar"
+                              title={t('actions.delete')}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>

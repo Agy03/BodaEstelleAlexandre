@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Select } from '@/components/ui/Select';
 import NextImage from 'next/image';
 import { ExternalLink } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type Gift = {
   id?: string;
@@ -27,18 +28,16 @@ type GiftModalProps = {
   gift?: Gift;
 };
 
-const CATEGORIES = [
-  'Hogar',
-  'Cocina',
-  'Decoración',
-  'Experiencias',
-  'Viaje de Novios',
-  'Tecnología',
-  'Jardín',
-  'Otro',
-];
+const CATEGORY_KEYS = ['home', 'experience', 'other'] as const;
 
 export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
+  const t = useTranslations('admin.giftModal');
+  const tActions = useTranslations('admin.actions');
+
+  const categories = CATEGORY_KEYS.map(key => ({
+    value: key,
+    label: t(`categories.${key}`),
+  }));
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -57,7 +56,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
         price: gift.price?.toString() || '',
         image: gift.image || '',
         link: gift.link || '',
-        category: gift.category || 'Hogar',
+        category: gift.category || 'home',
         priority: gift.priority || false,
       });
     } else {
@@ -68,7 +67,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
         price: '',
         image: '',
         link: '',
-        category: 'Hogar',
+        category: 'home',
         priority: false,
       });
     }
@@ -84,28 +83,28 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={gift ? 'Editar Regalo' : 'Añadir Regalo'} size="md">
+    <Modal isOpen={isOpen} onClose={onClose} title={gift ? t('editTitle') : t('addTitle')} size="md">
       <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         <div>
           <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-            Nombre del Regalo *
+            {t('nameLabel')}
           </label>
           <Input
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="Ej: Juego de sábanas de lujo"
+            placeholder={t('namePlaceholder')}
             required
           />
         </div>
 
         <div>
           <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-            Descripción
+            {t('descriptionLabel')}
           </label>
           <Textarea
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            placeholder="Describe el regalo..."
+            placeholder={t('descriptionPlaceholder')}
             rows={3}
           />
         </div>
@@ -113,7 +112,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Precio (€)
+              {t('priceLabel')}
             </label>
             <Input
               type="number"
@@ -127,15 +126,15 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
 
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Categoría
+              {t('categoryLabel')}
             </label>
             <Select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
             >
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
+              {categories.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
                 </option>
               ))}
             </Select>
@@ -144,7 +143,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
 
         <div>
           <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-            URL de la Imagen
+            {t('imageLabel')}
           </label>
           <Input
             value={formData.image}
@@ -166,7 +165,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
 
         <div>
           <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-            Enlace (tienda online, Amazon, etc.)
+            {t('linkLabel')}
           </label>
           <div className="flex gap-2">
             <Input
@@ -196,7 +195,7 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
             className="w-4 h-4 text-[#E8B4B8] rounded focus:ring-[#E8B4B8] flex-shrink-0"
           />
           <label htmlFor="priority" className="text-xs md:text-sm font-medium text-gray-700">
-            ⭐ Marcar como prioritario
+            {t('priorityLabel')}
           </label>
         </div>
 
@@ -208,14 +207,14 @@ export function GiftModal({ isOpen, onClose, onSave, gift }: GiftModalProps) {
             variant="ghost"
             className="w-full sm:w-auto order-2 sm:order-1"
           >
-            Cancelar
+            {tActions('cancel')}
           </Button>
           <Button
             type="submit"
             variant="primary"
             className="w-full sm:w-auto order-1 sm:order-2"
           >
-            {gift ? 'Guardar Cambios' : 'Añadir Regalo'}
+            {gift ? t('saveChanges') : t('addGift')}
           </Button>
         </div>
       </form>

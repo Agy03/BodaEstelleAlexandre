@@ -130,6 +130,7 @@
     },
     "additional": {
       "title": "Additional Information",
+      "viewOnMap": "📍 View on map",
       "accommodation": {
         "title": "Accommodation",
         "description": "Check our tourism section for recommended hotels in the area."
@@ -344,7 +345,9 @@
       "username": "Username",
       "password": "Password",
       "submit": "Login",
-      "error": "Invalid username or password"
+      "error": "Invalid username or password",
+      "subtitle": "For the couple only",
+      "footer": "Access credentials for Estelle and Alexandre only"
     },
     "logout": "Logout",
     "tabs": {
@@ -396,7 +399,8 @@
       "confirmationsReceivedCount": "confirmations received",
       "allUpToDate": "All up to date!",
       "noPending": "No pending items",
-      "see": "See"
+      "see": "See",
+      "placesLabel": "Places"
     },
     "rsvp": {
       "title": "RSVP Confirmations",
@@ -495,7 +499,106 @@
       "add": "Add",
       "save": "Save",
       "cancel": "Cancel"
-    }
+    },
+    "loginPage": {
+      "subtitle": "Couple only",
+      "footer": "Access credentials only for Estelle and Alexandre"
+    },
+    "giftModal": {
+      "editTitle": "Edit Gift",
+      "addTitle": "Add Gift",
+      "nameLabel": "Gift Name *",
+      "namePlaceholder": "E.g.: Luxury sheet set",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Describe the gift...",
+      "priceLabel": "Price (€)",
+      "categoryLabel": "Category",
+      "imageLabel": "Image URL",
+      "linkLabel": "Link (online store, Amazon, etc.)",
+      "priorityLabel": "⭐ Mark as priority",
+      "saveChanges": "Save Changes",
+      "addGift": "Add Gift",
+      "categories": {
+        "home": "Home",
+        "experience": "Experiences",
+        "other": "Other"
+      }
+    },
+    "placeModal": {
+      "editTitle": "Edit Place",
+      "addTitle": "Add Tourist Place",
+      "searchGMaps": "Search on Google Maps",
+      "searchGMapsDesc": "Search for a place on Google Maps to auto-fill",
+      "searchPlaceholder": "E.g.: Restaurant La Terraza, Madrid",
+      "placeSelected": "✓ Place selected:",
+      "nameLabel": "Place Name *",
+      "categoryLabel": "Category *",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Describe the place and why you recommend it...",
+      "addressLabel": "Address",
+      "addressPlaceholder": "123 Main Street",
+      "distanceLabel": "Distance",
+      "distancePlaceholder": "2 km from hotel",
+      "ratingLabel": "Rating (0-5)",
+      "priceLabel": "Price",
+      "hoursLabel": "Hours",
+      "imageLabel": "Image URL",
+      "linkLabel": "Link (Google Maps, official website, etc.)",
+      "recommendedLabel": "⭐ Mark as recommended",
+      "saveChanges": "Save Changes",
+      "addPlace": "Add Place",
+      "categories": {
+        "restaurant": "Restaurant",
+        "cafe": "Café",
+        "bar": "Bar",
+        "hotel": "Hotel",
+        "museum": "Museum",
+        "park": "Park",
+        "monument": "Monument",
+        "beach": "Beach",
+        "shopping": "Shopping",
+        "activity": "Activity",
+        "other": "Other"
+      }
+    },
+    "infoModal": {
+      "title": "Edit Wedding Information",
+      "tabs": {
+        "dateTime": "Date & Time",
+        "location": "Location",
+        "weather": "Weather",
+        "additional": "Additional Information"
+      },
+      "weddingDate": "Wedding Date",
+      "ceremonyTime": "Ceremony Time",
+      "cocktailTime": "Cocktail Time",
+      "dinnerPartyTime": "Dinner & Party Time",
+      "scheduleNote": "Schedule Note",
+      "venueName": "Venue Name",
+      "venueAddress": "Address",
+      "venueLink": "Google Maps Link",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "parkingAvailable": "Parking Available",
+      "parkingDescription": "Parking Description",
+      "transportNote": "Transport Note",
+      "dressCodeTitle": "Dress Code Title",
+      "dressCodeDescription": "General Description",
+      "dressCodeMen": "Dress Code for Men",
+      "dressCodeWomen": "Dress Code for Women",
+      "weatherSeason": "Season",
+      "weatherAvgTemp": "Average Temperature",
+      "weatherDescription": "Weather Description",
+      "weatherRecommendations": "Recommendations",
+      "accommodationTitle": "Accommodation Title",
+      "accommodationDescription": "Accommodation Description",
+      "giftPolicy": "Gift Policy",
+      "childrenPolicy": "Children Policy",
+      "photographyNote": "Photography Note",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes"
+    },
+    "confirmDeleteRsvp": "Are you sure you want to delete this RSVP?"
   },
   "common": {
     "loading": "Loading...",
@@ -505,6 +608,29 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
-    "search": "Search"
+    "search": "Search",
+    "errorUnknown": "Unknown error"
+  },
+  "metadata": {
+    "title": "Wedding Estelle & Alexandre - Join our celebration",
+    "description": "Celebrate with us on this special day. Confirm your attendance, find information about the ceremony and discover nearby places."
+  },
+  "errors": {
+    "rsvpSubmit": "There was an error sending your confirmation. Please try again.",
+    "musicSubmit": "Error sending suggestion. Please try again.",
+    "photoUploadPartial": "{successful} of {total} photos uploaded. {failed} failed.",
+    "photoUploadFailed": "Could not upload any photos.",
+    "photoUploadError": "Error uploading photos: {error}",
+    "fileError": "File {index}: General error",
+    "couldNotLoadInfo": "Could not load information",
+    "addSongError": "Error adding song. Try again.",
+    "createGiftError": "Error creating gift. Try again.",
+    "saveGiftError": "Error saving gift. Try again.",
+    "processReceiptError": "Error processing receipt",
+    "createPlaceError": "Error creating place. Try again.",
+    "savePlaceError": "Error saving place. Try again."
+  },
+  "accessibility": {
+    "changeLanguage": "Change language"
   }
 }

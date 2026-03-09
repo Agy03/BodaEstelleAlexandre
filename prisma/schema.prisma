@@ -121,6 +121,8 @@ model Gift {
   price                Float?
   image                String?
   link                 String?
+  category             String?
+  priority             Boolean  @default(false)
   reserved             Boolean  @default(false)
   purchased            Boolean  @default(false)
   reservedBy           String?

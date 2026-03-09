@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Select } from '@/components/ui/Select';
 import NextImage from 'next/image';
+import { useTranslations } from 'next-intl';
 
 type Place = {
   id?: string;
@@ -42,23 +43,21 @@ type PlaceModalProps = {
   place?: Place;
 };
 
-const CATEGORIES = [
-  'Restaurante',
-  'Café',
-  'Bar',
-  'Hotel',
-  'Museo',
-  'Parque',
-  'Monumento',
-  'Playa',
-  'Compras',
-  'Actividad',
-  'Otro',
-];
+const CATEGORY_KEYS = [
+  'restaurant', 'cafe', 'bar', 'hotel', 'museum',
+  'park', 'monument', 'beach', 'shopping', 'activity', 'other',
+] as const;
 
 const PRICE_LEVELS = ['€', '€€', '€€€', '€€€€'];
 
 export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) {
+  const t = useTranslations('admin.placeModal');
+  const tActions = useTranslations('admin.actions');
+
+  const categories = CATEGORY_KEYS.map(key => ({
+    value: key,
+    label: t(`categories.${key}`),
+  }));
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -83,7 +82,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
       setFormData({
         name: place.name || '',
         description: place.description || '',
-        category: place.category || 'Restaurante',
+        category: place.category || 'restaurant',
         address: place.address || '',
         distance: place.distance || '',
         rating: place.rating?.toString() || '',
@@ -98,7 +97,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
       setFormData({
         name: '',
         description: '',
-        category: 'Restaurante',
+        category: 'restaurant',
         address: '',
         distance: '',
         rating: '',
@@ -167,23 +166,23 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={place ? 'Editar Lugar' : 'Añadir Lugar Turístico'} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} title={place ? t('editTitle') : t('addTitle')} size="lg">
       <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         {/* Búsqueda en Google Maps */}
         {!place && (
           <div className="p-4 md:p-6 bg-gradient-to-br from-[#E8B4B8]/10 to-[#C9A7C7]/10 rounded-2xl border-2 border-dashed border-[#E8B4B8]/30">
             <div className="flex items-center gap-2 mb-3 md:mb-4">
               <MapPin className="w-4 h-4 md:w-5 md:h-5 text-[#E8B4B8] flex-shrink-0" />
-              <h3 className="text-sm md:text-base font-semibold text-gray-800">Buscar en Google Maps</h3>
+              <h3 className="text-sm md:text-base font-semibold text-gray-800">{t('searchGMaps')}</h3>
             </div>
             <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
-              Busca un lugar en Google Maps para rellenar automáticamente la información
+              {t('searchGMapsDesc')}
             </p>
             <div className="flex gap-2">
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Ej: Restaurante La Terraza, Madrid"
+                placeholder={t('searchPlaceholder')}
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleSearch())}
               />
               <Button
@@ -245,7 +244,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
             {selectedPlace && (
               <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-sm text-green-800">
-                  ✓ Lugar seleccionado: <strong>{selectedPlace.name}</strong>
+                  {t('placeSelected')} <strong>{selectedPlace.name}</strong>
                 </p>
               </div>
             )}
@@ -256,7 +255,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Nombre del Lugar *
+              {t('nameLabel')}
             </label>
             <Input
               value={formData.name}
@@ -268,16 +267,16 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
 
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Categoría *
+              {t('categoryLabel')}
             </label>
             <Select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               required
             >
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
+              {categories.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
                 </option>
               ))}
             </Select>
@@ -286,12 +285,12 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
 
         <div>
           <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-            Descripción
+            {t('descriptionLabel')}
           </label>
           <Textarea
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            placeholder="Describe el lugar y por qué lo recomiendas..."
+            placeholder={t('descriptionPlaceholder')}
             rows={3}
           />
         </div>
@@ -299,23 +298,23 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Dirección
+              {t('addressLabel')}
             </label>
             <Input
               value={formData.address}
               onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              placeholder="Calle Principal 123"
+              placeholder={t('addressPlaceholder')}
             />
           </div>
 
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Distancia
+              {t('distanceLabel')}
             </label>
             <Input
               value={formData.distance}
               onChange={(e) => setFormData({ ...formData, distance: e.target.value })}
-              placeholder="2 km del hotel"
+              placeholder={t('distancePlaceholder')}
             />
           </div>
         </div>
@@ -323,7 +322,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Valoración (0-5)
+              {t('ratingLabel')}
             </label>
             <Input
               type="number"
@@ -338,7 +337,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
 
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Precio
+              {t('priceLabel')}
             </label>
             <Select
               value={formData.priceLevel}
@@ -354,7 +353,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
 
           <div>
             <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-              Horario
+              {t('hoursLabel')}
             </label>
             <Input
               value={formData.hours}
@@ -366,7 +365,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
 
         <div>
           <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-            URL de la Imagen
+            {t('imageLabel')}
           </label>
           <Input
             value={formData.image}
@@ -388,7 +387,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
 
         <div>
           <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-            Enlace (Google Maps, web oficial, etc.)
+            {t('linkLabel')}
           </label>
           <div className="flex gap-2">
             <Input
@@ -418,7 +417,7 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
             className="w-4 h-4 text-[#E8B4B8] rounded focus:ring-[#E8B4B8] flex-shrink-0"
           />
           <label htmlFor="recommended" className="text-xs md:text-sm font-medium text-gray-700">
-            ⭐ Marcar como recomendado
+            {t('recommendedLabel')}
           </label>
         </div>
 
@@ -430,14 +429,14 @@ export function PlaceModal({ isOpen, onClose, onSave, place }: PlaceModalProps) 
             variant="ghost"
             className="w-full sm:w-auto order-2 sm:order-1"
           >
-            Cancelar
+            {tActions('cancel')}
           </Button>
           <Button
             type="submit"
             variant="primary"
             className="w-full sm:w-auto order-1 sm:order-2"
           >
-            {place ? 'Guardar Cambios' : 'Añadir Lugar'}
+            {place ? t('saveChanges') : t('addPlace')}
           </Button>
         </div>
       </form>

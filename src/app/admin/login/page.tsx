@@ -92,7 +92,7 @@ export default function AdminLoginPage() {
               </h1>
               <p className="text-gray-600 flex items-center justify-center gap-2">
                 <Heart className="w-4 h-4 text-[var(--color-primary)]" />
-                Solo para los novios
+                {t('subtitle')}
               </p>
             </div>
 
@@ -159,7 +159,7 @@ export default function AdminLoginPage() {
             {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-500">
-                Credenciales de acceso solo para Estelle y Alexandre
+                {t('footer')}
               </p>
             </div>
           </CardContent>

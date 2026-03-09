@@ -256,6 +256,7 @@ export default function TurismoPage() {
                             alt={place.name}
                             width={600}
                             height={400}
+                            unoptimized
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -305,7 +306,7 @@ export default function TurismoPage() {
                         <div className="flex flex-wrap gap-2 mb-4">
                           <div className={`inline-flex items-center gap-2 bg-gradient-to-r ${categoryInfo?.color} text-white px-3 py-1 rounded-full text-xs font-semibold`}>
                             <Icon className="w-3 h-3" />
-                            {place.type}
+                            {categoryInfo?.label || place.type}
                           </div>
                           {place.distance && (
                             <div className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">
@@ -499,6 +500,7 @@ export default function TurismoPage() {
                               alt={place.name}
                               width={500}
                               height={300}
+                              unoptimized
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -520,7 +522,7 @@ export default function TurismoPage() {
                             {/* Category badge */}
                             <div className={`absolute top-3 left-3 bg-gradient-to-r ${categoryInfo?.color || 'from-gray-600 to-gray-700'} text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg flex items-center gap-1.5`}>
                               <Icon className="w-3 h-3" />
-                              <span className="capitalize">{place.type}</span>
+                              <span>{categoryInfo?.label || place.type}</span>
                             </div>
 
                             {/* Rating */}
