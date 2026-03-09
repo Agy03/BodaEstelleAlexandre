@@ -130,7 +130,7 @@
     },
     "additional": {
       "title": "Informations Complémentaires",
-      "viewOnMap": "📍 Voir sur la carte",
+      "viewOnMap": "Voir sur la carte",
       "accommodation": {
         "title": "Hébergement",
         "description": "Consultez notre section tourisme pour les hôtels recommandés dans la région."
@@ -217,7 +217,7 @@
       "purchased": "Achetés"
     },
     "confirmReserve": "Veuillez entrer votre nom pour réserver ce cadeau:",
-    "successReserve": "Cadeau réservé! N'oubliez pas de télécharger le reçu d'achat dans les 7 prochains jours. 💝",
+    "successReserve": "Cadeau réservé! N'oubliez pas de télécharger le reçu d'achat dans les 7 prochains jours.",
     "errorReserve": "Erreur lors de la réservation. Veuillez réessayer.",
     "noGiftsFound": "Aucun cadeau trouvé",
     "noGiftsAvailable": "Aucun cadeau disponible",
@@ -240,7 +240,7 @@
     "receiptRejected": "Reçu rejeté",
     "reservedBy": "Réservé par",
     "noInfoReservation": "Informations de réservation introuvables. Veuillez contacter les mariés.",
-    "receiptSuccess": "Reçu téléchargé avec succès! Les mariés l'examineront bientôt. 💝",
+    "receiptSuccess": "Reçu téléchargé avec succès! Les mariés l'examineront bientôt.",
     "receiptError": "Erreur lors du téléchargement du reçu. Veuillez réessayer.",
     "enterYourName": "Entrez votre nom",
     "yourName": "Votre nom",
@@ -287,8 +287,8 @@
     "proposedBy": "Proposée par",
     "openSpotify": "Ouvrir dans Spotify",
     "playingPreview": "Lecture de l'aperçu (10 sec)",
-    "listeningFromWeb": "🎵 Écoute depuis notre site",
-    "stop": "⏸ Arrêter",
+    "listeningFromWeb": "Écoute depuis notre site",
+    "stop": "Arrêter",
     "form": {
       "song": "Titre de la chanson",
       "artist": "Artiste",
@@ -369,7 +369,7 @@
       "guests": "Invités",
       "photos": "Photos",
       "toApprove": "à approuver",
-      "allApproved": "Toutes approuvées ✓",
+      "allApproved": "Toutes approuvées",
       "songs": "Chansons",
       "gifts": "Cadeaux",
       "available": "disponibles",
@@ -464,7 +464,7 @@
       "expires": "Expire",
       "receipt": "Reçu d'achat",
       "pendingReview": "En attente de révision",
-      "approvedReceipt": "Approuvé ✓",
+      "approvedReceipt": "Approuvé",
       "rejected": "Rejeté",
       "view": "Voir",
       "approve": "Approuver",
@@ -517,7 +517,7 @@
       "categoryLabel": "Catégorie",
       "imageLabel": "URL de l'Image",
       "linkLabel": "Lien (boutique en ligne, Amazon, etc.)",
-      "priorityLabel": "⭐ Marquer comme prioritaire",
+      "priorityLabel": "Marquer comme prioritaire",
       "saveChanges": "Enregistrer",
       "addGift": "Ajouter le Cadeau",
       "categories": {
@@ -532,7 +532,7 @@
       "searchGMaps": "Rechercher sur Google Maps",
       "searchGMapsDesc": "Recherchez un lieu sur Google Maps pour remplir automatiquement",
       "searchPlaceholder": "Ex: Restaurant La Terraza, Madrid",
-      "placeSelected": "✓ Lieu sélectionné :",
+      "placeSelected": "Lieu sélectionné :",
       "nameLabel": "Nom du Lieu *",
       "categoryLabel": "Catégorie *",
       "descriptionLabel": "Description",
@@ -546,7 +546,7 @@
       "hoursLabel": "Horaires",
       "imageLabel": "URL de l'Image",
       "linkLabel": "Lien (Google Maps, site officiel, etc.)",
-      "recommendedLabel": "⭐ Marquer comme recommandé",
+      "recommendedLabel": "Marquer comme recommandé",
       "saveChanges": "Enregistrer",
       "addPlace": "Ajouter le Lieu",
       "categories": {

@@ -130,7 +130,7 @@
     },
     "additional": {
       "title": "Información Adicional",
-      "viewOnMap": "📍 Ver en el mapa",
+      "viewOnMap": "Ver en el mapa",
       "accommodation": {
         "title": "Alojamiento",
         "description": "Consulta nuestra sección de turismo para ver hoteles recomendados en la zona."
@@ -217,7 +217,7 @@
       "purchased": "Comprados"
     },
     "confirmReserve": "Por favor, introduce tu nombre para reservar este regalo:",
-    "successReserve": "¡Regalo reservado! Recuerda subir el recibo de compra en los próximos 7 días. 💝",
+    "successReserve": "¡Regalo reservado! Recuerda subir el recibo de compra en los próximos 7 días.",
     "errorReserve": "Error al reservar el regalo. Por favor, inténtalo de nuevo.",
     "noGiftsFound": "No se encontraron regalos",
     "noGiftsAvailable": "No hay regalos disponibles",
@@ -240,7 +240,7 @@
     "receiptRejected": "Recibo rechazado",
     "reservedBy": "Reservado por",
     "noInfoReservation": "No se encontró información de reserva. Por favor, contacta con los novios.",
-    "receiptSuccess": "¡Recibo subido con éxito! Los novios lo revisarán pronto. 💝",
+    "receiptSuccess": "¡Recibo subido con éxito! Los novios lo revisarán pronto.",
     "receiptError": "Error al subir el recibo. Por favor, inténtalo de nuevo.",
     "enterYourName": "Introduce tu nombre",
     "yourName": "Tu nombre",
@@ -287,8 +287,8 @@
     "proposedBy": "Propuesta por",
     "openSpotify": "Abrir en Spotify",
     "playingPreview": "Reproduciendo preview (10 seg)",
-    "listeningFromWeb": "🎵 Escuchando desde nuestra web",
-    "stop": "⏸ Detener",
+    "listeningFromWeb": "Escuchando desde nuestra web",
+    "stop": "Detener",
     "form": {
       "song": "Nombre de la canción",
       "artist": "Artista",
@@ -369,7 +369,7 @@
       "guests": "Invitados",
       "photos": "Fotos",
       "toApprove": "por aprobar",
-      "allApproved": "Todas aprobadas ✓",
+      "allApproved": "Todas aprobadas",
       "songs": "Canciones",
       "gifts": "Regalos",
       "available": "disponibles",
@@ -464,7 +464,7 @@
       "expires": "Expira",
       "receipt": "Recibo de compra",
       "pendingReview": "Pendiente de revisión",
-      "approvedReceipt": "Aprobado ✓",
+      "approvedReceipt": "Aprobado",
       "rejected": "Rechazado",
       "view": "Ver",
       "approve": "Aprobar",
@@ -517,7 +517,7 @@
       "categoryLabel": "Categoría",
       "imageLabel": "URL de la Imagen",
       "linkLabel": "Enlace (tienda online, Amazon, etc.)",
-      "priorityLabel": "⭐ Marcar como prioritario",
+      "priorityLabel": "Marcar como prioritario",
       "saveChanges": "Guardar Cambios",
       "addGift": "Añadir Regalo",
       "categories": {
@@ -532,7 +532,7 @@
       "searchGMaps": "Buscar en Google Maps",
       "searchGMapsDesc": "Busca un lugar en Google Maps para rellenar automáticamente",
       "searchPlaceholder": "Ej: Restaurante La Terraza, Madrid",
-      "placeSelected": "✓ Lugar seleccionado:",
+      "placeSelected": "Lugar seleccionado:",
       "nameLabel": "Nombre del Lugar *",
       "categoryLabel": "Categoría *",
       "descriptionLabel": "Descripción",
@@ -546,7 +546,7 @@
       "hoursLabel": "Horario",
       "imageLabel": "URL de la Imagen",
       "linkLabel": "Enlace (Google Maps, web oficial, etc.)",
-      "recommendedLabel": "⭐ Marcar como recomendado",
+      "recommendedLabel": "Marcar como recomendado",
       "saveChanges": "Guardar Cambios",
       "addPlace": "Añadir Lugar",
       "categories": {

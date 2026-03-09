@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { Info, Calendar, MapPin, Cloud, Shirt, Car, Clock, Palette, Sparkles, Heart, Wine, Camera, Music, Users } from 'lucide-react';
+import { Info, Calendar, MapPin, Cloud, Shirt, Car, Clock, Palette, Sparkles, Heart, Wine, Camera, Music, Users, UserRound } from 'lucide-react';
 
 type WeddingInfo = {
   id: string;
@@ -383,14 +383,14 @@ export default function InformacionPage() {
                       <div className="flex items-start gap-3">
                         <div className="w-2 h-2 rounded-full bg-[var(--color-rose)] mt-2 flex-shrink-0" />
                         <div>
-                          <p className="font-semibold text-gray-800 mb-1">👔 {t('dressCode.menLabel')}</p>
+                          <p className="font-semibold text-gray-800 mb-1 flex items-center gap-1.5"><Shirt className="w-4 h-4 text-[var(--color-secondary)]" /> {t('dressCode.menLabel')}</p>
                           <p className="text-gray-700 text-sm">{weddingInfo.dressCodeMen}</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3">
                         <div className="w-2 h-2 rounded-full bg-[var(--color-rose)] mt-2 flex-shrink-0" />
                         <div>
-                          <p className="font-semibold text-gray-800 mb-1">👗 {t('dressCode.womenLabel')}</p>
+                          <p className="font-semibold text-gray-800 mb-1 flex items-center gap-1.5"><UserRound className="w-4 h-4 text-[var(--color-rose)]" /> {t('dressCode.womenLabel')}</p>
                           <p className="text-gray-700 text-sm">{weddingInfo.dressCodeWomen}</p>
                         </div>
                       </div>

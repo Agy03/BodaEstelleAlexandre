@@ -24,7 +24,18 @@ import {
   Sun,
   Shirt,
   Lightbulb,
-  Download
+  Download,
+  Heart,
+  PartyPopper,
+  Star,
+  Clock,
+  DollarSign,
+  Check,
+  FileText,
+  Hourglass,
+  Play,
+  Pause,
+  Square
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -581,7 +592,7 @@ export default function AdminPage() {
                   <span className="font-medium bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] bg-clip-text text-transparent">
                     {session?.user?.name || t('couple')}
                   </span>
-                  <span className="text-xl md:text-2xl">💝</span>
+                  <Heart className="w-5 h-5 md:w-6 md:h-6 text-[var(--color-rose)] fill-current" />
                 </p>
               </div>
               <Button
@@ -848,7 +859,7 @@ export default function AdminPage() {
                     )}
                     {pendingPhotos === 0 && pendingSongs === 0 && (
                       <div className="text-center py-6 md:py-8">
-                        <div className="text-5xl md:text-6xl mb-3">🎉</div>
+                        <div className="mb-3"><PartyPopper className="w-12 h-12 md:w-14 md:h-14 text-[var(--color-secondary)] mx-auto" /></div>
                         <p className="text-gray-600 font-medium">{t('stats.allUpToDate')}</p>
                         <p className="text-gray-500 text-sm">{t('stats.noPending')}</p>
                       </div>
@@ -911,7 +922,7 @@ export default function AdminPage() {
                             <td className="py-3 md:py-4 px-2 md:px-4">
                               {rsvp.attending ? (
                                 <span className="inline-flex px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] text-white shadow-md whitespace-nowrap">
-                                  ✓ {t('rsvp.yes')}
+                                  <Check className="w-3 h-3 inline" /> {t('rsvp.yes')}
                                 </span>
                               ) : (
                                 <span className="inline-flex px-2 md:px-4 py-1 md:py-2 rounded-full text-xs md:text-sm font-bold bg-gradient-to-r from-red-400 to-red-500 text-white shadow-md whitespace-nowrap">
@@ -996,7 +1007,7 @@ export default function AdminPage() {
                           >
                             <CheckCircle className="w-4 h-4 mr-1" />
                             <span className="hidden sm:inline">{t('actions.approve')}</span>
-                            <span className="sm:hidden">✓</span>
+                            <span className="sm:hidden"><Check className="w-3 h-3" /></span>
                           </Button>
                         )}
                         <Button
@@ -1010,7 +1021,7 @@ export default function AdminPage() {
                         </Button>
                       </div>
                       {photo.approved && (
-                        <p className="text-xs text-green-600 mt-2 text-center font-medium">✓ {t('photos.approved')}</p>
+                        <p className="text-xs text-green-600 mt-2 text-center font-medium flex items-center justify-center gap-1"><Check className="w-3 h-3" /> {t('photos.approved')}</p>
                       )}
                     </CardContent>
                   </Card>
@@ -1093,7 +1104,7 @@ export default function AdminPage() {
                                       : 'bg-green-500 hover:bg-green-600'
                                   } text-white`}
                                 >
-                                  {currentAudioUrl === track.previewUrl && isPlaying ? `⏸ ${t('songs.pause')}` : `▶ ${t('songs.preview')}`}
+                                  {currentAudioUrl === track.previewUrl && isPlaying ? <><Pause className="w-3 h-3 inline" /> {t('songs.pause')}</> : <><Play className="w-3 h-3 inline" /> {t('songs.preview')}</>}
                                 </Button>
                               )}
                             </div>
@@ -1243,9 +1254,9 @@ export default function AdminPage() {
                               }`}
                             >
                               {currentAudioUrl === song.previewUrl && isPlaying ? (
-                                <span className="text-xl">⏸</span>
+                                <Pause className="w-5 h-5" />
                               ) : (
-                                <span className="text-xl">▶</span>
+                                <Play className="w-5 h-5" />
                               )}
                             </button>
                           ) : (
@@ -1313,13 +1324,13 @@ export default function AdminPage() {
                             <span className="inline-flex items-center gap-1 px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
                               <CheckCircle className="w-3 h-3" />
                               <span className="hidden sm:inline">{t('songs.approved')}</span>
-                              <span className="sm:hidden">✓</span>
+                              <span className="sm:hidden"><Check className="w-3 h-3" /></span>
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 px-2 md:px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium animate-pulse">
                               <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
                               <span className="hidden sm:inline">{t('songs.pending')}</span>
-                              <span className="sm:hidden">⏳</span>
+                              <span className="sm:hidden"><Hourglass className="w-3 h-3" /></span>
                             </span>
                           )}
                         </div>
@@ -1383,7 +1394,7 @@ export default function AdminPage() {
                         }}
                         className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
                       >
-                        ⏸ {t('songs.stop')}
+                        <Square className="w-4 h-4 inline" /> {t('songs.stop')}
                       </button>
                     </div>
                   </motion.div>
@@ -1415,8 +1426,8 @@ export default function AdminPage() {
                 {gifts.map((gift) => (
                   <Card key={gift.id} className="relative overflow-hidden">
                     {gift.priority && (
-                      <div className="absolute top-2 left-2 z-10 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                        ⭐ {t('gifts.priority')}
+                      <div className="absolute top-2 left-2 z-10 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-current" /> {t('gifts.priority')}
                       </div>
                     )}
                     {gift.image && (
@@ -1443,16 +1454,16 @@ export default function AdminPage() {
                       <div className="mb-3 space-y-2">
                         <div className="flex items-center gap-2 flex-wrap">
                           {gift.purchased ? (
-                            <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium">
-                              ✓ {t('gifts.purchased')}
+                            <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-medium inline-flex items-center gap-1">
+                              <Check className="w-3 h-3" /> {t('gifts.purchased')}
                             </span>
                           ) : gift.reserved ? (
-                            <span className="px-2 py-1 bg-orange-200 text-orange-700 rounded text-xs font-medium">
-                              ⏳ {t('gifts.reserved')}
+                            <span className="px-2 py-1 bg-orange-200 text-orange-700 rounded text-xs font-medium inline-flex items-center gap-1">
+                              <Hourglass className="w-3 h-3" /> {t('gifts.reserved')}
                             </span>
                           ) : (
-                            <span className="px-2 py-1 bg-green-200 text-green-700 rounded text-xs font-medium">
-                              ✓ {t('gifts.available')}
+                            <span className="px-2 py-1 bg-green-200 text-green-700 rounded text-xs font-medium inline-flex items-center gap-1">
+                              <Check className="w-3 h-3" /> {t('gifts.available')}
                             </span>
                           )}
                           {gift.category && (
@@ -1478,7 +1489,7 @@ export default function AdminPage() {
                             <div className="grid grid-cols-2 gap-2 pt-2 border-t border-blue-200">
                               {gift.reservedAt && (
                                 <div className="flex items-start gap-1.5">
-                                  <span className="text-blue-500 mt-0.5">📅</span>
+                                  <Calendar className="w-3.5 h-3.5 text-blue-500 mt-0.5 flex-shrink-0" />
                                   <div>
                                     <p className="text-xs text-blue-600">{t('gifts.date')}</p>
                                     <p className="text-xs font-semibold text-blue-900">
@@ -1492,7 +1503,7 @@ export default function AdminPage() {
                               )}
                               {gift.reservationExpiresAt && !gift.receiptUrl && (
                                 <div className="flex items-start gap-1.5">
-                                  <span className="text-orange-500 mt-0.5">⏰</span>
+                                  <Clock className="w-3.5 h-3.5 text-orange-500 mt-0.5 flex-shrink-0" />
                                   <div>
                                     <p className="text-xs text-orange-600">{t('gifts.expires')}</p>
                                     <p className="text-xs font-semibold text-orange-900">
@@ -1514,7 +1525,7 @@ export default function AdminPage() {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                                  <span className="text-white text-sm">📄</span>
+                                  <FileText className="w-4 h-4 text-white" />
                                 </div>
                                 <div>
                                   <p className="text-xs text-purple-600 font-medium">{t('gifts.receipt')}</p>
@@ -1540,7 +1551,7 @@ export default function AdminPage() {
                                   onClick={() => handleApproveReceipt(gift.id, true)}
                                   className="flex-1 px-3 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg text-xs font-semibold transition-all shadow-sm hover:shadow"
                                 >
-                                  ✓ {t('gifts.approve')}
+                                  <Check className="w-3 h-3 inline" /> {t('gifts.approve')}
                                 </button>
                                 <button
                                   onClick={() => handleApproveReceipt(gift.id, false)}
@@ -1602,8 +1613,8 @@ export default function AdminPage() {
                 {places.map((place) => (
                   <Card key={place.id} className="relative overflow-hidden">
                     {place.recommended && (
-                      <div className="absolute top-2 left-2 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                        ⭐ {t('places.recommended')}
+                      <div className="absolute top-2 left-2 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-current" /> {t('places.recommended')}
                       </div>
                     )}
                     {place.image && (
@@ -1626,9 +1637,9 @@ export default function AdminPage() {
                         <p className="text-sm text-gray-600 mb-2 line-clamp-2">{place.description}</p>
                       )}
                       <div className="space-y-1 text-xs text-gray-500 mb-3">
-                        {place.distance && <p>📍 {place.distance}</p>}
-                        {place.rating && <p>⭐ {place.rating}/5</p>}
-                        {place.priceLevel && <p>💰 {place.priceLevel}</p>}
+                        {place.distance && <p className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {place.distance}</p>}
+                        {place.rating && <p className="flex items-center gap-1"><Star className="w-3 h-3 fill-current text-yellow-500" /> {place.rating}/5</p>}
+                        {place.priceLevel && <p className="flex items-center gap-1"><DollarSign className="w-3 h-3" /> {place.priceLevel}</p>}
                       </div>
                       <div className="flex gap-2">
                         <Button 

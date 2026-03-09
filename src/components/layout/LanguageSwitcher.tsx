@@ -90,7 +90,7 @@ export function LanguageSwitcher() {
                   <span className="text-2xl">{lang.flag}</span>
                   <span className="font-medium">{lang.name}</span>
                   {currentLocale === lang.code && (
-                    <span className="ml-auto">✓</span>
+                    <span className="ml-auto text-[var(--color-primary)]">&#10003;</span>
                   )}
                 </button>
               ))}

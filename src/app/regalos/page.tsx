@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
-import { Gift, ExternalLink, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users } from 'lucide-react';
+import { Gift, ExternalLink, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users, Check, Hourglass, Star, FileText, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
@@ -401,7 +401,7 @@ export default function RegalosPage() {
           >
             <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3 font-playfair">
-                💝 {t('mostWanted')}
+                <Heart className="w-6 h-6 inline text-[var(--color-rose)] fill-current" /> {t('mostWanted')}
               </h2>
               <p className="text-gray-600">{t('mostWantedSubtitle')}</p>
             </div>
@@ -594,7 +594,7 @@ export default function RegalosPage() {
             >
               <div className="text-center mb-6">
                 <div className="bg-gradient-to-br from-[var(--color-rose)] to-[var(--color-secondary)] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-3xl">📄</span>
+                  <FileText className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('uploadReceipt')}</h3>
                 <p className="text-gray-600">{selectedGift.name}</p>
@@ -669,7 +669,7 @@ export default function RegalosPage() {
                   transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
                   className="bg-gradient-to-br from-green-400 to-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
                 >
-                  <span className="text-4xl">✓</span>
+                  <Check className="w-10 h-10 text-white" />
                 </motion.div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">{t('success')}</h3>
                 <p className="text-gray-600 mb-6 leading-relaxed">{successMessage}</p>
@@ -806,7 +806,7 @@ function GiftCard({
                   ? 'bg-gradient-to-r from-gray-500 to-gray-700' 
                   : 'bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-accent)]'
               }`}>
-                {gift.purchased ? `✓ ${t('purchased')}` : `⏳ ${t('reserved')}`}
+                {gift.purchased ? t('purchased') : t('reserved')}
               </div>
             </div>
           )}
@@ -882,16 +882,16 @@ function GiftCard({
                 onClick={() => onUploadReceipt(gift)}
                 className="w-full bg-gradient-to-r from-[var(--color-rose)] to-[var(--color-secondary)] text-white hover:shadow-xl transition-all"
               >
-                📄 {t('uploadReceiptButton')}
+                <FileText className="w-4 h-4 inline" /> {t('uploadReceiptButton')}
               </Button>
             )}
 
             {/* Receipt status */}
             {hasReceipt && (
               <div className="bg-[var(--color-rose)]/10 text-[var(--color-rose)] text-xs px-3 py-2 rounded text-center font-medium">
-                {gift.receiptStatus === 'pending' && `⏳ ${t('receiptPending')}`}
-                {gift.receiptStatus === 'approved' && `✓ ${t('receiptApproved')}`}
-                {gift.receiptStatus === 'rejected' && `✗ ${t('receiptRejected')}`}
+                {gift.receiptStatus === 'pending' && t('receiptPending')}
+                {gift.receiptStatus === 'approved' && t('receiptApproved')}
+                {gift.receiptStatus === 'rejected' && t('receiptRejected')}
               </div>
             )}
           </div>

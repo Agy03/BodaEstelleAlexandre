@@ -5,7 +5,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
-import { Save, X } from 'lucide-react';
+import { Save, X, Calendar, MapPin, Shirt, Sun, Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 type WeddingInfo = {
@@ -121,11 +121,11 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
   };
 
   const sections = [
-    { id: 'date', label: t('tabs.dateTime'), icon: '📅' },
-    { id: 'location', label: t('tabs.location'), icon: '📍' },
-    { id: 'dress', label: 'Dress Code', icon: '👔' },
-    { id: 'weather', label: t('tabs.weather'), icon: '☀️' },
-    { id: 'additional', label: t('tabs.additional'), icon: 'ℹ️' },
+    { id: 'date', label: t('tabs.dateTime'), icon: Calendar },
+    { id: 'location', label: t('tabs.location'), icon: MapPin },
+    { id: 'dress', label: 'Dress Code', icon: Shirt },
+    { id: 'weather', label: t('tabs.weather'), icon: Sun },
+    { id: 'additional', label: t('tabs.additional'), icon: Info },
   ];
 
   return (
@@ -144,7 +144,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {section.icon} {section.label}
+              <section.icon className="w-4 h-4 inline" /> {section.label}
             </button>
           ))}
         </div>

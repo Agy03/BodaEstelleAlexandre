@@ -130,7 +130,7 @@
     },
     "additional": {
       "title": "Additional Information",
-      "viewOnMap": "📍 View on map",
+      "viewOnMap": "View on map",
       "accommodation": {
         "title": "Accommodation",
         "description": "Check our tourism section for recommended hotels in the area."
@@ -215,7 +215,7 @@
       "purchased": "Purchased"
     },
     "confirmReserve": "Please enter your name to reserve this gift:",
-    "successReserve": "Gift reserved! Remember to upload the purchase receipt within the next 7 days. 💝",
+    "successReserve": "Gift reserved! Remember to upload the purchase receipt within the next 7 days.",
     "errorReserve": "Error reserving gift. Please try again.",
     "noGiftsFound": "No gifts found",
     "noGiftsAvailable": "No gifts available",
@@ -238,7 +238,7 @@
     "receiptRejected": "Receipt rejected",
     "reservedBy": "Reserved by",
     "noInfoReservation": "Reservation information not found. Please contact the couple.",
-    "receiptSuccess": "Receipt uploaded successfully! The couple will review it soon. 💝",
+    "receiptSuccess": "Receipt uploaded successfully! The couple will review it soon.",
     "receiptError": "Error uploading receipt. Please try again.",
     "enterYourName": "Enter your name",
     "yourName": "Your name",
@@ -285,8 +285,8 @@
     "proposedBy": "Proposed by",
     "openSpotify": "Open in Spotify",
     "playingPreview": "Playing preview (10 sec)",
-    "listeningFromWeb": "🎵 Listening from our web",
-    "stop": "⏸ Stop",
+    "listeningFromWeb": "Listening from our web",
+    "stop": "Stop",
     "form": {
       "song": "Song name",
       "artist": "Artist",
@@ -367,7 +367,7 @@
       "guests": "Guests",
       "photos": "Photos",
       "toApprove": "to approve",
-      "allApproved": "All approved ✓",
+      "allApproved": "All approved",
       "songs": "Songs",
       "gifts": "Gifts",
       "available": "available",
@@ -462,7 +462,7 @@
       "expires": "Expires",
       "receipt": "Purchase receipt",
       "pendingReview": "Pending review",
-      "approvedReceipt": "Approved ✓",
+      "approvedReceipt": "Approved",
       "rejected": "Rejected",
       "view": "View",
       "approve": "Approve",
@@ -515,7 +515,7 @@
       "categoryLabel": "Category",
       "imageLabel": "Image URL",
       "linkLabel": "Link (online store, Amazon, etc.)",
-      "priorityLabel": "⭐ Mark as priority",
+      "priorityLabel": "Mark as priority",
       "saveChanges": "Save Changes",
       "addGift": "Add Gift",
       "categories": {
@@ -530,7 +530,7 @@
       "searchGMaps": "Search on Google Maps",
       "searchGMapsDesc": "Search for a place on Google Maps to auto-fill",
       "searchPlaceholder": "E.g.: Restaurant La Terraza, Madrid",
-      "placeSelected": "✓ Place selected:",
+      "placeSelected": "Place selected:",
       "nameLabel": "Place Name *",
       "categoryLabel": "Category *",
       "descriptionLabel": "Description",
@@ -544,7 +544,7 @@
       "hoursLabel": "Hours",
       "imageLabel": "Image URL",
       "linkLabel": "Link (Google Maps, official website, etc.)",
-      "recommendedLabel": "⭐ Mark as recommended",
+      "recommendedLabel": "Mark as recommended",
       "saveChanges": "Save Changes",
       "addPlace": "Add Place",
       "categories": {
