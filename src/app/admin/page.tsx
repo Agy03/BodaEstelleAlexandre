@@ -113,6 +113,7 @@ type TourismPlace = {
 
 export default function AdminPage() {
   const t = useTranslations('admin');
+  const tErrors = useTranslations('errors');
   const { data: session, status } = useSession();
   const router = useRouter();
   const [rsvps, setRsvps] = useState<RSVP[]>([]);
