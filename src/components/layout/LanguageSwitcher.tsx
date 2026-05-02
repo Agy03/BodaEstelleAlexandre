@@ -3,7 +3,7 @@
 import { useState, useTransition, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 const languages = [
   { code: 'es', name: 'Español', flag: '🇪🇸' },
@@ -11,27 +11,16 @@ const languages = [
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
 ];
 
-// Función para leer la cookie actual
-const getCurrentLocale = (): string => {
-  if (typeof document === 'undefined') return 'es';
-  
-  const cookie = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('NEXT_LOCALE='));
-  
-  return cookie ? cookie.split('=')[1] : 'es';
-};
-
 export function LanguageSwitcher() {
   const t = useTranslations('accessibility');
+  const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [currentLocale, setCurrentLocale] = useState('es');
+  const [currentLocale, setCurrentLocale] = useState(locale);
 
-  // Leer el idioma actual de la cookie al montar el componente
   useEffect(() => {
-    setCurrentLocale(getCurrentLocale());
-  }, []);
+    setCurrentLocale(locale);
+  }, [locale]);
 
   const handleLanguageChange = (locale: string) => {
     startTransition(() => {
