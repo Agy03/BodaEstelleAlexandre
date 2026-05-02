@@ -639,7 +639,7 @@
       "title": "Virement Bancaire",
       "description": "Vous pouvez effectuer un virement sur le compte bancaire suivant au nom d'Estelle",
       "accountHolderLabel": "Titulaire",
-      "accountHolder": "Estelle Rousseau",
+      "accountHolder": "Estelle",
       "ibanLabel": "IBAN",
       "iban": "FR7630004033770000192535624",
       "bicLabel": "BIC/SWIFT",

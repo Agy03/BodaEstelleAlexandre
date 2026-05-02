@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
-import { Gift, ExternalLink, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users, Check, Hourglass, Star, FileText, X } from 'lucide-react';
+import { Gift, ExternalLink, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users, Check, Hourglass, Star, FileText, X, CreditCard, Lightbulb } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
@@ -575,7 +575,7 @@ export default function RegalosPage() {
 
               <div className="bg-gradient-to-br from-[var(--color-primary)]/5 to-[var(--color-accent)]/5 rounded-2xl p-6 border border-[var(--color-primary)]/20">
                 <p className="text-sm text-gray-700">
-                  <span className="font-semibold">💡 {tPayment('bankTransfer.note')}</span>
+                  <span className="flex items-center gap-2 font-semibold"><Lightbulb className="w-4 h-4" /> {tPayment('bankTransfer.note')}</span>
                 </p>
               </div>
             </motion.div>
@@ -605,15 +605,30 @@ export default function RegalosPage() {
                   rotateY: [0, 5, 0],
                 }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-80 h-48 bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] rounded-3xl shadow-2xl p-8 text-white transform perspective"
+                className="relative w-80 h-48 bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] rounded-3xl shadow-2xl p-8 text-white transform perspective flex flex-col justify-between"
               >
-                <div className="absolute top-4 left-4 text-3xl font-bold opacity-80">💳</div>
-                <div className="absolute bottom-6 left-8 font-mono text-xl tracking-widest">
+                {/* Chip and Icon */}
+                <div className="flex justify-between items-start">
+                  <div className="w-12 h-10 bg-white/20 rounded-lg border border-white/30 flex items-center justify-center">
+                    <CreditCard className="w-6 h-6" />
+                  </div>
+                  <div className="text-right text-xs opacity-75">debit</div>
+                </div>
+
+                {/* IBAN */}
+                <div className="font-mono text-lg tracking-widest font-semibold">
                   FR76 3000 4033 7700
                 </div>
-                <div className="absolute bottom-6 right-8 text-right">
-                  <div className="text-xs opacity-75 mb-1">Estelle</div>
-                  <div className="text-sm font-semibold">Rousseau</div>
+
+                {/* Cardholder Info */}
+                <div className="flex justify-between items-end">
+                  <div>
+                    <div className="text-xs opacity-75 mb-1">Cardholder</div>
+                    <div className="text-sm font-semibold">Estelle & Alexandre</div>
+                  </div>
+                  <div className="text-right text-xs opacity-75">
+                    <div>05/30</div>
+                  </div>
                 </div>
               </motion.div>
 

@@ -637,7 +637,7 @@
       "title": "Bank Transfer",
       "description": "You can make a transfer to the following bank account in Estelle's name",
       "accountHolderLabel": "Account holder",
-      "accountHolder": "Estelle Rousseau",
+      "accountHolder": "Estelle",
       "ibanLabel": "IBAN",
       "iban": "FR7630004033770000192535624",
       "bicLabel": "BIC/SWIFT",
