@@ -632,6 +632,27 @@
     "createPlaceError": "Error al crear el lugar. Inténtalo de nuevo.",
     "savePlaceError": "Error al guardar el lugar. Inténtalo de nuevo."
   },
+  "payment": {
+    "title": "Información de Transferencia",
+    "subtitle": "Si deseas contribuir de una manera especial",
+    "bankTransfer": {
+      "title": "Transferencia Bancaria",
+      "description": "Puedes hacer una transferencia a la siguiente cuenta bancaria a nombre de Estelle",
+      "accountHolderLabel": "Titular",
+      "accountHolder": "Estelle Rousseau",
+      "ibanLabel": "IBAN",
+      "iban": "FR7630004033770000192535624",
+      "bicLabel": "BIC/SWIFT",
+      "bic": "BNAGFRPP",
+      "reference": "Boda Estelle & Alexandre",
+      "note": "Por favor, incluye tu nombre en la referencia para que podamos agradecerte personalmente"
+    },
+    "bizum": {
+      "title": "Bizum",
+      "description": "También puedes enviar Bizum al número",
+      "phone": "+34 622 74 56 69"
+    }
+  },
   "accessibility": {
     "changeLanguage": "Cambiar idioma"
   }

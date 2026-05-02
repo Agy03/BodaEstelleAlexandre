@@ -632,6 +632,27 @@
     "createPlaceError": "Erreur lors de la création du lieu. Réessayez.",
     "savePlaceError": "Erreur lors de la sauvegarde du lieu. Réessayez."
   },
+  "payment": {
+    "title": "Informations de Virement Bancaire",
+    "subtitle": "Si vous souhaitez contribuer d'une manière spéciale",
+    "bankTransfer": {
+      "title": "Virement Bancaire",
+      "description": "Vous pouvez effectuer un virement sur le compte bancaire suivant au nom d'Estelle",
+      "accountHolderLabel": "Titulaire",
+      "accountHolder": "Estelle Rousseau",
+      "ibanLabel": "IBAN",
+      "iban": "FR7630004033770000192535624",
+      "bicLabel": "BIC/SWIFT",
+      "bic": "BNAGFRPP",
+      "reference": "Mariage Estelle & Alexandre",
+      "note": "Veuillez inclure votre nom dans la référence pour que nous puissions vous remercier personnellement"
+    },
+    "bizum": {
+      "title": "Bizum",
+      "description": "Vous pouvez également envoyer Bizum au numéro",
+      "phone": "+34 622 74 56 69"
+    }
+  },
   "accessibility": {
     "changeLanguage": "Changer de langue"
   }

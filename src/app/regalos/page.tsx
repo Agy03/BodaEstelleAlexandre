@@ -29,6 +29,7 @@ type GiftItem = {
 export default function RegalosPage() {
   const t = useTranslations('gifts');
   const tCommon = useTranslations('common');
+  const tPayment = useTranslations('payment');
   
   const categories = [
     { id: 'all', label: t('categories.all'), icon: Sparkles, color: 'from-[var(--color-primary)] to-[var(--color-secondary)]' },
@@ -511,6 +512,119 @@ export default function RegalosPage() {
             </AnimatePresence>
           </motion.div>
         )}
+
+        {/* Payment Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="mt-20 max-w-4xl mx-auto"
+        >
+          <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mb-16" />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            {/* Content Side */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <div>
+                <h2 className="text-4xl md:text-5xl font-bold font-playfair mb-4">
+                  <span className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">
+                    {tPayment('bankTransfer.title')}
+                  </span>
+                </h2>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  {tPayment('subtitle')}
+                </p>
+              </div>
+              
+              <div className="space-y-3">
+                <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold">{tPayment('bankTransfer.title')}</p>
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-100 space-y-4">
+                  <div>
+                    <p className="text-xs text-gray-500 font-medium mb-1">{tPayment('bankTransfer.accountHolderLabel')}</p>
+                    <p className="text-lg font-semibold text-gray-800">{tPayment('bankTransfer.accountHolder')}</p>
+                  </div>
+                  <div className="h-px bg-gray-100" />
+                  <div>
+                    <p className="text-xs text-gray-500 font-medium mb-1">{tPayment('bankTransfer.ibanLabel')}</p>
+                    <p className="text-lg font-mono font-bold text-[var(--color-primary)] break-all">{tPayment('bankTransfer.iban')}</p>
+                  </div>
+                  <div className="h-px bg-gray-100" />
+                  <div>
+                    <p className="text-xs text-gray-500 font-medium mb-1">{tPayment('bankTransfer.bicLabel')}</p>
+                    <p className="text-lg font-mono font-semibold text-gray-800">{tPayment('bankTransfer.bic')}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold">{tPayment('bizum.title')}</p>
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 border-2 border-gray-100 space-y-4">
+                  <div>
+                    <p className="text-xs text-gray-500 font-medium mb-1">{tPayment('bizum.description')}</p>
+                    <p className="text-lg font-semibold text-gray-800">{tPayment('bizum.phone')}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-[var(--color-primary)]/5 to-[var(--color-accent)]/5 rounded-2xl p-6 border border-[var(--color-primary)]/20">
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">💡 {tPayment('bankTransfer.note')}</span>
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Illustration Side */}
+            <motion.div
+              initial={{ opacity: 0, x: 30, scale: 0.95 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ delay: 0.3 }}
+              viewport={{ once: true }}
+              className="relative h-80 hidden md:flex items-center justify-center"
+            >
+              {/* Decorative card background */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-accent)]/10 rounded-3xl blur-2xl"
+                animate={{
+                  scale: [1, 1.05, 1],
+                  opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{ duration: 4, repeat: Infinity }}
+              />
+              
+              {/* Card visualization */}
+              <motion.div
+                animate={{
+                  y: [0, -10, 0],
+                  rotateY: [0, 5, 0],
+                }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="relative w-80 h-48 bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] rounded-3xl shadow-2xl p-8 text-white transform perspective"
+              >
+                <div className="absolute top-4 left-4 text-3xl font-bold opacity-80">💳</div>
+                <div className="absolute bottom-6 left-8 font-mono text-xl tracking-widest">
+                  FR76 3000 4033 7700
+                </div>
+                <div className="absolute bottom-6 right-8 text-right">
+                  <div className="text-xs opacity-75 mb-1">Estelle</div>
+                  <div className="text-sm font-semibold">Rousseau</div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-tr from-[var(--color-accent)] to-transparent rounded-full blur-2xl opacity-40"
+                animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.6, 0.4] }}
+                transition={{ duration: 5, repeat: Infinity }}
+              />
+            </motion.div>
+          </div>
+        </motion.div>
       </div>
 
       {/* Name Input Modal */}
