@@ -405,6 +405,7 @@ export default function InformacionPage() {
               variants={itemVariants}
               whileHover={{ y: -8, scale: 1.02 }}
               transition={{ duration: 0.3 }}
+              className="col-span-1 lg:col-span-2"
             >
               <div className="relative h-full bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-[var(--color-secondary)]/20 overflow-hidden">
                 <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-[var(--color-secondary)]/10 to-transparent rounded-full blur-2xl -z-10" />
@@ -425,70 +426,65 @@ export default function InformacionPage() {
                   </div>
                 </div>
 
-                <p className="text-gray-700 mb-6 leading-relaxed">
+                <p className="text-gray-700 mb-8 leading-relaxed">
                   {t('colorPalette.description')}
                 </p>
 
-                <div className="space-y-6">
-                  {/* Winter Palette */}
-                  <div className="bg-gradient-to-br from-[var(--color-accent)]/5 to-[var(--color-secondary)]/5 rounded-2xl p-6">
-                    <p className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[var(--color-accent)]" />
-                      {t('colorPalette.winter')}
-                    </p>
-                    <div className="grid grid-cols-3 gap-3">
-                      <motion.div 
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        className="group relative"
-                      >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-red-600/80 to-red-700/80 shadow-md cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </motion.div>
-                      <motion.div 
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        className="group relative"
-                      >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-orange-500/80 to-orange-600/80 shadow-md cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </motion.div>
-                      <motion.div 
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        className="group relative"
-                      >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-blue-500/80 to-blue-600/80 shadow-md cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </motion.div>
+                <div className="space-y-12">
+                  {/* Pink & Rose Collection */}
+                  <div>
+                    <h4 className="text-xl font-light font-playfair text-gray-800 mb-6 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-[var(--color-rose)]" />
+                      {t('colorPalette.pinkAndRose')}
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+                      <ColorSwatch color="#F5D5E0" label="Zartrosa" />
+                      <ColorSwatch color="#F0D5C8" label="Puderrosa" />
+                      <ColorSwatch color="#D4A5A0" label="Altrosa" />
+                      <ColorSwatch color="#E8D5C4" label="Rosettenrosa" />
+                      <ColorSwatch color="#F0D0B8" label="Roségold" />
+                      <ColorSwatch color="#F0C8D8" label="Englisches Rosa" />
+                      <ColorSwatch color="#FF9999" label="Lachsrosa" />
+                      <ColorSwatch color="#C97860" label="Antike Rose" />
+                      <ColorSwatch color="#FF99DD" label="Bonbonrosa" />
+                      <ColorSwatch color="#FF1493" label="Barbie™ Pink" />
                     </div>
                   </div>
 
-                  {/* Spring Palette */}
-                  <div className="bg-gradient-to-br from-[var(--color-secondary)]/5 to-[var(--color-rose)]/5 rounded-2xl p-6">
-                    <p className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[var(--color-secondary)]" />
-                      {t('colorPalette.spring')}
-                    </p>
-                    <div className="grid grid-cols-3 gap-3">
-                      <motion.div 
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        className="group relative"
-                      >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-500/80 to-purple-600/80 shadow-md cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </motion.div>
-                      <motion.div 
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        className="group relative"
-                      >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-400/80 to-purple-500/80 shadow-md cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </motion.div>
-                      <motion.div 
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        className="group relative"
-                      >
-                        <div className="aspect-square rounded-xl bg-gradient-to-br from-slate-400/80 to-slate-500/80 shadow-md cursor-pointer" />
-                        <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </motion.div>
+                  {/* Purple & Mauve Collection */}
+                  <div>
+                    <h4 className="text-xl font-light font-playfair text-gray-800 mb-6 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-[var(--color-secondary)]" />
+                      {t('colorPalette.purpleAndMauve')}
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                      <ColorSwatch color="#E8D5F2" label="Lavendel" />
+                      <ColorSwatch color="#D5C0E8" label="Frostiges Flieder" />
+                      <ColorSwatch color="#D8B5E8" label="Flieder" />
+                      <ColorSwatch color="#B8A0D8" label="Blauregen" />
+                      <ColorSwatch color="#A860C8" label="Tahiti" />
+                      <ColorSwatch color="#A08080" label="Vintage Mauve" />
+                      <ColorSwatch color="#7860A8" label="Amethyst" />
+                      <ColorSwatch color="#805858" label="Wüstenrose" />
+                      <ColorSwatch color="#662055" label="Sangria" />
+                      <ColorSwatch color="#4A2870" label="Traube" />
+                      <ColorSwatch color="#7A3A7A" label="Pflaume" />
+                    </div>
+                  </div>
+
+                  {/* Patterned & Textured Swatches */}
+                  <div>
+                    <h4 className="text-xl font-light font-playfair text-gray-800 mb-6 flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-[var(--color-accent)]" />
+                      {t('colorPalette.patternedAndTextured')}
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-6">
+                      <ColorSwatch color="#F5E5E0" label="Rosa Farn Blumen" />
+                      <ColorSwatch color="#F0D0D8" label="Blush Pink Floral Burnout" />
+                      <ColorSwatch color="#F0D8E8" label="Abstraktes Aquarell Mit Blumen" />
+                      <ColorSwatch color="#D8A8A0" label="Altrosa Blumen Burnout" />
+                      <ColorSwatch color="#D4A878" label="Rosette Floral Burnout" />
+                      <ColorSwatch color="#C8A8D8" label="Lila Blumen Burnout" />
                     </div>
                   </div>
                 </div>
@@ -622,6 +618,24 @@ export default function InformacionPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+function ColorSwatch({ color, label }: { color: string; label: string }) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.08, y: -4 }}
+      transition={{ duration: 0.2 }}
+      className="flex flex-col items-center gap-3 cursor-pointer group"
+    >
+      <div 
+        className="w-full aspect-square rounded-lg shadow-lg border-2 border-gray-200 transition-all group-hover:shadow-xl group-hover:border-gray-400"
+        style={{ backgroundColor: color }}
+      />
+      <p className="text-sm font-medium text-gray-700 text-center leading-tight group-hover:text-gray-900 transition-colors">
+        {label}
+      </p>
+    </motion.div>
   );
 }
 
