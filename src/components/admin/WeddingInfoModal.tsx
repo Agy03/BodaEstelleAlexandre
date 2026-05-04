@@ -152,7 +152,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
                   className="w-4 h-4 text-blue-600"
                 />
                 <span className="text-sm font-medium text-gray-700">
-                  {lang === 'en' ? '🇬🇧 English' : lang === 'es' ? '🇪🇸 Español' : '🇫🇷 Français'}
+                  {lang === 'en' ? '🇬🇧 English' : lang === 'es' ? '🇪🇸 Español' : '🇫🇷 Francés'}
                 </span>
               </label>
             ))}

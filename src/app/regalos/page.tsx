@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import NextImage from 'next/image';
-import { Gift, ExternalLink, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users, Check, Hourglass, Star, FileText, X, CreditCard, Lightbulb } from 'lucide-react';
+import { Gift, ExternalLink, Loader, Heart, Search, Sparkles, ShoppingBag, Tag, Users, Check, FileText, CreditCard, Lightbulb } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
