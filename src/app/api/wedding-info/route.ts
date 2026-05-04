@@ -74,6 +74,10 @@ export async function PUT(request: Request) {
 
     const data = await request.json();
 
+    // Get source language from Accept-Language header (defaults to 'en')
+    const acceptLanguage = request.headers.get('Accept-Language') || 'en';
+    const sourceLocale = acceptLanguage.split('-')[0].toLowerCase() as 'en' | 'es' | 'fr';
+
     // Buscar el registro existente
     const existingInfo = await prisma.weddingInfo.findFirst();
 
@@ -97,9 +101,8 @@ export async function PUT(request: Request) {
       });
     }
 
-    // Auto-translate to other locales
-    const sourceLocale = getLocaleFromRequest(request);
-    autoTranslateEntity('WeddingInfo', weddingInfo.id, data, sourceLocale);
+    // Auto-translate to other locales (wait for completion)
+    await autoTranslateEntity('WeddingInfo', weddingInfo.id, data, sourceLocale);
 
     return NextResponse.json(weddingInfo);
   } catch (error) {

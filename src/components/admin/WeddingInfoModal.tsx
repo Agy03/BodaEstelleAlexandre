@@ -48,6 +48,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
   const t = useTranslations('admin.infoModal');
   const tActions = useTranslations('admin.actions');
   const [loading, setLoading] = useState(false);
+  const [sourceLanguage, setSourceLanguage] = useState<'en' | 'es' | 'fr'>('fr');
   const [activeSection, setActiveSection] = useState<'date' | 'location' | 'dress' | 'weather' | 'additional'>('date');
   const [formData, setFormData] = useState<WeddingInfo>({
     weddingDate: '',
@@ -101,7 +102,10 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
     try {
       const response = await fetch('/api/wedding-info', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept-Language': sourceLanguage,
+        },
         body: JSON.stringify(formData),
       });
 
@@ -131,6 +135,33 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('title')}>
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Language Selection */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Language of Content Being Edited
+          </label>
+          <div className="flex gap-3">
+            {(['en', 'es', 'fr'] as const).map((lang) => (
+              <label key={lang} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="sourceLanguage"
+                  value={lang}
+                  checked={sourceLanguage === lang}
+                  onChange={(e) => setSourceLanguage(e.target.value as 'en' | 'es' | 'fr')}
+                  className="w-4 h-4 text-blue-600"
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  {lang === 'en' ? '🇬🇧 English' : lang === 'es' ? '🇪🇸 Español' : '🇫🇷 Français'}
+                </span>
+              </label>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500 mt-2">
+            Select the language you're using. Other languages will be auto-translated.
+          </p>
+        </div>
+
         {/* Section Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-2 border-b">
           {sections.map((section) => (
