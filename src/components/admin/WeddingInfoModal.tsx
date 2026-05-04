@@ -158,7 +158,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
             ))}
           </div>
           <p className="text-xs text-gray-500 mt-2">
-            Select the language you're using. Other languages will be auto-translated.
+            Select the language you&apos;re using. Other languages will be auto-translated.
           </p>
         </div>
 
