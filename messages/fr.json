@@ -190,6 +190,12 @@
   "rsvp": {
     "title": "Confirmer votre Présence",
     "subtitle": "Merci de confirmer avant le 1er Mai",
+    "selectYourName": "Sélectionnez votre nom dans la liste des invités",
+    "selectYourNameDescription": "Cliquez sur votre nom pour confirmer votre invitation. Ensuite, saisissez votre e-mail et complétez votre réponse.",
+    "searchInvite": "Rechercher un invité",
+    "noMatchingGuest": "Aucun nom correspondant trouvé.",
+    "selectedInvite": "Invité sélectionné",
+    "changeGuest": "Changer d'invité",
     "form": {
       "name": "Nom complet",
       "email": "Adresse e-mail",

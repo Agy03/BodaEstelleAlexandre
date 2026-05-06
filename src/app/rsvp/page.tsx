@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { CheckCircle, Users, Mail, User, Heart, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { INVITED_GUESTS } from '@/data/invitedGuests';
 
 interface GuestInfo {
   name: string;
@@ -21,18 +22,43 @@ export default function RSVPPage() {
   const tErrors = useTranslations('errors');
   const locale = useLocale();
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     attending: true,
     guests: 0,
     comments: '',
   });
   const [guestList, setGuestList] = useState<GuestInfo[]>([]);
+  const [availableGuestNames, setAvailableGuestNames] = useState<string[]>(INVITED_GUESTS);
+  const [selectedGuestName, setSelectedGuestName] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const selectGuest = (name: string) => {
+    setSelectedGuestName(name);
+    setAvailableGuestNames(prev => prev.filter((guest) => guest !== name));
+  };
+
+  const clearSelectedGuest = () => {
+    if (!selectedGuestName) return;
+    setAvailableGuestNames((prev) => {
+      const updated = [...prev, selectedGuestName];
+      return INVITED_GUESTS.filter((name) => updated.includes(name));
+    });
+    setSelectedGuestName(null);
+  };
+
+  const filteredGuestNames = availableGuestNames.filter((name) =>
+    name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedGuestName) {
+      alert(t('selectYourName')); 
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -40,6 +66,7 @@ export default function RSVPPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          name: selectedGuestName,
           ...formData,
           guestList,
           locale,
@@ -226,16 +253,57 @@ export default function RSVPPage() {
         >
           <Card hover className="p-8 md:p-10">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Nombre */}
-              <Input
-                label={t('form.name')}
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder={t('form.name')}
-                icon={<User className="w-5 h-5" />}
-              />
+              {/* Selección de invitado */}
+              {!selectedGuestName ? (
+                <div className="space-y-4">
+                  <div className="rounded-3xl border border-[var(--color-accent)]/20 bg-white/80 p-5">
+                    <p className="text-sm font-light text-gray-600 mb-3">
+                      {t('selectYourNameDescription')}
+                    </p>
+                    <Input
+                      label={t('searchInvite')}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder={t('searchInvite')}
+                      icon={<Users className="w-5 h-5" />}
+                    />
+                    <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                      {filteredGuestNames.length > 0 ? (
+                        filteredGuestNames.map((name) => (
+                          <button
+                            key={name}
+                            type="button"
+                            onClick={() => selectGuest(name)}
+                            className="rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-rose)]/5 px-4 py-3 text-left text-sm font-medium text-gray-800 transition hover:border-[var(--color-rose)] hover:bg-[var(--color-rose)]/10"
+                          >
+                            {name}
+                          </button>
+                        ))
+                      ) : (
+                        <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-4 text-sm text-gray-500">
+                          {t('noMatchingGuest')}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="rounded-3xl border border-[var(--color-rose)]/20 bg-gradient-to-br from-[var(--color-rose)]/5 to-[var(--color-secondary)]/5 p-5">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-light text-gray-500">{t('selectedInvite')}</p>
+                      <p className="mt-1 text-lg font-semibold text-gray-900">{selectedGuestName}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={clearSelectedGuest}
+                      className="text-sm font-medium text-[var(--color-rose)] hover:underline"
+                    >
+                      {t('changeGuest')}
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Email */}
               <Input
@@ -384,7 +452,7 @@ export default function RSVPPage() {
                   type="submit" 
                   className="w-full group relative overflow-hidden" 
                   size="lg" 
-                  disabled={loading}
+                  disabled={loading || !selectedGuestName}
                 >
                   {loading ? (
                     <span className="flex items-center justify-center gap-2">
