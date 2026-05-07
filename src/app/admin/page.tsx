@@ -35,7 +35,8 @@ import {
   Hourglass,
   Play,
   Pause,
-  Square
+  Square,
+  Mail
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -135,6 +136,7 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'rsvps' | 'photos' | 'songs' | 'gifts' | 'places' | 'info'>('overview');
   const [loading, setLoading] = useState(true);
   const [rsvpPage, setRsvpPage] = useState(1);
+  const [resendingInvitationId, setResendingInvitationId] = useState<string | null>(null);
   const rsvpPageSize = 10;
   
   // Modal states
@@ -527,6 +529,27 @@ export default function AdminPage() {
     } catch (error) {
       console.error('Error deleting RSVP:', error);
       fetchData();
+    }
+  };
+
+  const handleResendInvitation = async (rsvpId: string) => {
+    setResendingInvitationId(rsvpId);
+
+    try {
+      const response = await fetch(`/api/rsvp/${rsvpId}/resend-invitation`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to resend invitation');
+      }
+
+      alert('Invitacion reenviada correctamente.');
+    } catch (error) {
+      console.error('Error resending invitation:', error);
+      alert('No se pudo reenviar la invitacion. Revisa la configuracion SMTP o intentalo de nuevo.');
+    } finally {
+      setResendingInvitationId(null);
     }
   };
 
@@ -969,6 +992,19 @@ export default function AdminPage() {
                               {new Date(rsvp.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
                             </td>
                             <td className="py-3 md:py-4 px-2 md:px-4">
+                              <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => handleResendInvitation(rsvp.id)}
+                                disabled={resendingInvitationId === rsvp.id}
+                                className="p-2 text-purple-500 hover:text-purple-700 hover:bg-purple-50 rounded-lg transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                                title="Reenviar invitacion"
+                              >
+                                {resendingInvitationId === rsvp.id ? (
+                                  <Loader className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <Mail className="w-4 h-4" />
+                                )}
+                              </button>
                               <button
                                 onClick={() => handleDeleteRsvp(rsvp.id)}
                                 className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
@@ -976,6 +1012,7 @@ export default function AdminPage() {
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
+                              </div>
                             </td>
                           </motion.tr>
                         ))}

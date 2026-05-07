@@ -20,6 +20,12 @@ type RSVPEmailData = {
   locale?: string;
 };
 
+type InvitationEmailData = {
+  to: string;
+  guestName: string;
+  locale?: string;
+};
+
 const i18n: Record<string, Record<string, string>> = {
   es: {
     rsvpConfirmation: 'Confirmaci&oacute;n RSVP',
@@ -312,6 +318,90 @@ function escapeHtml(text: string): string {
     .replace(/"/g, '&quot;');
 }
 
+function buildInvitationEmail({ guestName, locale = 'es' }: InvitationEmailData): string {
+  const lang = i18n[locale] ? locale : 'es';
+  const siteUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://estelle-alexandre.bodasaliugo.com';
+
+  const copy = {
+    es: {
+      title: 'Invitacion de boda',
+      greeting: 'Querido/a',
+      intro: 'Nos hace muchisima ilusion invitarte a celebrar nuestra boda con nosotros.',
+      cta: 'Confirmar asistencia',
+      details: 'En nuestra web encontraras la informacion del evento y el formulario RSVP.',
+      footer: 'Con todo nuestro carino,',
+      subject: 'Invitacion de boda - Estelle & Alexandre',
+    },
+    en: {
+      title: 'Wedding invitation',
+      greeting: 'Dear',
+      intro: 'We are so excited to invite you to celebrate our wedding with us.',
+      cta: 'Confirm attendance',
+      details: 'On our website you will find the event details and the RSVP form.',
+      footer: 'With all our love,',
+      subject: 'Wedding invitation - Estelle & Alexandre',
+    },
+    fr: {
+      title: 'Invitation de mariage',
+      greeting: 'Cher/Chere',
+      intro: 'Nous sommes tres heureux de vous inviter a celebrer notre mariage avec nous.',
+      cta: 'Confirmer votre presence',
+      details: 'Sur notre site, vous trouverez les informations de l evenement et le formulaire RSVP.',
+      footer: 'Avec tout notre amour,',
+      subject: 'Invitation de mariage - Estelle & Alexandre',
+    },
+  }[lang] || {
+    title: 'Invitacion de boda',
+    greeting: 'Querido/a',
+    intro: 'Nos hace muchisima ilusion invitarte a celebrar nuestra boda con nosotros.',
+    cta: 'Confirmar asistencia',
+    details: 'En nuestra web encontraras la informacion del evento y el formulario RSVP.',
+    footer: 'Con todo nuestro carino,',
+    subject: 'Invitacion de boda - Estelle & Alexandre',
+  };
+
+  return `
+<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${copy.title}</title>
+</head>
+<body style="margin:0; padding:0; background:#fff7fb; font-family: Georgia, 'Times New Roman', serif;">
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td align="center" style="padding:40px 16px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:600px; width:100%; background:#ffffff; border-radius:28px; overflow:hidden; border:1px solid #f3e8ff;">
+          <tr>
+            <td style="background:linear-gradient(135deg,#7c3aed,#c084fc); padding:48px 36px; text-align:center;">
+              <p style="margin:0 0 14px 0; color:rgba(255,255,255,.78); letter-spacing:5px; text-transform:uppercase; font-size:12px;">${copy.title}</p>
+              <h1 style="margin:0; color:#ffffff; font-size:38px; font-weight:400;">Estelle &amp; Alexandre</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:42px 36px; text-align:center;">
+              <p style="margin:0 0 8px 0; color:#8b5cf6; letter-spacing:2px; text-transform:uppercase; font-size:12px;">${copy.greeting}</p>
+              <p style="margin:0 0 24px 0; color:#4c1d95; font-size:30px; font-style:italic;">${escapeHtml(guestName)}</p>
+              <p style="margin:0 auto 18px auto; max-width:460px; color:#57534e; font-size:17px; line-height:1.8;">${copy.intro}</p>
+              <p style="margin:0 auto 30px auto; max-width:460px; color:#78716c; font-size:15px; line-height:1.7;">${copy.details}</p>
+              <a href="${siteUrl}/rsvp" style="display:inline-block; background:linear-gradient(135deg,#7c3aed,#a855f7); color:#ffffff; text-decoration:none; padding:16px 34px; border-radius:999px; font-size:13px; letter-spacing:2px; text-transform:uppercase; font-weight:700;">${copy.cta}</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 36px; text-align:center; background:#faf5ff;">
+              <p style="margin:0 0 6px 0; color:#7c3aed; font-size:14px;">${copy.footer}</p>
+              <p style="margin:0; color:#4c1d95; font-size:22px; font-style:italic;">Estelle &amp; Alexandre</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
 export async function sendRSVPConfirmation(data: RSVPEmailData): Promise<void> {
   const fromAddress = process.env.SMTP_FROM || 'estelle-alexandre@bodasaliugo.com';
   const lang = data.locale && i18n[data.locale] ? data.locale : 'es';
@@ -324,6 +414,24 @@ export async function sendRSVPConfirmation(data: RSVPEmailData): Promise<void> {
     subject: data.attending
       ? tr(lang, 'subjectAttending')
       : tr(lang, 'subjectNotAttending'),
+    html,
+  });
+}
+
+export async function sendWeddingInvitation(data: InvitationEmailData): Promise<void> {
+  const fromAddress = process.env.SMTP_FROM || 'estelle-alexandre@bodasaliugo.com';
+  const lang = data.locale && i18n[data.locale] ? data.locale : 'es';
+  const html = buildInvitationEmail(data);
+  const subject = {
+    es: 'Invitacion de boda - Estelle & Alexandre',
+    en: 'Wedding invitation - Estelle & Alexandre',
+    fr: 'Invitation de mariage - Estelle & Alexandre',
+  }[lang] || 'Invitacion de boda - Estelle & Alexandre';
+
+  await transporter.sendMail({
+    from: `"Estelle & Alexandre" <${fromAddress}>`,
+    to: data.to,
+    subject,
     html,
   });
 }
