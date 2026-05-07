@@ -17,6 +17,13 @@ interface GuestInfo {
   email: string;
 }
 
+const normalizeGuestSearch = (value: string) =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+
 export default function RSVPPage() {
   const t = useTranslations('rsvp');
   const tErrors = useTranslations('errors');
@@ -77,20 +84,27 @@ export default function RSVPPage() {
     setGuestPage(1);
   };
 
-  const filteredGuestNames = useMemo(() => (
-    availableGuestNames.filter((name) =>
-      name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  ), [availableGuestNames, searchTerm]);
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setGuestPage(1);
+  };
+
+  const filteredGuestNames = useMemo(() => {
+    const normalizedSearchTerm = normalizeGuestSearch(searchTerm);
+
+    if (!normalizedSearchTerm) {
+      return availableGuestNames;
+    }
+
+    return availableGuestNames.filter((name) =>
+      normalizeGuestSearch(name).includes(normalizedSearchTerm)
+    );
+  }, [availableGuestNames, searchTerm]);
   const guestPageCount = Math.max(1, Math.ceil(filteredGuestNames.length / guestPageSize));
   const paginatedGuestNames = filteredGuestNames.slice(
     (guestPage - 1) * guestPageSize,
     guestPage * guestPageSize
   );
-
-  useEffect(() => {
-    setGuestPage(1);
-  }, [searchTerm]);
 
   useEffect(() => {
     if (guestPage > guestPageCount) {
@@ -309,7 +323,7 @@ export default function RSVPPage() {
                     <Input
                       label={t('searchInvite')}
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={(e) => handleSearchChange(e.target.value)}
                       placeholder={t('searchInvite')}
                       icon={<Users className="w-5 h-5" />}
                     />
@@ -332,10 +346,7 @@ export default function RSVPPage() {
                       )}
                     </div>
                     {filteredGuestNames.length > guestPageSize && (
-                      <div className="mt-4 flex flex-col items-center justify-between gap-3 border-t border-[var(--color-accent)]/10 pt-4 sm:flex-row">
-                        <span className="text-xs text-gray-500">
-                          {Math.min((guestPage - 1) * guestPageSize + 1, filteredGuestNames.length)}-{Math.min(guestPage * guestPageSize, filteredGuestNames.length)} / {filteredGuestNames.length}
-                        </span>
+                      <div className="mt-4 flex items-center justify-center border-t border-[var(--color-accent)]/10 pt-4">
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
