@@ -83,6 +83,12 @@ export default function GaleriaPage() {
     try {
       const response = await fetch('/api/photos');
       const data = await response.json();
+      if (!Array.isArray(data)) {
+        setPhotos([]);
+        setPhotosWithSizes([]);
+        return;
+      }
+
       const approvedPhotos = data.filter((photo: Photo) => photo.approved);
       
       // Obtener dimensiones y clasificar cada foto

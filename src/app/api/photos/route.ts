@@ -18,9 +18,6 @@ export async function GET() {
     return NextResponse.json(photos);
   } catch (error) {
     console.error('Error fetching photos:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch photos' },
-      { status: 500 }
-    );
+    return NextResponse.json([]);
   }
 }

@@ -156,6 +156,13 @@ export default function AdminPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
+  const parseArrayResponse = async <T,>(response: Response): Promise<T[]> => {
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    return Array.isArray(data) ? data : [];
+  };
+
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/admin/login');
@@ -214,11 +221,11 @@ export default function AdminPage() {
         fetch('/api/tourism'),
       ]);
 
-      setRsvps(await rsvpRes.json());
-      setPhotos(await photoRes.json());
-      setSongs(await songRes.json());
-      setGifts(await giftRes.json());
-      setPlaces(await tourismRes.json());
+      setRsvps(await parseArrayResponse<RSVP>(rsvpRes));
+      setPhotos(await parseArrayResponse<Photo>(photoRes));
+      setSongs(await parseArrayResponse<Song>(songRes));
+      setGifts(await parseArrayResponse<Gift>(giftRes));
+      setPlaces(await parseArrayResponse<TourismPlace>(tourismRes));
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
