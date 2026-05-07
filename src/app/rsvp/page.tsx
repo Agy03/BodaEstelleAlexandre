@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { type Dispatch, type SetStateAction, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import { Input } from '@/components/ui/Input';
@@ -36,13 +36,10 @@ export default function RSVPPage() {
   });
   const [guestList, setGuestList] = useState<GuestInfo[]>([]);
   const [availableGuestNames, setAvailableGuestNames] = useState<string[]>(INVITED_GUESTS);
-  const [submittedGuestNames, setSubmittedGuestNames] = useState<string[]>([]);
   const [selectedGuestName, setSelectedGuestName] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [nameInput, setNameInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [guestPage, setGuestPage] = useState(1);
-  const guestPageSize = 12;
 
   useEffect(() => {
     const loadSubmittedGuests = async () => {
@@ -57,7 +54,6 @@ export default function RSVPPage() {
             .filter((name): name is string => Boolean(name))
         );
 
-        setSubmittedGuestNames(Array.from(submittedNames));
         setAvailableGuestNames(INVITED_GUESTS.filter((name) => !submittedNames.has(name)));
       } catch (error) {
         console.error('Error loading submitted RSVP names:', error);
@@ -69,48 +65,41 @@ export default function RSVPPage() {
 
   const selectGuest = (name: string) => {
     setSelectedGuestName(name);
+    setNameInput(name);
     setAvailableGuestNames(prev => prev.filter((guest) => guest !== name));
-    setSearchTerm('');
-    setGuestPage(1);
   };
 
-  const clearSelectedGuest = () => {
-    if (!selectedGuestName) return;
-    setAvailableGuestNames((prev) => {
-      const updated = [...prev, selectedGuestName];
-      return INVITED_GUESTS.filter((name) => updated.includes(name) && !submittedGuestNames.includes(name));
-    });
-    setSelectedGuestName(null);
-    setGuestPage(1);
+  const handleNameChange = (value: string) => {
+    setNameInput(value);
+
+    const normalizedValue = normalizeGuestSearch(value);
+    const exactGuest = availableGuestNames.find((name) => normalizeGuestSearch(name) === normalizedValue);
+    setSelectedGuestName(exactGuest ?? null);
   };
 
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-    setGuestPage(1);
-  };
+  const guestNameSuggestions = useMemo(() => {
+    const normalizedSearchTerm = normalizeGuestSearch(nameInput);
 
-  const filteredGuestNames = useMemo(() => {
-    const normalizedSearchTerm = normalizeGuestSearch(searchTerm);
-
-    if (!normalizedSearchTerm) {
-      return availableGuestNames;
+    if (normalizedSearchTerm.length < 2 || selectedGuestName) {
+      return [];
     }
 
     return availableGuestNames.filter((name) =>
       normalizeGuestSearch(name).includes(normalizedSearchTerm)
-    );
-  }, [availableGuestNames, searchTerm]);
-  const guestPageCount = Math.max(1, Math.ceil(filteredGuestNames.length / guestPageSize));
-  const paginatedGuestNames = filteredGuestNames.slice(
-    (guestPage - 1) * guestPageSize,
-    guestPage * guestPageSize
-  );
-
-  useEffect(() => {
-    if (guestPage > guestPageCount) {
-      setGuestPage(guestPageCount);
-    }
-  }, [guestPage, guestPageCount]);
+    ).slice(0, 6);
+  }, [availableGuestNames, nameInput, selectedGuestName]);
+  const searchTerm = nameInput;
+  const handleSearchChange = handleNameChange;
+  const filteredGuestNames = guestNameSuggestions;
+  const paginatedGuestNames = guestNameSuggestions;
+  const guestPage = 1;
+  const guestPageCount = 1;
+  const guestPageSize = Number.POSITIVE_INFINITY;
+  const setGuestPage: Dispatch<SetStateAction<number>> = () => undefined;
+  const clearSelectedGuest = () => {
+    setNameInput('');
+    setSelectedGuestName(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -313,8 +302,35 @@ export default function RSVPPage() {
         >
           <Card hover className="p-8 md:p-10">
             <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="relative">
+                <Input
+                  label={t('form.name')}
+                  value={nameInput}
+                  onChange={(e) => handleNameChange(e.target.value)}
+                  placeholder={t('form.name')}
+                  icon={<User className="w-5 h-5" />}
+                  required
+                />
+                {guestNameSuggestions.length > 0 && (
+                  <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-2xl border border-[var(--color-rose)]/20 bg-white shadow-xl">
+                    {guestNameSuggestions.map((name, index) => (
+                      <button
+                        key={`${name}-${index}`}
+                        type="button"
+                        onClick={() => selectGuest(name)}
+                        className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 transition hover:bg-[var(--color-rose)]/10"
+                      >
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {nameInput.trim().length >= 2 && !selectedGuestName && guestNameSuggestions.length === 0 && (
+                  <p className="mt-2 text-sm text-gray-500">{t('noMatchingGuest')}</p>
+                )}
+              </div>
               {/* Selección de invitado */}
-              {!selectedGuestName ? (
+              {false && (!selectedGuestName ? (
                 <div className="space-y-4">
                   <div className="rounded-3xl border border-[var(--color-accent)]/20 bg-white/80 p-5">
                     <p className="text-sm font-light text-gray-600 mb-3">
@@ -388,7 +404,7 @@ export default function RSVPPage() {
                     </button>
                   </div>
                 </div>
-              )}
+              ))}
 
               {/* Email */}
               <Input
