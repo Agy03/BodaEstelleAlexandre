@@ -754,24 +754,24 @@
     "subtitle": "Si deseas contribuir de una manera especial",
     "bankTransfer": {
       "title": "Transferencia Bancaria",
-      "description": "Puedes hacer una transferencia a la cuenta bancaria a nombre de Alexandre",
+      "description": "Puedes hacer una transferencia a la cuenta bancaria a nombre de Estelle",
       "accountHolderLabel": "Titular",
-      "accountHolder": "Lembe Alexandre",
+      "accountHolder": "Estelle",
       "ibanLabel": "IBAN",
-      "iban": "Disponible bajo petici?n",
+      "iban": "FR7630004033770000192535624",
       "bicLabel": "BIC/SWIFT",
-      "bic": "Disponible bajo petici?n",
+      "bic": "BNAGFRPP",
       "reference": "Boda Estelle & Alexandre",
       "note": "Por favor, incluye tu nombre en la referencia para que podamos agradecerte personalmente"
     },
     "bizum": {
       "title": "Bizum",
-      "description": "Hemos puesto el n?mero de Hugo para Bizum en Espa?a",
+      "description": "Tambi?n puedes enviar Bizum al n?mero de Estelle",
       "phone": "+34 622 74 56 69"
     },
     "paypal": {
       "title": "PayPal",
-      "description": "Tambi?n puedes enviarlo por PayPal",
+      "description": "PayPal est? a nombre de Lembe Alexandre",
       "link": "paypal.me/AlexandreLEMBE"
     },
     "paylib": {

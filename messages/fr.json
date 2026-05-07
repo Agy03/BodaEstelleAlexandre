@@ -754,24 +754,24 @@
     "subtitle": "Si vous souhaitez contribuer d'une manière spéciale",
     "bankTransfer": {
       "title": "Virement Bancaire",
-      "description": "Vous pouvez effectuer un virement sur le compte bancaire au nom d'Alexandre",
+      "description": "Vous pouvez effectuer un virement sur le compte bancaire au nom d'Estelle",
       "accountHolderLabel": "Titulaire",
-      "accountHolder": "Lembe Alexandre",
+      "accountHolder": "Estelle",
       "ibanLabel": "IBAN",
-      "iban": "Disponible sur demande",
+      "iban": "FR7630004033770000192535624",
       "bicLabel": "BIC/SWIFT",
-      "bic": "Disponible sur demande",
+      "bic": "BNAGFRPP",
       "reference": "Mariage Estelle & Alexandre",
       "note": "Veuillez inclure votre nom dans la référence pour que nous puissions vous remercier personnellement"
     },
     "bizum": {
       "title": "Bizum",
-      "description": "Nous avons ajout? le num?ro de Hugo pour Bizum en Espagne",
+      "description": "Vous pouvez ?galement envoyer un Bizum au num?ro d'Estelle",
       "phone": "+34 622 74 56 69"
     },
     "paypal": {
       "title": "PayPal",
-      "description": "Vous pouvez aussi l'envoyer par PayPal",
+      "description": "PayPal est au nom de Lembe Alexandre",
       "link": "paypal.me/AlexandreLEMBE"
     },
     "paylib": {

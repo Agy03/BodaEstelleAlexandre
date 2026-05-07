@@ -754,24 +754,24 @@
     "subtitle": "If you wish to contribute in a special way",
     "bankTransfer": {
       "title": "Bank Transfer",
-      "description": "You can make a transfer to the bank account in Alexandre's name",
+      "description": "You can make a transfer to the bank account in Estelle's name",
       "accountHolderLabel": "Account holder",
-      "accountHolder": "Lembe Alexandre",
+      "accountHolder": "Estelle",
       "ibanLabel": "IBAN",
-      "iban": "Available on request",
+      "iban": "FR7630004033770000192535624",
       "bicLabel": "BIC/SWIFT",
-      "bic": "Available on request",
+      "bic": "BNAGFRPP",
       "reference": "Wedding Estelle & Alexandre",
       "note": "Please include your name in the reference so we can thank you personally"
     },
     "bizum": {
       "title": "Bizum",
-      "description": "We have added Hugo's number for Bizum in Spain",
+      "description": "You can also send Bizum to Estelle's number",
       "phone": "+34 622 74 56 69"
     },
     "paypal": {
       "title": "PayPal",
-      "description": "You can also send it via PayPal",
+      "description": "PayPal is in Lembe Alexandre's name",
       "link": "paypal.me/AlexandreLEMBE"
     },
     "paylib": {
