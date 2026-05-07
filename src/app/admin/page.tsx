@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -134,6 +134,8 @@ export default function AdminPage() {
   const [places, setPlaces] = useState<TourismPlace[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'rsvps' | 'photos' | 'songs' | 'gifts' | 'places' | 'info'>('overview');
   const [loading, setLoading] = useState(true);
+  const [rsvpPage, setRsvpPage] = useState(1);
+  const rsvpPageSize = 10;
   
   // Modal states
   const [isPlaceModalOpen, setIsPlaceModalOpen] = useState(false);
@@ -553,10 +555,22 @@ export default function AdminPage() {
 
   const attendingCount = rsvps.filter((r) => r.attending).length;
   const totalGuests = rsvps.reduce((sum, r) => sum + (r.attending ? r.guests + 1 : 0), 0);
+  const acceptedRsvps = useMemo(() => rsvps.filter((r) => r.attending), [rsvps]);
+  const rsvpPageCount = Math.max(1, Math.ceil(acceptedRsvps.length / rsvpPageSize));
+  const paginatedAcceptedRsvps = acceptedRsvps.slice(
+    (rsvpPage - 1) * rsvpPageSize,
+    rsvpPage * rsvpPageSize
+  );
   const pendingPhotos = photos.filter((p) => !p.approved).length;
   const pendingSongs = songs.filter((s) => !s.approved).length;
   const availableGifts = gifts.filter(g => !g.reserved && !g.purchased).length;
   const reservedGifts = gifts.filter(g => g.reserved).length;
+
+  useEffect(() => {
+    if (rsvpPage > rsvpPageCount) {
+      setRsvpPage(rsvpPageCount);
+    }
+  }, [rsvpPage, rsvpPageCount]);
 
   if (status === 'loading' || loading) {
     return (
@@ -882,7 +896,7 @@ export default function AdminPage() {
                   </div>
                   <div className="flex items-center gap-2 md:ml-auto">
                     <span className="text-xs md:text-sm font-normal text-gray-500">
-                      {attendingCount} {t('rsvp.confirmedOf')} {rsvps.length} {t('stats.responses')}
+                      {acceptedRsvps.length} {t('rsvp.confirmedOf')} {rsvps.length} {t('stats.responses')}
                     </span>
                     <Button size="sm" variant="primary" onClick={exportRsvpsCsv} className="ml-2">
                       <Download className="w-4 h-4 mr-1" />
@@ -907,7 +921,7 @@ export default function AdminPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {rsvps.map((rsvp, index) => (
+                        {paginatedAcceptedRsvps.map((rsvp, index) => (
                           <motion.tr 
                             key={rsvp.id} 
                             initial={{ opacity: 0, x: -20 }}
@@ -967,8 +981,41 @@ export default function AdminPage() {
                         ))}
                       </tbody>
                     </table>
+                    {acceptedRsvps.length === 0 && (
+                      <div className="py-10 text-center text-sm text-gray-500">
+                        Aun no hay invitados confirmados.
+                      </div>
+                    )}
                   </div>
                 </div>
+                {acceptedRsvps.length > rsvpPageSize && (
+                  <div className="mt-4 flex flex-col items-center justify-between gap-3 border-t border-gray-100 pt-4 sm:flex-row">
+                    <span className="text-xs text-gray-500">
+                      {Math.min((rsvpPage - 1) * rsvpPageSize + 1, acceptedRsvps.length)}-{Math.min(rsvpPage * rsvpPageSize, acceptedRsvps.length)} / {acceptedRsvps.length} confirmados
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setRsvpPage((page) => Math.max(1, page - 1))}
+                        disabled={rsvpPage === 1}
+                        className="rounded-full border border-[var(--color-rose)]/20 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:border-[var(--color-rose)] disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Anterior
+                      </button>
+                      <span className="text-xs font-medium text-gray-600">
+                        {rsvpPage} / {rsvpPageCount}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setRsvpPage((page) => Math.min(rsvpPageCount, page + 1))}
+                        disabled={rsvpPage === rsvpPageCount}
+                        className="rounded-full border border-[var(--color-rose)]/20 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:border-[var(--color-rose)] disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Siguiente
+                      </button>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import { Input } from '@/components/ui/Input';
@@ -29,28 +29,74 @@ export default function RSVPPage() {
   });
   const [guestList, setGuestList] = useState<GuestInfo[]>([]);
   const [availableGuestNames, setAvailableGuestNames] = useState<string[]>(INVITED_GUESTS);
+  const [submittedGuestNames, setSubmittedGuestNames] = useState<string[]>([]);
   const [selectedGuestName, setSelectedGuestName] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [guestPage, setGuestPage] = useState(1);
+  const guestPageSize = 12;
+
+  useEffect(() => {
+    const loadSubmittedGuests = async () => {
+      try {
+        const response = await fetch('/api/rsvp');
+        if (!response.ok) return;
+
+        const submittedRsvps: { name?: string }[] = await response.json();
+        const submittedNames = new Set(
+          submittedRsvps
+            .map((rsvp) => rsvp.name)
+            .filter((name): name is string => Boolean(name))
+        );
+
+        setSubmittedGuestNames(Array.from(submittedNames));
+        setAvailableGuestNames(INVITED_GUESTS.filter((name) => !submittedNames.has(name)));
+      } catch (error) {
+        console.error('Error loading submitted RSVP names:', error);
+      }
+    };
+
+    loadSubmittedGuests();
+  }, []);
 
   const selectGuest = (name: string) => {
     setSelectedGuestName(name);
     setAvailableGuestNames(prev => prev.filter((guest) => guest !== name));
+    setSearchTerm('');
+    setGuestPage(1);
   };
 
   const clearSelectedGuest = () => {
     if (!selectedGuestName) return;
     setAvailableGuestNames((prev) => {
       const updated = [...prev, selectedGuestName];
-      return INVITED_GUESTS.filter((name) => updated.includes(name));
+      return INVITED_GUESTS.filter((name) => updated.includes(name) && !submittedGuestNames.includes(name));
     });
     setSelectedGuestName(null);
+    setGuestPage(1);
   };
 
-  const filteredGuestNames = availableGuestNames.filter((name) =>
-    name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredGuestNames = useMemo(() => (
+    availableGuestNames.filter((name) =>
+      name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  ), [availableGuestNames, searchTerm]);
+  const guestPageCount = Math.max(1, Math.ceil(filteredGuestNames.length / guestPageSize));
+  const paginatedGuestNames = filteredGuestNames.slice(
+    (guestPage - 1) * guestPageSize,
+    guestPage * guestPageSize
   );
+
+  useEffect(() => {
+    setGuestPage(1);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (guestPage > guestPageCount) {
+      setGuestPage(guestPageCount);
+    }
+  }, [guestPage, guestPageCount]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -269,9 +315,9 @@ export default function RSVPPage() {
                     />
                     <div className="mt-4 grid gap-2 sm:grid-cols-2">
                       {filteredGuestNames.length > 0 ? (
-                        filteredGuestNames.map((name) => (
+                        paginatedGuestNames.map((name, index) => (
                           <button
-                            key={name}
+                            key={`${name}-${index}`}
                             type="button"
                             onClick={() => selectGuest(name)}
                             className="rounded-2xl border border-[var(--color-rose)]/20 bg-[var(--color-rose)]/5 px-4 py-3 text-left text-sm font-medium text-gray-800 transition hover:border-[var(--color-rose)] hover:bg-[var(--color-rose)]/10"
@@ -285,6 +331,34 @@ export default function RSVPPage() {
                         </div>
                       )}
                     </div>
+                    {filteredGuestNames.length > guestPageSize && (
+                      <div className="mt-4 flex flex-col items-center justify-between gap-3 border-t border-[var(--color-accent)]/10 pt-4 sm:flex-row">
+                        <span className="text-xs text-gray-500">
+                          {Math.min((guestPage - 1) * guestPageSize + 1, filteredGuestNames.length)}-{Math.min(guestPage * guestPageSize, filteredGuestNames.length)} / {filteredGuestNames.length}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setGuestPage((page) => Math.max(1, page - 1))}
+                            disabled={guestPage === 1}
+                            className="rounded-full border border-[var(--color-rose)]/20 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:border-[var(--color-rose)] disabled:cursor-not-allowed disabled:opacity-40"
+                          >
+                            Anterior
+                          </button>
+                          <span className="text-xs font-medium text-gray-600">
+                            {guestPage} / {guestPageCount}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setGuestPage((page) => Math.min(guestPageCount, page + 1))}
+                            disabled={guestPage === guestPageCount}
+                            className="rounded-full border border-[var(--color-rose)]/20 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:border-[var(--color-rose)] disabled:cursor-not-allowed disabled:opacity-40"
+                          >
+                            Siguiente
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
