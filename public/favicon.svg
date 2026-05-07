@@ -1,0 +1,8 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estelle y Alexandre">
+  <rect width="512" height="512" rx="96" fill="#ffffff"/>
+  <circle cx="256" cy="256" r="214" fill="none" stroke="#7c3aed" stroke-width="18" opacity="0.18"/>
+  <circle cx="256" cy="256" r="184" fill="none" stroke="#a855f7" stroke-width="7" opacity="0.28"/>
+  <text x="152" y="326" fill="#6d28d9" font-family="Georgia, 'Times New Roman', serif" font-size="210" font-weight="700" letter-spacing="-24">E</text>
+  <text x="222" y="332" fill="#8b5cf6" font-family="Georgia, 'Times New Roman', serif" font-size="214" font-weight="700" letter-spacing="-20" opacity="0.96">A</text>
+  <text x="218" y="296" fill="#5b21b6" font-family="Georgia, 'Times New Roman', serif" font-size="94" font-style="italic" font-weight="700">&amp;</text>
+</svg>
