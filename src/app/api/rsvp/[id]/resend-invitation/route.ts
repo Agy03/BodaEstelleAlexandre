@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { sendWeddingInvitation } from '@/lib/email';
+import { sendRSVPConfirmation } from '@/lib/email';
 
 export async function POST(
   request: Request,
@@ -17,9 +17,8 @@ export async function POST(
     const { id } = await params;
     const rsvp = await prisma.rSVP.findUnique({
       where: { id },
-      select: {
-        name: true,
-        email: true,
+      include: {
+        guestList: true,
       },
     });
 
@@ -33,9 +32,13 @@ export async function POST(
 
     const locale = request.headers.get('Accept-Language')?.split(',')[0]?.split('-')[0] || 'es';
 
-    await sendWeddingInvitation({
+    await sendRSVPConfirmation({
       to: rsvp.email,
       guestName: rsvp.name,
+      attending: rsvp.attending,
+      guests: rsvp.guests,
+      guestList: rsvp.guestList,
+      comments: rsvp.comments || undefined,
       locale,
     });
 

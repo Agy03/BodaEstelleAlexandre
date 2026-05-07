@@ -110,33 +110,114 @@
       "purpleAndMauve": "The Purple & Mauve Collection",
       "patternedAndTextured": "Patterned & Textured Swatches",
       "colors": {
-        "zartrosa": { "name": "Zartrosa", "hex": "#F5D5E0" },
-        "puderrosa": { "name": "Puderrosa", "hex": "#F0D5C8" },
-        "altrosa": { "name": "Altrosa", "hex": "#D4A5A0" },
-        "rosettenrosa": { "name": "Rosettenrosa", "hex": "#E8D5C4" },
-        "rosegold": { "name": "Roségold", "hex": "#F0D0B8" },
-        "englischesRosa": { "name": "Englisches Rosa", "hex": "#F0C8D8" },
-        "lachsrosa": { "name": "Lachsrosa", "hex": "#FF9999" },
-        "antikeRose": { "name": "Antike Rose", "hex": "#C97860" },
-        "bonbonrosa": { "name": "Bonbonrosa", "hex": "#FF99DD" },
-        "barbiePink": { "name": "Barbie™ Pink", "hex": "#FF1493" },
-        "lavendel": { "name": "Lavendel", "hex": "#E8D5F2" },
-        "frostigesFlieder": { "name": "Frostiges Flieder", "hex": "#D5C0E8" },
-        "flieder": { "name": "Flieder", "hex": "#D8B5E8" },
-        "blauregen": { "name": "Blauregen", "hex": "#B8A0D8" },
-        "tahiti": { "name": "Tahiti", "hex": "#A860C8" },
-        "vintageMauve": { "name": "Vintage Mauve", "hex": "#A08080" },
-        "amethyst": { "name": "Amethyst", "hex": "#7860A8" },
-        "wustenrose": { "name": "Wüstenrose", "hex": "#805858" },
-        "sangria": { "name": "Sangria", "hex": "#662055" },
-        "traube": { "name": "Traube", "hex": "#4A2870" },
-        "pflaume": { "name": "Pflaume", "hex": "#7A3A7A" },
-        "rosafarnBlumen": { "name": "Rosa Farn Blumen", "hex": "#F5E5E0" },
-        "blushPinkFloral": { "name": "Blush Pink Floral Burnout", "hex": "#F0D0D8" },
-        "abstraktesAquarell": { "name": "Abstraktes Aquarell Mit Blumen", "hex": "#F0D8E8" },
-        "altrosaBlumenBurnout": { "name": "Altrosa Blumen Burnout", "hex": "#D8A8A0" },
-        "rosetteFloral": { "name": "Rosette Floral Burnout", "hex": "#D4A878" },
-        "lilaBlumenBurnout": { "name": "Lila Blumen Burnout", "hex": "#C8A8D8" }
+        "zartrosa": {
+          "name": "Zartrosa",
+          "hex": "#F5D5E0"
+        },
+        "puderrosa": {
+          "name": "Puderrosa",
+          "hex": "#F0D5C8"
+        },
+        "altrosa": {
+          "name": "Altrosa",
+          "hex": "#D4A5A0"
+        },
+        "rosettenrosa": {
+          "name": "Rosettenrosa",
+          "hex": "#E8D5C4"
+        },
+        "rosegold": {
+          "name": "Roségold",
+          "hex": "#F0D0B8"
+        },
+        "englischesRosa": {
+          "name": "Englisches Rosa",
+          "hex": "#F0C8D8"
+        },
+        "lachsrosa": {
+          "name": "Lachsrosa",
+          "hex": "#FF9999"
+        },
+        "antikeRose": {
+          "name": "Antike Rose",
+          "hex": "#C97860"
+        },
+        "bonbonrosa": {
+          "name": "Bonbonrosa",
+          "hex": "#FF99DD"
+        },
+        "barbiePink": {
+          "name": "Barbie™ Pink",
+          "hex": "#FF1493"
+        },
+        "lavendel": {
+          "name": "Lavendel",
+          "hex": "#E8D5F2"
+        },
+        "frostigesFlieder": {
+          "name": "Frostiges Flieder",
+          "hex": "#D5C0E8"
+        },
+        "flieder": {
+          "name": "Flieder",
+          "hex": "#D8B5E8"
+        },
+        "blauregen": {
+          "name": "Blauregen",
+          "hex": "#B8A0D8"
+        },
+        "tahiti": {
+          "name": "Tahiti",
+          "hex": "#A860C8"
+        },
+        "vintageMauve": {
+          "name": "Vintage Mauve",
+          "hex": "#A08080"
+        },
+        "amethyst": {
+          "name": "Amethyst",
+          "hex": "#7860A8"
+        },
+        "wustenrose": {
+          "name": "Wüstenrose",
+          "hex": "#805858"
+        },
+        "sangria": {
+          "name": "Sangria",
+          "hex": "#662055"
+        },
+        "traube": {
+          "name": "Traube",
+          "hex": "#4A2870"
+        },
+        "pflaume": {
+          "name": "Pflaume",
+          "hex": "#7A3A7A"
+        },
+        "rosafarnBlumen": {
+          "name": "Rosa Farn Blumen",
+          "hex": "#F5E5E0"
+        },
+        "blushPinkFloral": {
+          "name": "Blush Pink Floral Burnout",
+          "hex": "#F0D0D8"
+        },
+        "abstraktesAquarell": {
+          "name": "Abstraktes Aquarell Mit Blumen",
+          "hex": "#F0D8E8"
+        },
+        "altrosaBlumenBurnout": {
+          "name": "Altrosa Blumen Burnout",
+          "hex": "#D8A8A0"
+        },
+        "rosetteFloral": {
+          "name": "Rosette Floral Burnout",
+          "hex": "#D4A878"
+        },
+        "lilaBlumenBurnout": {
+          "name": "Lila Blumen Burnout",
+          "hex": "#C8A8D8"
+        }
       }
     },
     "weather": {
@@ -210,10 +291,12 @@
         "3": "3 guests",
         "4": "4 guests",
         "5": "5 guests"
-      },      "guestDetails": "Guest Information",
+      },
+      "guestDetails": "Guest Information",
       "guestName": "Guest name",
       "guestEmail": "Guest email",
-      "addGuestInfo": "Please provide your guests' information",      "comments": "Comments or dietary restrictions",
+      "addGuestInfo": "Please provide your guests' information",
+      "comments": "Comments or dietary restrictions",
       "submit": "Confirm Attendance",
       "submitting": "Sending..."
     },
@@ -671,20 +754,30 @@
     "subtitle": "If you wish to contribute in a special way",
     "bankTransfer": {
       "title": "Bank Transfer",
-      "description": "You can make a transfer to the following bank account in Estelle's name",
+      "description": "You can make a transfer to the bank account in Alexandre's name",
       "accountHolderLabel": "Account holder",
-      "accountHolder": "Estelle",
+      "accountHolder": "Lembe Alexandre",
       "ibanLabel": "IBAN",
-      "iban": "FR7630004033770000192535624",
+      "iban": "Available on request",
       "bicLabel": "BIC/SWIFT",
-      "bic": "BNAGFRPP",
+      "bic": "Available on request",
       "reference": "Wedding Estelle & Alexandre",
       "note": "Please include your name in the reference so we can thank you personally"
     },
     "bizum": {
       "title": "Bizum",
-      "description": "You can also send Bizum to",
+      "description": "We have added Hugo's number for Bizum in Spain",
       "phone": "+34 622 74 56 69"
+    },
+    "paypal": {
+      "title": "PayPal",
+      "description": "You can also send it via PayPal",
+      "link": "paypal.me/AlexandreLEMBE"
+    },
+    "paylib": {
+      "title": "Paylib",
+      "description": "Paylib is like French Bizum",
+      "phone": "+33 6 47 45 52 06"
     }
   },
   "accessibility": {

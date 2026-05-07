@@ -573,6 +573,32 @@ export default function RegalosPage() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border-2 border-gray-100 space-y-3">
+                  <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold">{tPayment('paypal.title')}</p>
+                  <div>
+                    <p className="text-xs text-gray-500 font-medium mb-1">{tPayment('paypal.description')}</p>
+                    <a
+                      href="https://paypal.me/AlexandreLEMBE"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-lg font-semibold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors"
+                    >
+                      {tPayment('paypal.link')}
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border-2 border-gray-100 space-y-3">
+                  <p className="text-sm text-gray-500 uppercase tracking-wider font-semibold">{tPayment('paylib.title')}</p>
+                  <div>
+                    <p className="text-xs text-gray-500 font-medium mb-1">{tPayment('paylib.description')}</p>
+                    <p className="text-lg font-semibold text-gray-800">{tPayment('paylib.phone')}</p>
+                  </div>
+                </div>
+              </div>
+
               <div className="bg-gradient-to-br from-[var(--color-primary)]/5 to-[var(--color-accent)]/5 rounded-2xl p-6 border border-[var(--color-primary)]/20">
                 <p className="text-sm text-gray-700">
                   <span className="flex items-center gap-2 font-semibold"><Lightbulb className="w-4 h-4" /> {tPayment('bankTransfer.note')}</span>
