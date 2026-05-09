@@ -1701,7 +1701,7 @@ export default function AdminPage() {
                                 </div>
                               </div>
                               <a 
-                                href={gift.receiptUrl} 
+                                href={`/api/gifts/${gift.id}/receipt/view`}
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 className="px-3 py-1.5 bg-white border border-purple-300 text-purple-700 hover:bg-purple-50 rounded-lg text-xs font-medium transition-colors"
