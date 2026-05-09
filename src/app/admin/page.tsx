@@ -133,6 +133,9 @@ export default function AdminPage() {
   const [songs, setSongs] = useState<Song[]>([]);
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [places, setPlaces] = useState<TourismPlace[]>([]);
+  const [invitedGuests, setInvitedGuests] = useState<string[]>([]);
+  const [newGuestName, setNewGuestName] = useState('');
+  const [addingGuest, setAddingGuest] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'rsvps' | 'photos' | 'songs' | 'gifts' | 'places' | 'info'>('overview');
   const [loading, setLoading] = useState(true);
   const [rsvpPage, setRsvpPage] = useState(1);
@@ -213,12 +216,13 @@ export default function AdminPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [rsvpRes, photoRes, songRes, giftRes, tourismRes] = await Promise.all([
+      const [rsvpRes, photoRes, songRes, giftRes, tourismRes, invitedGuestsRes] = await Promise.all([
         fetch('/api/rsvp'),
         fetch('/api/photos'),
         fetch('/api/songs'),
         fetch('/api/gifts'),
         fetch('/api/tourism'),
+        fetch('/api/invited-guests'),
       ]);
 
       setRsvps(await parseArrayResponse<RSVP>(rsvpRes));
@@ -226,6 +230,7 @@ export default function AdminPage() {
       setSongs(await parseArrayResponse<Song>(songRes));
       setGifts(await parseArrayResponse<Gift>(giftRes));
       setPlaces(await parseArrayResponse<TourismPlace>(tourismRes));
+      setInvitedGuests(await parseArrayResponse<string>(invitedGuestsRes));
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -557,6 +562,33 @@ export default function AdminPage() {
       alert('No se pudo reenviar la invitacion. Revisa la configuracion SMTP o intentalo de nuevo.');
     } finally {
       setResendingInvitationId(null);
+    }
+  };
+
+  const handleAddInvitedGuest = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const name = newGuestName.trim();
+    if (!name) return;
+
+    setAddingGuest(true);
+    try {
+      const response = await fetch('/api/invited-guests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add guest');
+      }
+
+      setInvitedGuests((prev) => Array.from(new Set([...prev, name])));
+      setNewGuestName('');
+    } catch (error) {
+      console.error('Error adding invited guest:', error);
+      alert('No se pudo añadir el invitado. Intentalo de nuevo.');
+    } finally {
+      setAddingGuest(false);
     }
   };
 
@@ -936,6 +968,47 @@ export default function AdminPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4 md:pt-6">
+                <form
+                  onSubmit={handleAddInvitedGuest}
+                  className="mb-6 rounded-2xl border border-[var(--color-rose)]/15 bg-white/70 p-4"
+                >
+                  <div className="flex flex-col gap-3 md:flex-row md:items-end">
+                    <div className="flex-1">
+                      <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-gray-500">
+                        Añadir invitado a la lista
+                      </label>
+                      <input
+                        type="text"
+                        value={newGuestName}
+                        onChange={(event) => setNewGuestName(event.target.value)}
+                        placeholder="Nombre completo"
+                        className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition focus:border-[var(--color-rose)] focus:ring-2 focus:ring-[var(--color-rose)]/10"
+                      />
+                      <p className="mt-2 text-xs text-gray-500">
+                        No afecta a quienes ya han confirmado. Solo añade nombres nuevos para futuros RSVPs.
+                      </p>
+                    </div>
+                    <Button
+                      type="submit"
+                      size="sm"
+                      variant="primary"
+                      disabled={addingGuest || !newGuestName.trim()}
+                      className="md:min-w-[150px]"
+                    >
+                      {addingGuest ? (
+                        <Loader className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Plus className="w-4 h-4 mr-1" />
+                          Añadir
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  <div className="mt-3 text-xs text-gray-500">
+                    {invitedGuests.length} nombres disponibles en la lista base y añadida.
+                  </div>
+                </form>
                 <div className="overflow-x-auto -mx-4 md:mx-0 scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-transparent hover:scrollbar-thumb-purple-400">
                   <div className="inline-block min-w-full align-middle px-4 md:px-0">
                     <table className="min-w-full">

@@ -44,17 +44,21 @@ export default function RSVPPage() {
   useEffect(() => {
     const loadSubmittedGuests = async () => {
       try {
-        const response = await fetch('/api/rsvp');
-        if (!response.ok) return;
+        const [guestResponse, rsvpResponse] = await Promise.all([
+          fetch('/api/invited-guests'),
+          fetch('/api/rsvp'),
+        ]);
+        if (!guestResponse.ok || !rsvpResponse.ok) return;
 
-        const submittedRsvps: { name?: string }[] = await response.json();
+        const invitedGuests: string[] = await guestResponse.json();
+        const submittedRsvps: { name?: string }[] = await rsvpResponse.json();
         const submittedNames = new Set(
           submittedRsvps
             .map((rsvp) => rsvp.name)
             .filter((name): name is string => Boolean(name))
         );
 
-        setAvailableGuestNames(INVITED_GUESTS.filter((name) => !submittedNames.has(name)));
+        setAvailableGuestNames(invitedGuests.filter((name) => !submittedNames.has(name)));
       } catch (error) {
         console.error('Error loading submitted RSVP names:', error);
       }
@@ -117,7 +121,8 @@ export default function RSVPPage() {
         body: JSON.stringify({
           name: selectedGuestName,
           ...formData,
-          guestList,
+          guests: 0,
+          guestList: [],
           locale,
         }),
       });
@@ -458,7 +463,7 @@ export default function RSVPPage() {
               </div>
 
               {/* Número de acompañantes */}
-              {formData.attending && (
+              {false && formData.attending && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
@@ -483,7 +488,7 @@ export default function RSVPPage() {
               )}
 
               {/* Información de los acompañantes */}
-              {formData.attending && formData.guests > 0 && (
+              {false && formData.attending && formData.guests > 0 && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
