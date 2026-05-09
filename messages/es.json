@@ -363,7 +363,10 @@
     "yourName": "Tu nombre",
     "success": "¡Éxito!",
     "error": "Error",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "receiptPreview": "Vista previa del recibo",
+    "confirmReceiptUpload": "Confirmar subida",
+    "changeReceiptFile": "Cambiar archivo"
   },
   "gallery": {
     "title": "Galería de Fotos",

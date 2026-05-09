@@ -46,6 +46,8 @@ export default function RegalosPage() {
   const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [uploadingReceipt, setUploadingReceipt] = useState(false);
+  const [selectedReceiptFile, setSelectedReceiptFile] = useState<File | null>(null);
+  const [receiptPreviewUrl, setReceiptPreviewUrl] = useState<string | null>(null);
   const [showNameModal, setShowNameModal] = useState(false);
   const [reserveName, setReserveName] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -170,7 +172,18 @@ export default function RegalosPage() {
 
   const handleUploadReceipt = async (gift: GiftItem) => {
     setSelectedGift(gift);
+    setSelectedReceiptFile(null);
+    setReceiptPreviewUrl(null);
     setShowReceiptModal(true);
+  };
+
+  const handleReceiptFileSelect = (file: File) => {
+    if (receiptPreviewUrl) {
+      URL.revokeObjectURL(receiptPreviewUrl);
+    }
+
+    setSelectedReceiptFile(file);
+    setReceiptPreviewUrl(file.type.startsWith('image/') ? URL.createObjectURL(file) : null);
   };
 
   const uploadReceipt = async (file: File) => {
@@ -199,6 +212,11 @@ export default function RegalosPage() {
         fetchGifts();
         setShowReceiptModal(false);
         setSelectedGift(null);
+        setSelectedReceiptFile(null);
+        if (receiptPreviewUrl) {
+          URL.revokeObjectURL(receiptPreviewUrl);
+          setReceiptPreviewUrl(null);
+        }
         setSuccessMessage(t('receiptSuccess'));
         setShowSuccessModal(true);
       } else {
@@ -214,6 +232,14 @@ export default function RegalosPage() {
       setUploadingReceipt(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (receiptPreviewUrl) {
+        URL.revokeObjectURL(receiptPreviewUrl);
+      }
+    };
+  }, [receiptPreviewUrl]);
 
   return (
     <div className="min-h-screen py-20 px-4 relative overflow-hidden">
@@ -738,7 +764,14 @@ export default function RegalosPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowReceiptModal(false)}
+            onClick={() => {
+              setShowReceiptModal(false);
+              setSelectedReceiptFile(null);
+              if (receiptPreviewUrl) {
+                URL.revokeObjectURL(receiptPreviewUrl);
+                setReceiptPreviewUrl(null);
+              }
+            }}
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
@@ -759,6 +792,23 @@ export default function RegalosPage() {
               </div>
               
               <div className="space-y-4">
+                {selectedReceiptFile && (
+                  <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                    <p className="mb-3 text-sm font-semibold text-gray-700">{t('receiptPreview')}</p>
+                    {receiptPreviewUrl ? (
+                      <img
+                        src={receiptPreviewUrl}
+                        alt={selectedReceiptFile.name}
+                        className="max-h-64 w-full rounded-xl object-contain bg-white"
+                      />
+                    ) : (
+                      <div className="rounded-xl bg-white p-4 text-sm text-gray-600">
+                        <FileText className="mb-2 h-6 w-6 text-[var(--color-rose)]" />
+                        {selectedReceiptFile.name}
+                      </div>
+                    )}
+                  </div>
+                )}
                 <input
                   type="file"
                   accept="image/*,.pdf"
@@ -767,8 +817,9 @@ export default function RegalosPage() {
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      uploadReceipt(file);
+                      handleReceiptFileSelect(file);
                     }
+                    e.target.value = '';
                   }}
                   disabled={uploadingReceipt}
                 />
@@ -784,11 +835,34 @@ export default function RegalosPage() {
                       {t('uploading')}
                     </span>
                   ) : (
-                    t('selectFile')
+                    selectedReceiptFile ? t('changeReceiptFile') : t('selectFile')
                   )}
                 </label>
+                {selectedReceiptFile && (
+                  <Button
+                    onClick={() => uploadReceipt(selectedReceiptFile)}
+                    className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white py-4"
+                    disabled={uploadingReceipt}
+                  >
+                    {uploadingReceipt ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader className="w-5 h-5 animate-spin" />
+                        {t('uploading')}
+                      </span>
+                    ) : (
+                      t('confirmReceiptUpload')
+                    )}
+                  </Button>
+                )}
                 <Button
-                  onClick={() => setShowReceiptModal(false)}
+                  onClick={() => {
+                    setShowReceiptModal(false);
+                    setSelectedReceiptFile(null);
+                    if (receiptPreviewUrl) {
+                      URL.revokeObjectURL(receiptPreviewUrl);
+                      setReceiptPreviewUrl(null);
+                    }
+                  }}
                   className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200 py-4"
                   disabled={uploadingReceipt}
                 >

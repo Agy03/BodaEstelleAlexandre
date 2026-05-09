@@ -1709,7 +1709,7 @@ export default function AdminPage() {
                                 {t('gifts.view')}
                               </a>
                             </div>
-                            {gift.receiptStatus === 'pending' && (
+                            {gift.receiptStatus === 'pending' ? (
                               <div className="flex gap-2 pt-2 border-t border-purple-200">
                                 <button
                                   onClick={() => handleApproveReceipt(gift.id, true)}
@@ -1722,6 +1722,15 @@ export default function AdminPage() {
                                   className="flex-1 px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg text-xs font-semibold transition-all shadow-sm hover:shadow"
                                 >
                                   ✗ {t('gifts.reject')}
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex gap-2 pt-2 border-t border-purple-200">
+                                <button
+                                  onClick={() => handleApproveReceipt(gift.id, false)}
+                                  className="flex-1 px-3 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg text-xs font-semibold transition-all shadow-sm hover:shadow"
+                                >
+                                  Rechazar recibo
                                 </button>
                               </div>
                             )}

@@ -52,6 +52,7 @@ export async function POST(
         purchased: true,
       } : {
         receiptStatus: 'rejected',
+        purchased: false,
         reserved: false,
         reservedBy: null,
         reservedAt: null,
