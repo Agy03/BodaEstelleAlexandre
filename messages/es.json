@@ -757,9 +757,9 @@
     "subtitle": "Si deseas contribuir de una manera especial",
     "bankTransfer": {
       "title": "Transferencia Bancaria",
-      "description": "Puedes hacer una transferencia a la cuenta bancaria a nombre de Estelle",
+      "description": "Puedes hacer una transferencia a la cuenta bancaria a nombre de Alexandre",
       "accountHolderLabel": "Titular",
-      "accountHolder": "Estelle",
+      "accountHolder": "Alexandre",
       "ibanLabel": "IBAN",
       "iban": "FR7630004033770000192535624",
       "bicLabel": "BIC/SWIFT",

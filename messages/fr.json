@@ -757,9 +757,9 @@
     "subtitle": "Si vous souhaitez contribuer d'une manière spéciale",
     "bankTransfer": {
       "title": "Virement Bancaire",
-      "description": "Vous pouvez effectuer un virement sur le compte bancaire au nom d'Estelle",
+      "description": "Vous pouvez effectuer un virement sur le compte bancaire au nom d'Alexandre",
       "accountHolderLabel": "Titulaire",
-      "accountHolder": "Estelle",
+      "accountHolder": "Alexandre",
       "ibanLabel": "IBAN",
       "iban": "FR7630004033770000192535624",
       "bicLabel": "BIC/SWIFT",

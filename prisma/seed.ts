@@ -21,7 +21,7 @@ async function main() {
         venueLongitude: 2.3522,
         dressCodeTitle: 'Elegante y Romántico',
         dressCodeDescription: 'Queremos que te sientas cómodo y hermoso en nuestro día especial. El código de vestimenta es elegante y romántico.',
-        dressCodeMen: 'Traje o smoking en colores oscuros (negro, azul marino o gris). Corbata o pajarita opcional.',
+        dressCodeMen: 'No es necesario llevar smoking. Un traje formal en colores oscuros (negro, azul marino o gris) es perfecto. Corbata o pajarita opcional.',
         dressCodeWomen: 'Vestido de cóctel o largo en colores suaves y románticos. Evitar blanco, crema o marfil.',
         weatherSeason: 'Principios de Verano',
         weatherAvgTemp: '20-25°C (68-77°F)',

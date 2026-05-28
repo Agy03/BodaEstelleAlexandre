@@ -676,7 +676,7 @@ export default function RegalosPage() {
                 <div className="flex justify-between items-end">
                   <div>
                     <div className="text-xs opacity-75 mb-1">Cardholder</div>
-                    <div className="text-sm font-semibold">Estelle & Alexandre</div>
+                    <div className="text-sm font-semibold">Alexandre</div>
                   </div>
                   <div className="text-right text-xs opacity-75">
                     <div>05/30</div>

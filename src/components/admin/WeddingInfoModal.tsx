@@ -313,7 +313,7 @@ export function WeddingInfoModal({ isOpen, onClose, onSave }: WeddingInfoModalPr
               label={t('dressCodeMen')}
               value={formData.dressCodeMen}
               onChange={(e) => handleChange('dressCodeMen', e.target.value)}
-              placeholder="Suit or tuxedo in dark colors..."
+              placeholder="A formal suit in dark colors..."
               rows={3}
               required
             />
